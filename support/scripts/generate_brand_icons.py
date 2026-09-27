@@ -59,10 +59,25 @@ def save(image, relative, **kwargs):
 
 def generate():
     (ROOT/'support/branding/legnasend-mark.svg').write_text(SVG)
+    # Embed the same mark without adding an asset route or relaxing page CSP.
+    import re
+    glyph = SVG.strip().replace('<svg ', '<svg class="product-mark" width="32" height="32" aria-hidden="true" focusable="false" ')
+    for name in ('download', 'upload', 'workspace', 'error-403', 'directories'):
+        page = ROOT / f'packages/core/assets/web/{name}.html'
+        html = page.read_text()
+        html = html.replace('<span class="brand-mark" data-icon="send"></span>', glyph)
+        html = html.replace('>● <b>LegnaSend</b>', '>' + glyph + ' <b>LegnaSend</b>')
+        html = re.sub(r'<svg class="product-mark".*?</svg>', lambda _: glyph, html)
+        page.write_text(html)
+
     for size in (32,128,256,512):save(mark(size),f'app/assets/img/logo-{size}.png')
     for size,color in [(32,'black'),(32,'white'),(512,'white')]:save(mark(size,mono=color),f'app/assets/img/logo-{size}-{color}.png')
     for path in ['app/assets/img/logo.ico','app/assets/packaging/logo.ico','app/windows/runner/resources/app_icon.ico']:
         save(mark(256),path,format='ICO',sizes=[(n,n) for n in (16,24,32,48,64,128,256)])
+    save(mark(32), 'app/web/favicon.png')
+    for size in (192, 512):
+        save(mark(size, opaque=True), f'app/web/icons/Icon-{size}.png')
+        save(mark(size, opaque=True, scale=.8), f'app/web/icons/Icon-maskable-{size}.png')
     for platform in ['ios','macos']:
         folder=Path(f'app/{platform}/Runner/Assets.xcassets/AppIcon.appiconset')
         entries=json.loads((ROOT/folder/'Contents.json').read_text())['images']
@@ -118,6 +133,27 @@ def check():
         if '/ios/' in str(path):assert image.mode=='RGB',path
     for item in manifest['auxiliary']:
         assert hashlib.sha256((ROOT/item['path']).read_bytes()).hexdigest()==item['sha256'],item['path']
+    metadata = json.loads((ROOT / 'app/web/manifest.json').read_text())
+    assert metadata['name'] == metadata['short_name'] == 'LegnaSend'
+    assert metadata['theme_color'].lower() == GREEN.lower()
+    html = (ROOT / 'app/web/index.html').read_text()
+    assert '<title>LegnaSend</title>' in html
+    assert 'localsend_app' not in html and 'A new Flutter project.' not in html
+    for item in metadata['icons']:
+        icon = Image.open(ROOT / 'app/web' / item['src'])
+        assert item['sizes'] == f'{icon.width}x{icon.height}'
+        if item.get('purpose') == 'maskable':
+            assert icon.mode == 'RGB'
+            # All solid foreground pixels fit within the 40%-radius safe circle.
+            for y in range(icon.height):
+                for x in range(icon.width):
+                    if icon.getpixel((x, y)) in ((84, 184, 101), (16, 44, 22)):
+                        assert math.hypot(x + .5 - icon.width/2, y + .5 - icon.height/2) <= .4*icon.width
+    glyph = SVG.strip().replace('<svg ', '<svg class="product-mark" width="32" height="32" aria-hidden="true" focusable="false" ')
+    for name in ('download', 'upload', 'workspace', 'error-403', 'directories'):
+        html = (ROOT / f'packages/core/assets/web/{name}.html').read_text()
+        assert html.count(glyph) == 1, name
+        assert 'class="brand-mark" data-icon="send"' not in html, name
     print(f"Verified {len(manifest['outputs'])} icon assets; iOS is opaque RGB; source and hashes match.")
 
 

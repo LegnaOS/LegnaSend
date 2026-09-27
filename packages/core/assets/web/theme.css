@@ -81,3 +81,6 @@
    can fail contrast even when both endpoint palettes pass. */
 :root[data-theme] button,:root[data-theme] a,:root[data-theme] input,:root[data-theme] select { transition:none; }
 :root[data-theme] .row .icon { color:var(--link-ink); }
+/* Shared product identity, including the workspace index header. */
+.brand { display:inline-flex; align-items:center; gap:8px; }
+.product-mark { display:block; flex:0 0 32px; }

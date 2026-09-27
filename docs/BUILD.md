@@ -28,3 +28,17 @@ fvm flutter test
 # From packages/core:
 cargo test --features full
 ```
+
+### macOS Archive
+
+Run `pod install` in `app/macos` after changing the Podfile. Flutter-dependent pods skip Xcode's standalone distributable-framework module verifier because Flutter supplies its engine outside the placeholder CocoaPod. Normal Clang/Swift module compilation remains enabled. See [Apple's module verifier documentation](https://developer.apple.com/documentation/xcode/identifying-and-addressing-framework-module-issues).
+
+Choose a macOS destination in Xcode, or explicitly select it from the repository root:
+
+```sh
+xcodebuild archive -workspace app/macos/Runner.xcworkspace -scheme Runner \
+  -configuration Release -destination 'generic/platform=macOS' \
+  -archivePath "$HOME/Downloads/LegnaSend.xcarchive"
+```
+
+The selected team's provisioning profile must include the app's App Groups entitlement. A compiler check with signing disabled does not validate distribution signing or App Store submission.

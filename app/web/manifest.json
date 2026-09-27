@@ -1,11 +1,11 @@
 {
-  "name": "localsend_app",
-  "short_name": "localsend_app",
+  "name": "LegnaSend",
+  "short_name": "LegnaSend",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0175C2",
-  "theme_color": "#0175C2",
-  "description": "A new Flutter project.",
+  "background_color": "#F5F4EE",
+  "theme_color": "#54B865",
+  "description": "Share files with nearby devices and browse shared workspaces.",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [

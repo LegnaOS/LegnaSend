@@ -9,9 +9,9 @@ python3 support/scripts/generate_brand_icons.py
 python3 support/scripts/generate_brand_icons.py --check
 ```
 
-The generator uses Pillow, keeps existing file names and platform metadata, and produces 140 binary assets plus the vector and two Android XML files. `generated-icons.json` records paths, sizes, color modes and content hashes. Keep script, vector, generated files and manifest together. iOS icons have an opaque background; Android adaptive foregrounds are inset for masking; tray and notification glyphs use a transparent L cutout. Windows application and installer ICO files include 16–256 px representations. Existing Linux packaging consumes the shared PNGs. Existing success/error badges remain distinct.
+The generator uses Pillow, keeps existing file names and platform metadata, and produces 145 binary assets plus the vector and two Android XML files. `generated-icons.json` records paths, sizes, color modes and content hashes. Keep script, vector, generated files and manifest together. iOS icons have an opaque background; Android adaptive foregrounds are inset for masking; tray and notification glyphs use a transparent L cutout. Windows application and installer ICO files include 16–256 px representations. Existing Linux packaging consumes the shared PNGs. Existing success/error badges remain distinct.
 
-No upstream license or legal credit is removed. The internal `LocalSendLogo` class name remains source-compatible while displaying the LegnaSend mark. Browser/PWA assets are outside this native batch and are not rewritten.
+No upstream license or legal credit is removed. The internal `LocalSendLogo` class name remains source-compatible while displaying the LegnaSend mark. Browser pages, PWA icons and favicon use the same mark. Maskable PWA icons keep the mark inside the central safe area.
 
 The shared rotation widget uses Flutter tickers instead of an endless timer. It stops for reduced motion, disabled animation, hidden routes/TickerMode and background lifecycle, retaining its angle for resumption. Receive-page online/active-tab gating remains in place; About and Settings show the static mark.
 

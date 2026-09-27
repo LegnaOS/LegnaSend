@@ -28,3 +28,17 @@ fvm flutter test
 # 在 packages/core 中：
 cargo test --features full
 ```
+
+### macOS 归档
+
+修改 Podfile 后，在 `app/macos` 执行 `pod install`。依赖 Flutter 的插件跳过 Xcode 面向独立框架分发的模块校验器，因为 Flutter 引擎由工具链在占位 CocoaPod 之外提供。普通 Clang／Swift 模块编译继续开启。参见 [Apple 模块校验文档](https://developer.apple.com/documentation/xcode/identifying-and-addressing-framework-module-issues)。
+
+在 Xcode 选择 macOS 目标设备，或在仓库根目录明确指定：
+
+```sh
+xcodebuild archive -workspace app/macos/Runner.xcworkspace -scheme Runner \
+  -configuration Release -destination 'generic/platform=macOS' \
+  -archivePath "$HOME/Downloads/LegnaSend.xcarchive"
+```
+
+所选团队的描述文件必须包含应用使用的 App Groups 权限。关闭签名的编译检查不代表分发签名或商店提交通过。

@@ -5,6 +5,7 @@ Author: Legna
 
 ## Unreleased — 2026-09-28
 
+- Complete browser/PWA branding and correct the macOS Archive configuration for Flutter plugin module verification.
 - Restore an existing workspace's folder access without recreating its name, path or password.
 - Prefer IPv4 and collapse alternate network addresses. Add Open beside Copy to launch the system browser.
 - Default unfinished-transfer caches to one hour, preserving explicit retention settings and active or completed files.

@@ -25,7 +25,7 @@
 
 [GitHub Actions](https://github.com/LegnaOS/LegnaSend/actions/workflows/legnasend_packages.yml) 构建 Windows x64／ARM64、Linux x64，以及 Android ARM64／x86_64。Windows 包不签名；Android 使用 Release 编译和固定 debug 密钥签名，供直接安装，不用于 Google Play 正式分发。Apple 包独立处理。产物状态与复现方法见[构建说明](../../docs/BUILD_ZH.md)。
 
-Windows 包使用 `LegnaSend.exe` 启动。
+Windows 包使用 `LegnaSend.exe` 启动。 原生应用与共享网页统一使用绿色 LegnaSend 标志。
 
 ## 文档
 

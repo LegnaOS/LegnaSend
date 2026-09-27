@@ -94,6 +94,51 @@
       "sha256": "7660c3e88ebb3ee12b37d994248250f763939cef0b8352094bab2249b3e4c22b"
     },
     {
+      "path": "app/web/favicon.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "b807e7c544087be8faf4e5c58fba65da501b4762df01494003eae0298deb7b1d"
+    },
+    {
+      "path": "app/web/icons/Icon-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGB",
+      "sha256": "d55b778ccb31c778d047f68144afc6515142a737b670824ec7a412585d883360"
+    },
+    {
+      "path": "app/web/icons/Icon-maskable-192.png",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGB",
+      "sha256": "19fb8705a48f394afc82bba77a6078762ab3b851ad68bf57a82d810270ccb9ca"
+    },
+    {
+      "path": "app/web/icons/Icon-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "sha256": "a16532813f004e48d59a3c6f5ed9482393108f56c2a4cc571a2ceb4a47d465b1"
+    },
+    {
+      "path": "app/web/icons/Icon-maskable-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGB",
+      "sha256": "415ab57e4f374cc917af91312eb34491d17168382891bd411d4d55d42b828ddf"
+    },
+    {
       "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20@2x.png",
       "size": [
         40,
