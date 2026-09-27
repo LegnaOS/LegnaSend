@@ -1,0 +1,258 @@
+--- a/darwin/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h
++++ b/darwin/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h
+@@ -5,33 +5,35 @@
+ @class PHAsset;
+ @class PHAssetCollection;
+ 
++NS_ASSUME_NONNULL_BEGIN
++
+ @interface PMAssetPathEntity : NSObject
+ 
+-@property(nonatomic, copy) NSString *id;
+-@property(nonatomic, copy) NSString *name;
++@property(nonatomic, copy, nullable) NSString *id;
++@property(nonatomic, copy, nullable) NSString *name;
+ @property(nonatomic, assign) BOOL isAll;
+ @property(nonatomic, assign) int type;
+ @property(nonatomic, assign) NSUInteger assetCount;
+ @property(nonatomic, assign) long modifiedDate;
+-@property(nonatomic, strong) PHAssetCollection *collection;
++@property(nonatomic, strong, nullable) PHAssetCollection *collection;
+ 
+-+ (instancetype)entityWithId:(NSString *)id name:(NSString *)name assetCollection:(PHAssetCollection*)collection;
+++ (instancetype)entityWithId:(NSString *)id name:(nullable NSString *)name assetCollection:(nullable PHAssetCollection*)collection;
+ 
+ @end
+ 
+ @interface PMAssetEntity : NSObject
+ 
+-@property(nonatomic, copy) NSString *id;
++@property(nonatomic, copy, nullable) NSString *id;
+ @property(nonatomic, assign) long createDt;
+ @property(nonatomic, assign) NSUInteger width;
+ @property(nonatomic, assign) NSUInteger height;
+ @property(nonatomic, assign) long duration;
+ @property(nonatomic, assign) int type;
+-@property(nonatomic, strong) PHAsset *phAsset;
++@property(nonatomic, strong, nullable) PHAsset *phAsset;
+ @property(nonatomic, assign) long modifiedDt;
+ @property(nonatomic, strong, nullable) NSNumber *lat;
+ @property(nonatomic, strong, nullable) NSNumber *lng;
+-@property(nonatomic, copy) NSString *title;
++@property(nonatomic, copy, nullable) NSString *title;
+ @property(nonatomic, assign) NSUInteger subtype;
+ @property(nonatomic, assign) BOOL favorite;
+ @property(nonatomic, assign) BOOL isLocallyAvailable;
+@@ -51,3 +53,5 @@
+                         type:(int)type;
+ 
+ @end
++
++NS_ASSUME_NONNULL_END
+--- a/darwin/photo_manager/Sources/photo_manager/core/PMManager.m
++++ b/darwin/photo_manager/Sources/photo_manager/core/PMManager.m
+@@ -1730,7 +1730,8 @@
+                 dataHandler(imageData, info);
+             }];
+         } else {
+-#if TARGET_OS_IOS
++#if TARGET_OS_IOS && __IPHONE_OS_VERSION_MIN_REQUIRED < 130000
++            // Compile the legacy fallback only for deployments that can execute it.
+             [strongSelf.cachingManager requestImageDataForAsset:asset
+                                                         options:options
+                                                   resultHandler:^(NSData *_Nullable imageData,
+@@ -1917,9 +1918,11 @@
+                                  completionHandler:^(BOOL success) {
+             [result reply:@(success)];
+         }];
++#if __IPHONE_OS_VERSION_MIN_REQUIRED < 100000
+     } else if (@available(iOS 8.0, *)) {
+         BOOL success = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+         [result reply:@(success)];
++#endif
+     } else {
+         [result reply:@false];
+     }
+--- a/darwin/photo_manager.podspec
++++ b/darwin/photo_manager.podspec
+@@ -14,7 +14,7 @@
+   s.author           = { 'CaiJingLong' => 'cjl_spy@163.com' }
+   s.source           = { :http => 'https://github.com/fluttercandies/flutter_photo_manager/tree/main/ios' }
+ 
+-  s.source_files = "#{package_name}/Sources/#{package_name}/**/*"
++  s.source_files = "#{package_name}/Sources/#{package_name}/**/*.{h,m,mm,swift}"
+   s.public_header_files = "#{package_name}/Sources/#{package_name}/**/**/*.h"
+ 
+   s.osx.dependency 'FlutterMacOS'
+--- a/ios/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h
++++ b/ios/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h
+@@ -5,33 +5,35 @@
+ @class PHAsset;
+ @class PHAssetCollection;
+ 
++NS_ASSUME_NONNULL_BEGIN
++
+ @interface PMAssetPathEntity : NSObject
+ 
+-@property(nonatomic, copy) NSString *id;
+-@property(nonatomic, copy) NSString *name;
++@property(nonatomic, copy, nullable) NSString *id;
++@property(nonatomic, copy, nullable) NSString *name;
+ @property(nonatomic, assign) BOOL isAll;
+ @property(nonatomic, assign) int type;
+ @property(nonatomic, assign) NSUInteger assetCount;
+ @property(nonatomic, assign) long modifiedDate;
+-@property(nonatomic, strong) PHAssetCollection *collection;
++@property(nonatomic, strong, nullable) PHAssetCollection *collection;
+ 
+-+ (instancetype)entityWithId:(NSString *)id name:(NSString *)name assetCollection:(PHAssetCollection*)collection;
+++ (instancetype)entityWithId:(NSString *)id name:(nullable NSString *)name assetCollection:(nullable PHAssetCollection*)collection;
+ 
+ @end
+ 
+ @interface PMAssetEntity : NSObject
+ 
+-@property(nonatomic, copy) NSString *id;
++@property(nonatomic, copy, nullable) NSString *id;
+ @property(nonatomic, assign) long createDt;
+ @property(nonatomic, assign) NSUInteger width;
+ @property(nonatomic, assign) NSUInteger height;
+ @property(nonatomic, assign) long duration;
+ @property(nonatomic, assign) int type;
+-@property(nonatomic, strong) PHAsset *phAsset;
++@property(nonatomic, strong, nullable) PHAsset *phAsset;
+ @property(nonatomic, assign) long modifiedDt;
+ @property(nonatomic, strong, nullable) NSNumber *lat;
+ @property(nonatomic, strong, nullable) NSNumber *lng;
+-@property(nonatomic, copy) NSString *title;
++@property(nonatomic, copy, nullable) NSString *title;
+ @property(nonatomic, assign) NSUInteger subtype;
+ @property(nonatomic, assign) BOOL favorite;
+ @property(nonatomic, assign) BOOL isLocallyAvailable;
+@@ -51,3 +53,5 @@
+                         type:(int)type;
+ 
+ @end
++
++NS_ASSUME_NONNULL_END
+--- a/ios/photo_manager/Sources/photo_manager/core/PMManager.m
++++ b/ios/photo_manager/Sources/photo_manager/core/PMManager.m
+@@ -1730,7 +1730,8 @@
+                 dataHandler(imageData, info);
+             }];
+         } else {
+-#if TARGET_OS_IOS
++#if TARGET_OS_IOS && __IPHONE_OS_VERSION_MIN_REQUIRED < 130000
++            // Compile the legacy fallback only for deployments that can execute it.
+             [strongSelf.cachingManager requestImageDataForAsset:asset
+                                                         options:options
+                                                   resultHandler:^(NSData *_Nullable imageData,
+@@ -1917,9 +1918,11 @@
+                                  completionHandler:^(BOOL success) {
+             [result reply:@(success)];
+         }];
++#if __IPHONE_OS_VERSION_MIN_REQUIRED < 100000
+     } else if (@available(iOS 8.0, *)) {
+         BOOL success = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+         [result reply:@(success)];
++#endif
+     } else {
+         [result reply:@false];
+     }
+--- a/ios/photo_manager.podspec
++++ b/ios/photo_manager.podspec
+@@ -14,7 +14,7 @@
+   s.author           = { 'CaiJingLong' => 'cjl_spy@163.com' }
+   s.source           = { :http => 'https://github.com/fluttercandies/flutter_photo_manager/tree/main/ios' }
+ 
+-  s.source_files = "#{package_name}/Sources/#{package_name}/**/*"
++  s.source_files = "#{package_name}/Sources/#{package_name}/**/*.{h,m,mm,swift}"
+   s.public_header_files = "#{package_name}/Sources/#{package_name}/**/**/*.h"
+ 
+   s.osx.dependency 'FlutterMacOS'
+--- a/macos/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h
++++ b/macos/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h
+@@ -5,33 +5,35 @@
+ @class PHAsset;
+ @class PHAssetCollection;
+ 
++NS_ASSUME_NONNULL_BEGIN
++
+ @interface PMAssetPathEntity : NSObject
+ 
+-@property(nonatomic, copy) NSString *id;
+-@property(nonatomic, copy) NSString *name;
++@property(nonatomic, copy, nullable) NSString *id;
++@property(nonatomic, copy, nullable) NSString *name;
+ @property(nonatomic, assign) BOOL isAll;
+ @property(nonatomic, assign) int type;
+ @property(nonatomic, assign) NSUInteger assetCount;
+ @property(nonatomic, assign) long modifiedDate;
+-@property(nonatomic, strong) PHAssetCollection *collection;
++@property(nonatomic, strong, nullable) PHAssetCollection *collection;
+ 
+-+ (instancetype)entityWithId:(NSString *)id name:(NSString *)name assetCollection:(PHAssetCollection*)collection;
+++ (instancetype)entityWithId:(NSString *)id name:(nullable NSString *)name assetCollection:(nullable PHAssetCollection*)collection;
+ 
+ @end
+ 
+ @interface PMAssetEntity : NSObject
+ 
+-@property(nonatomic, copy) NSString *id;
++@property(nonatomic, copy, nullable) NSString *id;
+ @property(nonatomic, assign) long createDt;
+ @property(nonatomic, assign) NSUInteger width;
+ @property(nonatomic, assign) NSUInteger height;
+ @property(nonatomic, assign) long duration;
+ @property(nonatomic, assign) int type;
+-@property(nonatomic, strong) PHAsset *phAsset;
++@property(nonatomic, strong, nullable) PHAsset *phAsset;
+ @property(nonatomic, assign) long modifiedDt;
+ @property(nonatomic, strong, nullable) NSNumber *lat;
+ @property(nonatomic, strong, nullable) NSNumber *lng;
+-@property(nonatomic, copy) NSString *title;
++@property(nonatomic, copy, nullable) NSString *title;
+ @property(nonatomic, assign) NSUInteger subtype;
+ @property(nonatomic, assign) BOOL favorite;
+ @property(nonatomic, assign) BOOL isLocallyAvailable;
+@@ -51,3 +53,5 @@
+                         type:(int)type;
+ 
+ @end
++
++NS_ASSUME_NONNULL_END
+--- a/macos/photo_manager/Sources/photo_manager/core/PMManager.m
++++ b/macos/photo_manager/Sources/photo_manager/core/PMManager.m
+@@ -1730,7 +1730,8 @@
+                 dataHandler(imageData, info);
+             }];
+         } else {
+-#if TARGET_OS_IOS
++#if TARGET_OS_IOS && __IPHONE_OS_VERSION_MIN_REQUIRED < 130000
++            // Compile the legacy fallback only for deployments that can execute it.
+             [strongSelf.cachingManager requestImageDataForAsset:asset
+                                                         options:options
+                                                   resultHandler:^(NSData *_Nullable imageData,
+@@ -1917,9 +1918,11 @@
+                                  completionHandler:^(BOOL success) {
+             [result reply:@(success)];
+         }];
++#if __IPHONE_OS_VERSION_MIN_REQUIRED < 100000
+     } else if (@available(iOS 8.0, *)) {
+         BOOL success = [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+         [result reply:@(success)];
++#endif
+     } else {
+         [result reply:@false];
+     }
+--- a/macos/photo_manager.podspec
++++ b/macos/photo_manager.podspec
+@@ -14,7 +14,7 @@
+   s.author           = { 'CaiJingLong' => 'cjl_spy@163.com' }
+   s.source           = { :http => 'https://github.com/fluttercandies/flutter_photo_manager/tree/main/ios' }
+ 
+-  s.source_files = "#{package_name}/Sources/#{package_name}/**/*"
++  s.source_files = "#{package_name}/Sources/#{package_name}/**/*.{h,m,mm,swift}"
+   s.public_header_files = "#{package_name}/Sources/#{package_name}/**/**/*.h"
+ 
+   s.osx.dependency 'FlutterMacOS'

@@ -1,0 +1,93 @@
+require 'pathname'
+
+# Uncomment this line to define a global platform for your project
+platform :ios, '13.0'
+
+# CocoaPods analytics sends network stats synchronously affecting flutter build latency.
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+project 'Runner', {
+  'Debug' => :debug,
+  'Profile' => :release,
+  'Release' => :release,
+}
+
+def flutter_root
+  generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'Generated.xcconfig'), __FILE__)
+  unless File.exist?(generated_xcode_build_settings_path)
+    raise "#{generated_xcode_build_settings_path} must exist. If you're running pod install manually, make sure flutter pub get is executed first"
+  end
+
+  File.foreach(generated_xcode_build_settings_path) do |line|
+    matches = line.match(/FLUTTER_ROOT\=(.*)/)
+    return matches[1].strip if matches
+  end
+  raise "FLUTTER_ROOT not found in #{generated_xcode_build_settings_path}. Try deleting Generated.xcconfig, then run flutter pub get"
+end
+
+require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelper'), flutter_root)
+
+flutter_ios_podfile_setup
+
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # share_handler addition start
+    target 'ShareExtension' do
+      inherit! :search_paths
+      pod "share_handler_ios_models", :path => ".symlinks/plugins/share_handler_ios/ios/Models"
+    end
+    # share_handler addition end
+end
+
+# These two pinned SDKs have no upstream manifest. Add a reviewed, repository-owned
+# manifest to each actual framework instead of editing the global pub cache or
+# copying a shared manifest into the application root. Re-audit on SDK upgrades.
+def install_share_handler_privacy_manifests(installer)
+  manifests_root = Pathname.new(File.join(__dir__, 'PrivacyManifests'))
+  group = installer.pods_project.main_group.find_subpath('LegnaSend Privacy Manifests', true)
+  %w[share_handler_ios share_handler_ios_models].each do |pod_name|
+    manifest = manifests_root.join(pod_name, 'PrivacyInfo.xcprivacy')
+    raise "Missing reviewed privacy manifest: #{manifest}" unless manifest.file?
+
+    # CocoaPods can suffix otherwise identical pod targets for different variants.
+    targets = installer.pods_project.targets.select do |target|
+      target.name == pod_name || target.name.start_with?("#{pod_name}-")
+    end
+    raise "Privacy manifest target not found: #{pod_name}" if targets.empty?
+
+    relative_path = manifest.relative_path_from(installer.pods_project.path.dirname).to_s
+    reference = group.files.find { |file| file.path == relative_path } || group.new_file(relative_path)
+    targets.each do |target|
+      resources = target.resources_build_phase
+      # An upstream SDK may add its own manifest after a dependency update. Stop
+      # rather than silently shipping two same-name resources or overriding it.
+      other_manifest = resources.files_references.find do |file|
+        file != reference && File.basename(file.path.to_s) == 'PrivacyInfo.xcprivacy'
+      end
+      raise "Review upstream privacy manifest before removing the LegnaSend override: #{pod_name}" if other_manifest
+
+      resources.add_file_reference(reference, true)
+    end
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    # Flutter's helper skips resource bundles; keep privacy resources at the
+    # product's existing minimum instead of CocoaPods' obsolete iOS 9 default.
+    if target.respond_to?(:product_type) && target.product_type == 'com.apple.product-type.bundle'
+      target.build_configurations.each do |config|
+        floor = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] || '9.0'
+        if floor.match?(/\A[0-9]+(?:\.[0-9]+)*\z/) && Gem::Version.new(floor) < Gem::Version.new('13.0')
+          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
+        end
+      end
+    end
+  end
+  install_share_handler_privacy_manifests(installer)
+end

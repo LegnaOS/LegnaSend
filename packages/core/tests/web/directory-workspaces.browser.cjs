@@ -1,0 +1,131 @@
+'use strict';
+// Real Chromium + compiled Rust fixture. No user app/profile/network settings.
+// PLAYWRIGHT_MODULE=/path/to/playwright node .../directory-workspaces.browser.cjs
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const {spawn} = require('node:child_process');
+const {createHash} = require('node:crypto');
+const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const repo = path.resolve(__dirname, '../../../..');
+const root = fs.mkdtempSync(path.join(os.tmpdir(), 'legnasend-directory-browser-'));
+const evidence = process.env.EVIDENCE_DIR || path.join(os.tmpdir(), 'legnasend-directory-evidence');
+fs.mkdirSync(evidence, {recursive:true});
+fs.mkdirSync(path.join(root,'a')); fs.mkdirSync(path.join(root,'b','文档'), {recursive:true});
+for(let i=0;i<10000;i++)fs.writeFileSync(path.join(root,'a',`设计资源-${String(i).padStart(5,'0')}.txt`),`file ${i}\n`);
+const sample = Buffer.from('LegnaSend browser download\n文件哈希验收\n');
+fs.writeFileSync(path.join(root,'b','private.txt'),sample);
+fs.writeFileSync(path.join(root,'b','文档','说明.txt'),'说明');
+fs.writeFileSync(path.join(root,'b','<script>plain-name.txt'),'literal');
+fs.writeFileSync(path.join(root,'b','download.LS'),'internal');
+const fixture = spawn(path.join(repo,'target/debug/examples/directory_workspace_fixture'),[root],{stdio:['pipe','pipe','pipe']});
+let browser, output='', errors=[];
+fixture.stderr.on('data',bytes=>process.stderr.write(bytes));
+fixture.stdout.on('data',bytes=>{output+=bytes;});
+async function until(check){for(let i=0;i<200;i++){const result=await check();if(result)return result;await new Promise(r=>setTimeout(r,25));}throw new Error('condition timed out');}
+async function command(value){const length=output.length;fixture.stdin.write(value+'\n');await until(()=>output.slice(length).includes('revision'));}
+const sha = bytes=>createHash('sha256').update(bytes).digest('hex');
+(async()=>{
+  const url=await until(()=>output.match(/http:\/\/127\.0\.0\.1:\d+\//)?.[0]);
+  browser=await chromium.launch({headless:true,...(process.env.CHROME_PATH?{executablePath:process.env.CHROME_PATH}:{})});
+  const context=await browser.newContext({viewport:{width:1100,height:800},locale:'zh-CN'});
+  const page=await context.newPage();
+  page.on('pageerror',error=>errors.push(error.message));
+  let lists=0;
+  page.on('request',request=>{if(request.url().includes('/files?'))lists++;});
+  await page.goto(url);await page.locator('#index .card').waitFor();
+  assert.equal(await page.locator('#index .card').count(),1);
+  assert.match(await page.locator('#index').innerText(),/设计资源/);
+  assert.doesNotMatch(await page.locator('#index').innerText(),/私人/);
+  await page.screenshot({path:path.join(evidence,'directory-index-desktop.png')});
+  await page.locator('#index .card').click();
+  await page.waitForFunction(()=>document.querySelector('#count').textContent.startsWith('100 '));
+  assert.equal(lists,1); // No eager full directory enumeration.
+  for(let i=2;i<=5;i++){
+    await page.locator('#more').click();
+    await page.waitForFunction(count=>document.querySelector('#count').textContent.startsWith(count+' '),i*100);
+  }
+  await page.locator('#viewport').evaluate(el=>{el.scrollTop=el.scrollHeight;});
+  await page.waitForFunction(()=>document.querySelector('#count').textContent.startsWith('600 '));
+  assert.ok(await page.locator('#rows .row').count()<=25);
+  await page.screenshot({path:path.join(evidence,'directory-files-desktop.png')});
+  // A changed directory rejects its old cursor and the UI refetches metadata once.
+  fs.writeFileSync(path.join(root,'a','new-file.txt'),'new');
+  const invalidated=page.waitForResponse(response=>response.url().includes('/files?')&&response.status()===409);
+  await page.locator('#more').click();await invalidated;
+  await page.waitForFunction(()=>document.querySelector('#count').textContent.startsWith('100 '));
+  const hidden=await context.newPage();hidden.on('pageerror',error=>errors.push(error.message));
+  await hidden.goto(url+'private/');
+  await hidden.locator('.row[title="private.txt"]').waitFor();
+  assert.equal(await hidden.locator('.row').count(),3);
+  assert.equal(await hidden.locator('.row[title="<script>plain-name.txt"]').count(),1);
+  assert.equal(await hidden.locator('#rows script').count(),0);
+  await hidden.locator('.row[title="文档"]').click();
+  await hidden.locator('.row[title="说明.txt"]').waitFor();
+  await hidden.locator('#path button').click();
+  const downloadEvent=hidden.waitForEvent('download');
+  await hidden.locator('.row[title="private.txt"]').click();
+  const download=await downloadEvent;assert.equal(await download.failure(),null);
+  const downloaded=fs.readFileSync(await download.path());assert.equal(sha(downloaded),sha(sample));
+  // Independent visibility and downloads survive removal of a different workspace.
+  await command('close-a');await page.locator('#refresh').click();
+  await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('暂不可用'));
+  const probe=await context.request.get(url+'private/?meta');assert.equal(probe.status(),200);
+  const closed=await context.request.get(url+'design/');assert.equal(closed.status(),404);
+  await command('restore');await page.locator('#refresh').click();
+  await page.waitForFunction(()=>document.querySelector('#count').textContent.startsWith('100 '));
+  const mobile=await context.newPage();mobile.on('pageerror',error=>errors.push(error.message));
+  await mobile.setViewportSize({width:390,height:844});await mobile.emulateMedia({colorScheme:'dark'});
+  await mobile.goto(url+'private/');await mobile.locator('.row').first().waitFor();
+  await mobile.locator('#language').selectOption('zh-TW');
+  assert.equal(await mobile.locator('#mode').innerText(),'唯讀分享');
+  assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
+  await mobile.screenshot({path:path.join(evidence,'directory-files-mobile-hant.png')});
+  await mobile.locator('#language').selectOption('en');assert.equal(await mobile.locator('#mode').innerText(),'Read only');
+  // End-to-end independent password gate, not a mocked HTML modal.
+  await command('protect-a');
+  const protectedIndex=await context.newPage();await protectedIndex.goto(url);await protectedIndex.locator('#index .card').waitFor();
+  await protectedIndex.locator('#language').selectOption('en');assert.equal(await protectedIndex.locator('#index .card .tag').innerText(),'Password required');await protectedIndex.close();
+  await page.locator('#refresh').click();
+  await page.locator('#auth[open]').waitFor();
+  assert.equal(await page.locator('#rows .row').count(),0);
+  await page.screenshot({path:path.join(evidence,'directory-password-desktop.png')});
+  await page.locator('#auth-password').fill('wrong-password');await page.locator('#auth-submit').click();
+  await page.waitForFunction(()=>document.querySelector('#auth-error').textContent.includes('不正确'));
+  await page.locator('#auth-password').fill('fixture-password');await page.locator('#auth-submit').click();
+  await page.locator('#auth[open]').waitFor({state:'hidden'});await page.locator('.row').first().waitFor();
+  const cookies=await context.cookies();const grant=cookies.find(value=>value.name.startsWith('lsw_'));
+  assert.ok(grant&&grant.httpOnly&&grant.sameSite==='Strict');
+  assert.equal(await page.evaluate(()=>document.cookie.includes('lsw_')),false);
+  const guardedDownload=page.waitForEvent('download');await page.locator('.row').first().click();
+  const downloadedProtected=await guardedDownload;assert.equal(await downloadedProtected.failure(),null);
+  const protectedHash=sha(fs.readFileSync(await downloadedProtected.path()));
+  assert.equal(protectedHash,sha(fs.readFileSync(path.join(root,'a',downloadedProtected.suggestedFilename()))));
+  await command('rotate-a');await page.locator('#refresh').click();
+  await page.locator('#auth[open]').waitFor();
+  await page.locator('#auth-password').fill('fixture-password');await page.locator('#auth-submit').click();
+  await page.waitForFunction(()=>document.querySelector('#auth-error').textContent.includes('不正确'));
+  await page.locator('#auth-password').fill('changed-password');await page.locator('#auth-submit').click();
+  await page.locator('#auth[open]').waitFor({state:'hidden'});await page.locator('.row').first().waitFor();
+  await page.locator('#logout').click();await page.locator('#unlock').waitFor();
+  assert.equal(await page.locator('#rows .row').count(),0);
+  await mobile.goto(url+'private/');await mobile.locator('.row').first().waitFor();
+  await mobile.locator('#language').selectOption('zh-TW');await mobile.goto(url+'design/');
+  await mobile.locator('#auth[open]').waitFor();
+  assert.equal(await mobile.locator('#auth-title').innerText(),'需要密碼');
+  assert.equal(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+  await mobile.screenshot({path:path.join(evidence,'directory-password-mobile-hant.png')});
+  await mobile.locator('#auth-password').fill('cancelled-input');await mobile.locator('#auth-cancel').click();
+  assert.equal(await mobile.locator('#auth-password').inputValue(),'');
+  await mobile.locator('#unlock').click();await mobile.locator('#auth[open]').waitFor();
+  assert.deepEqual(errors,[]);
+  const result={directoryFiles:10000,firstPage:100,prefetched:600,domRowsMax:25,downloadSha256:sha(downloaded),languages:['en','zh-CN','zh-TW'],viewports:[1100,390],independentClose:true,changedCursorRefresh:true,passwordGate:true,passwordRotation:true,logout:true,protectedDownloadSha256:protectedHash,pageErrors:errors};
+  fs.writeFileSync(path.join(evidence,'directory-browser-results.json'),JSON.stringify(result,null,2)+'\n');
+  console.log(JSON.stringify(result,null,2));
+})().catch(error=>{console.error(error);process.exitCode=1;}).finally(async()=>{
+  if(browser)await browser.close();
+  fixture.stdin.write('quit\n');
+  await new Promise(resolve=>{fixture.once('exit',resolve);setTimeout(()=>{fixture.kill('SIGTERM');resolve();},3000).unref();});
+  fs.rmSync(root,{recursive:true,force:true});
+});

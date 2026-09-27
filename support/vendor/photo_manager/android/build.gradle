@@ -1,0 +1,91 @@
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+File pubspec = new File(project.projectDir.parentFile, 'pubspec.yaml')
+String yaml = pubspec.text
+
+Matcher versionMatcher = Pattern.compile("^version:\\s*['|\"]?([^\\n|'|\"]*)['|\"]?\$", Pattern.MULTILINE).matcher(yaml)
+versionMatcher.find()
+String library_version = versionMatcher.group(1).replaceAll("\\+", "-")
+
+group 'com.fluttercandies.photo_manager'
+version library_version
+
+// Keep this top-level: a conditional buildscript block can run after Gradle
+// has resolved the script classpath.
+buildscript {
+    ext.kotlin_version = '1.9.23'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+// AGP creates its built-in Kotlin extension when the Android plugin is
+// applied. Checking before this point always misdetects the built-in path.
+def agpMajor = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0] as int
+def builtInKotlinProperty = project.findProperty("android.builtInKotlin")
+// AGP 9+ enables built-in Kotlin by default when the property is absent.
+def builtInKotlinRequested = builtInKotlinProperty == null
+        ? agpMajor >= 9
+        : builtInKotlinProperty.toString().toBoolean()
+def hasKotlinExtension = project.extensions.findByName("kotlin") != null
+def useBuiltInKotlin = builtInKotlinRequested && hasKotlinExtension
+
+if (!useBuiltInKotlin) {
+    apply plugin: 'kotlin-android'
+}
+
+android {
+    if (project.android.hasProperty('namespace')) {
+        namespace 'com.fluttercandies.photo_manager'
+    }
+
+    compileSdkVersion 36
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    if (!useBuiltInKotlin) {
+        kotlinOptions {
+            jvmTarget = '17'
+        }
+    }
+
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'androidx.exifinterface:exifinterface:1.4.2'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+if (useBuiltInKotlin) {
+    kotlin {
+        compilerOptions {
+            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+        }
+    }
+}

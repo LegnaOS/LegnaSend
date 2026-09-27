@@ -1,0 +1,92 @@
+.idea
+.vscode/
+
+# Build output
+/build/
+
+# Pub workspace resolution output
+/.dart_tool/
+
+# Rust workspace build output
+/target/
+
+# Linux AppImage
+/app/AppDir
+/app/appimage-build
+
+.refena_inspector/
+
+/secrets
+
+# FVM Version Cache
+.fvm/
+
+# macOS
+.DS_Store
+
+# Generated at build time by makepri (see support/scripts/compile_windows_msix_helper.ps1)
+/support/build/msix/content/resources.pri
+
+# Local Apple signing identity; never commit account-specific overrides.
+/app/ios/Flutter/LegnaSigning.local.xcconfig
+
+# Private delivery and account-local material
+/docs/app-store/
+/docs/evidence/
+/docs/upstream/
+/docs/*BATCH*
+/docs/*PLAN*
+/docs/*STAGE*
+/docs/*IMPLEMENTATION*
+/docs/*TASK_STATUS*
+/docs/*REQUIREMENTS*
+/docs/*CI_CHANGELOG*
+/docs/*CI_PACKAGES*
+/docs/*APPLE_SYMBOLS*
+/TODO.md
+/AGENTS.md
+/CLAUDE.md
+/CODE_SIGNING.md
+/fastlane/
+/support/download-portal/
+/.playwright-mcp/
+/app/test/marketing/
+**/*.local.xcconfig
+**/key.properties
+**/*.jks
+**/*.keystore
+**/*.p12
+**/*.pfx
+**/*.mobileprovision
+**/*.provisionprofile
+
+# Public documentation is explicitly allow-listed.
+/docs/*
+!/docs/API_KEY_LIFECYCLE.md
+!/docs/API_KEY_LIFECYCLE_ZH.md
+!/docs/API_PARAMETER_LIMITS.md
+!/docs/API_PARAMETER_LIMITS_ZH.md
+!/docs/API_RECEIVE_RETENTION.md
+!/docs/API_RECEIVE_RETENTION_ZH.md
+!/docs/ATTRIBUTION.md
+!/docs/ATTRIBUTION_ZH.md
+!/docs/BUILD.md
+!/docs/BUILD_ZH.md
+!/docs/DIRECTORY_API.md
+!/docs/DIRECTORY_API_ZH.md
+!/docs/INTEGRATION_API.md
+!/docs/INTEGRATION_API_ZH.md
+!/docs/NATIVE_DURABLE_RESUME.md
+!/docs/NATIVE_DURABLE_RESUME_ZH.md
+!/docs/NATIVE_RECEIVE_RETENTION.md
+!/docs/NATIVE_RECEIVE_RETENTION_APP.md
+!/docs/NATIVE_RECEIVE_RETENTION_APP_ZH.md
+!/docs/NATIVE_RECEIVE_RETENTION_ZH.md
+!/docs/NATIVE_RESUME_PROTOCOL.md
+!/docs/NATIVE_RESUME_PROTOCOL_ZH.md
+!/docs/PLATFORM_PATHS.md
+!/docs/PLATFORM_PATHS_ZH.md
+!/docs/SOURCE_END_CLEANUP_RECEIPTS.md
+!/docs/SOURCE_END_CLEANUP_RECEIPTS_ZH.md
+!/docs/api/
+!/docs/releases/

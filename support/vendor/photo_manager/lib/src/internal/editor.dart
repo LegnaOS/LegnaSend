@@ -1,0 +1,525 @@
+// Copyright 2018 The FlutterCandies author. All rights reserved.
+// Use of this source code is governed by an Apache license that can be found
+// in the LICENSE file.
+
+import 'dart:io';
+import 'dart:typed_data' as typed_data;
+
+import 'package:photo_manager/platform_utils.dart';
+
+import '../types/entity.dart';
+import 'enums.dart';
+import 'plugin.dart';
+
+class Editor {
+  final DarwinEditor _darwin = const DarwinEditor();
+  final AndroidEditor _android = const AndroidEditor();
+  final OhosEditor _ohos = const OhosEditor();
+
+  /// Support iOS and macOS.
+  DarwinEditor get darwin {
+    if (Platform.isIOS || Platform.isMacOS) {
+      return _darwin;
+    }
+    throw const OSError('Darwin Editor should only be use on iOS or macOS.');
+  }
+
+  /// Support Android.
+  AndroidEditor get android {
+    if (Platform.isAndroid) {
+      return _android;
+    }
+    throw const OSError('Android Editor should only be use on Android.');
+  }
+
+  /// Support Openharmony.
+  OhosEditor get ohos {
+    if (PlatformUtils.isOhos) {
+      return _ohos;
+    }
+    throw const OSError('Ohos Editor should only be use on OpenHarmony.');
+  }
+
+  /// Delete entities with specific IDs.
+  ///
+  /// Entities will be deleted no matter which album they're located at on iOS.
+  /// The method as [moveToTrash] on OpenHarmony, it's not support completely delete.
+  Future<List<String>> deleteWithIds(List<String> ids) {
+    return plugin.deleteWithIds(ids);
+  }
+
+  /// Save image to gallery from the given [data].
+  ///
+  /// [filename] will be helpful to evaluate the MIME type from the [data].
+  ///
+  /// {@template photo_manager.Editor.TitleWhenSaving}
+  /// [title] is the title field on Android, and the original filename on iOS.
+  /// {@endtemplate}
+  ///
+  /// {@template photo_manager.Editor.DescriptionWhenSaving}
+  /// [desc] is the description field that only works on Android.
+  /// {@endtemplate}
+  ///
+  /// {@template photo_manager.Editor.RelativePathWhenSaving}
+  /// On Android 29 and above, you can use [relativePath] to specify the
+  /// `RELATIVE_PATH` used in the MediaStore.
+  /// The MIME type will either be formed from the title if you pass one,
+  /// or guessed by the system, which does not always work.
+  /// {@endtemplate}
+  ///
+  /// {@template photo_manager.Editor.OrientationWhenSaving}
+  /// [orientation] is only available on Android. It could be useful when
+  /// some devices cannot recognizes the asset's size info well.
+  /// {@endtemplate}
+  ///
+  /// {@template photo_manager.Editor.LocationWhenSaving}
+  /// [latitude] and [longitude] specify the location metadata for the asset.
+  /// Both parameters must be provided together or not at all.
+  ///
+  /// On iOS/macOS these parameters are not supported by the core package (which
+  /// no longer links CoreLocation); calling with them throws. Use the
+  /// `photo_manager_location` plugin instead. Android is unaffected.
+  /// {@endtemplate}
+  ///
+  /// {@template photo_manager.Editor.CreationDateWhenSaving}
+  /// [creationDate] specifies the creation date for the asset.
+  /// On iOS, this sets the creation date of the asset.
+  /// On Android Q and above, this sets the DATE_TAKEN field (in milliseconds since epoch).
+  /// {@endtemplate}
+  Future<AssetEntity> saveImage(
+    typed_data.Uint8List data, {
+    required String filename,
+    String? title,
+    String? desc,
+    String? relativePath,
+    int? orientation,
+    double? latitude,
+    double? longitude,
+    DateTime? creationDate,
+  }) {
+    return plugin.saveImage(
+      data,
+      filename: filename,
+      title: title,
+      desc: desc,
+      relativePath: relativePath,
+      orientation: orientation,
+      latitude: latitude,
+      longitude: longitude,
+      creationDate: creationDate,
+    );
+  }
+
+  /// Save image to gallery from the given [filePath].
+  ///
+  /// {@macro photo_manager.Editor.TitleWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.DescriptionWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.RelativePathWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.OrientationWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.LocationWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.CreationDateWhenSaving}
+  Future<AssetEntity> saveImageWithPath(
+    String filePath, {
+    String? title,
+    String? desc,
+    String? relativePath,
+    int? orientation,
+    double? latitude,
+    double? longitude,
+    DateTime? creationDate,
+  }) {
+    return plugin.saveImageWithPath(
+      filePath,
+      title: title,
+      desc: desc,
+      relativePath: relativePath,
+      orientation: orientation,
+      latitude: latitude,
+      longitude: longitude,
+      creationDate: creationDate,
+    );
+  }
+
+  /// Save video to gallery from the given [file].
+  ///
+  /// {@macro photo_manager.Editor.TitleWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.DescriptionWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.RelativePathWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.OrientationWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.LocationWhenSaving}
+  ///
+  /// {@macro photo_manager.Editor.CreationDateWhenSaving}
+  Future<AssetEntity> saveVideo(
+    File file, {
+    String? title,
+    String? desc,
+    String? relativePath,
+    int? orientation,
+    double? latitude,
+    double? longitude,
+    DateTime? creationDate,
+  }) {
+    return plugin.saveVideo(
+      file,
+      title: title,
+      desc: desc,
+      relativePath: relativePath,
+      orientation: orientation,
+      latitude: latitude,
+      longitude: longitude,
+      creationDate: creationDate,
+    );
+  }
+
+  /// Copy asset to another gallery.
+  ///
+  /// - Android: Produce a copy of the original file.
+  /// - iOS/macOS: Make a soft link to the target file.
+  Future<AssetEntity> copyAssetToPath({
+    required AssetEntity asset,
+    required AssetPathEntity pathEntity,
+  }) {
+    return plugin.copyAssetToGallery(asset, pathEntity);
+  }
+}
+
+/// An editor for iOS/macOS.
+class DarwinEditor {
+  /// Creates a new [DarwinEditor] object.
+  const DarwinEditor();
+
+  /// {@template photo_manager.IosEditor.EnsureParentIsRootOrFolder}
+  ///
+  /// Throws an error if the given [parent] path is not null, the root path, or a folder path.
+  ///
+  /// This method is intended to be used by subclasses to ensure that a parent path is valid before creating assets or folders under it.
+  ///
+  /// Throws an [ArgumentError] if the parent path is not valid.
+  ///
+  /// See also:
+  ///
+  /// * [AssetPathEntity.isAll], which indicates whether the path represents all assets.
+  /// {@endtemplate}
+  void _ensureParentIsRootOrFolder(AssetPathEntity? parent) {
+    if (parent != null && parent.albumType != 2 && !parent.isAll) {
+      throw ArgumentError('Use a folder path or the root path.');
+    }
+  }
+
+  /// {@template photo_manager.IosEditor.EnsureParentIsNotRootOrFolder}
+  /// Entities' entry can be only removed from non-root albums,
+  /// so the [parent] should be non-albums.
+  /// {@endtemplate}
+  void _ensureParentIsNotRootOrFolder(AssetPathEntity parent) {
+    if (parent.isAll) {
+      throw ArgumentError('Use PhotoManager.editor.deleteWithIds instead.');
+    }
+    if (parent.albumType == 2) {
+      throw ArgumentError('Use a non-root album path.');
+    }
+  }
+
+  /// Creates a folder under the root path or other folders.
+  ///
+  /// [name] Define the folder name.
+  /// {@macro photo_manager.IosEditor.EnsureParentIsRootOrFolder}
+  Future<AssetPathEntity?> createFolder(
+    String name, {
+    AssetPathEntity? parent,
+  }) async {
+    _ensureParentIsRootOrFolder(parent);
+    return plugin.iosCreateFolder(
+      name,
+      parent == null || parent.isAll,
+      parent,
+    );
+  }
+
+  /// Creates an album under the root path or other folders.
+  ///
+  /// [name] Define the album name.
+  /// {@macro photo_manager.IosEditor.EnsureParentIsRootOrFolder}
+  Future<AssetPathEntity?> createAlbum(
+    String name, {
+    AssetPathEntity? parent,
+  }) async {
+    _ensureParentIsRootOrFolder(parent);
+    return plugin.iosCreateAlbum(
+      name,
+      parent == null || parent.isAll,
+      parent,
+    );
+  }
+
+  /// {@macro photo_manager.IosEditor.EnsureParentIsNotRootOrFolder}
+  Future<bool> removeInAlbum(AssetEntity entity, AssetPathEntity parent) async {
+    _ensureParentIsNotRootOrFolder(parent);
+    return plugin.iosRemoveInAlbum(<AssetEntity>[entity], parent);
+  }
+
+  /// Remove [list]'s items from [parent] in batches.
+  /// {@macro photo_manager.IosEditor.EnsureParentIsNotRootOrFolder}
+  Future<bool> removeAssetsInAlbum(
+    List<AssetEntity> list,
+    AssetPathEntity parent,
+  ) async {
+    if (list.isEmpty) {
+      return false;
+    }
+    // ignore: deprecated_member_use_from_same_package
+    if ((parent.darwinType ?? parent.albumTypeEx?.darwin?.type) ==
+        PMDarwinAssetCollectionType.smartAlbum) {
+      // Asset of smartAlbums can't be deleted.
+      return false;
+    }
+    _ensureParentIsNotRootOrFolder(parent);
+    return plugin.iosRemoveInAlbum(list, parent);
+  }
+
+  /// Deletes the given [path].
+  ///
+  /// Returns `true` if the operation was successful; otherwise, `false`.
+  Future<bool> deletePath(AssetPathEntity path) async {
+    // ignore: deprecated_member_use_from_same_package
+    if ((path.darwinType ?? path.albumTypeEx?.darwin?.type) ==
+        PMDarwinAssetCollectionType.smartAlbum) {
+      // SmartAlbums can't be deleted.
+      return false;
+    }
+    return plugin.iosDeleteCollection(path);
+  }
+
+  /// Sets the favorite status of the given [entity].
+  ///
+  /// Returns the updated [AssetEntity] if the operation was successful; otherwise, `null`.
+  Future<AssetEntity> favoriteAsset({
+    required AssetEntity entity,
+    required bool favorite,
+  }) async {
+    final bool result = await plugin.favoriteAsset(entity.id, favorite);
+    if (result) {
+      return entity.copyWith(isFavorite: favorite);
+    }
+    throw StateError(
+      'Failed to favorite the asset '
+      '${entity.id} for unknown reason',
+    );
+  }
+
+  /// Updates the creation date of the given [entity].
+  ///
+  /// This method modifies the creation date metadata of the asset.
+  /// On iOS/macOS, this updates the `creationDate` property of the asset.
+  ///
+  /// Returns the updated [AssetEntity] with the new creation date if the
+  /// operation was successful; otherwise, throws a [StateError].
+  ///
+  /// Example:
+  /// ```dart
+  /// final AssetEntity updated =
+  ///     await PhotoManager.editor.darwin.updateCreationDate(
+  ///   entity: myAsset,
+  ///   creationDate: DateTime(2023, 1, 15, 10, 30),
+  /// );
+  /// ```
+  Future<AssetEntity> updateCreationDate({
+    required AssetEntity entity,
+    required DateTime creationDate,
+  }) async {
+    final bool result = await plugin.updateCreationDate(
+      entity.id,
+      creationDate,
+    );
+    if (result) {
+      final int timestampInSeconds =
+          creationDate.millisecondsSinceEpoch ~/ 1000;
+      return entity.copyWith(createDateSecond: timestampInSeconds);
+    }
+    throw StateError('Failed to update creation date for asset ${entity.id}');
+  }
+
+  /// Save Live Photo to the gallery from the given [imageFile] and [videoFile].
+  ///
+  /// {@macro photo_manager.Editor.TitleWhenSaving}
+  /// For a Live Photo, [title] typically take place when saving the resources
+  /// and should not contain the extension. For example:
+  /// GOOD: "my_live_photo_20240123_123456"
+  /// BAD: "my_live_photo_20240123_123456.jpg"
+  /// BAD: "my_live_photo_20240123_123456.mov"
+  /// BAD: "my_live_photo_20240123_123456.heic"
+  Future<AssetEntity> saveLivePhoto({
+    required File imageFile,
+    required File videoFile,
+    required String title,
+    String? desc,
+    String? relativePath,
+  }) {
+    return plugin.saveLivePhoto(
+      imageFile: imageFile,
+      videoFile: videoFile,
+      title: title,
+      desc: desc,
+      relativePath: relativePath,
+    );
+  }
+}
+
+/// An editor for Android.
+class AndroidEditor {
+  /// Creates a new [AndroidEditor] object.
+  const AndroidEditor();
+
+  /// Sets the favorite status of the given [entity].
+  ///
+  /// Returns the updated [AssetEntity] if the operation was successful; otherwise, throws a state error to indicate the failure.
+  Future<AssetEntity> favoriteAsset({
+    required AssetEntity entity,
+    required bool favorite,
+  }) async {
+    final bool result = await plugin.favoriteAsset(entity.id, favorite);
+    if (result) {
+      return entity.copyWith(isFavorite: favorite);
+    }
+    throw StateError(
+      'Failed to favorite the asset '
+      '${entity.id} for unknown reason',
+    );
+  }
+
+  /// Updates the creation date of the given [entity].
+  ///
+  /// This method modifies the creation date metadata of the asset.
+  /// On Android Q (API 29) and above, this updates the `DATE_TAKEN` field in
+  /// MediaStore. On Android P (API 28) and below, this method is not supported
+  /// and throws a [StateError].
+  ///
+  /// Returns the updated [AssetEntity] with the new creation date if the
+  /// operation was successful; otherwise, throws a [StateError].
+  ///
+  /// Example:
+  /// ```dart
+  /// final AssetEntity updated =
+  ///     await PhotoManager.editor.android.updateCreationDate(
+  ///   entity: myAsset,
+  ///   creationDate: DateTime(2023, 1, 15, 10, 30),
+  /// );
+  /// ```
+  Future<AssetEntity> updateCreationDate({
+    required AssetEntity entity,
+    required DateTime creationDate,
+  }) async {
+    final bool result = await plugin.updateCreationDate(
+      entity.id,
+      creationDate,
+    );
+    if (result) {
+      final int timestampInSeconds =
+          creationDate.millisecondsSinceEpoch ~/ 1000;
+      return entity.copyWith(createDateSecond: timestampInSeconds);
+    }
+    throw StateError('Failed to update creation date for asset ${entity.id}');
+  }
+
+  /// Moves the given [entity] to the specified [target] path.
+  ///
+  /// Returns `true` if the move was successful; otherwise, `false`.
+  Future<bool> moveAssetToAnother({
+    required AssetEntity entity,
+    required AssetPathEntity target,
+  }) {
+    return plugin.androidMoveAssetToPath(entity, target);
+  }
+
+  /// Moves multiple assets to a different path/album on Android 11+ (API 30+) with user permission.
+  ///
+  /// This method uses MediaStore.createWriteRequest() to request user permission
+  /// for batch modifications, showing a single system dialog for all assets.
+  ///
+  /// [entities] List of assets to move
+  /// [targetPath] Target RELATIVE_PATH (e.g., "Pictures/MyAlbum")
+  ///
+  /// Returns `true` if the operation was successful; otherwise, `false`.
+  ///
+  /// Note: This method requires Android 11 (API 30) or higher.
+  /// For Android 10 and below, use [moveAssetToAnother] instead.
+  ///
+  /// Example:
+  /// ```dart
+  /// final success = await PhotoManager.editor.android.moveAssetsToPath(
+  ///   entities: [asset1, asset2, asset3],
+  ///   targetPath: 'Pictures/MyAlbum',
+  /// );
+  /// ```
+  Future<bool> moveAssetsToPath({
+    required List<AssetEntity> entities,
+    required String targetPath,
+  }) {
+    final assetIds = entities.map((e) => e.id).toList();
+    return plugin.androidMoveAssetsToPath(assetIds, targetPath);
+  }
+
+  /// Removes all assets from the gallery that are no longer available on disk.
+  ///
+  /// This method is intended to be used after manually deleting files from the
+  /// device's storage. It returns `true` if this operation was successful; otherwise, `false`.
+  Future<bool> removeAllNoExistsAsset() {
+    return plugin.androidRemoveNoExistsAssets();
+  }
+
+  /// Move to trash
+  Future<List<String>> moveToTrash(List<AssetEntity> list) {
+    return plugin.moveToTrash(list);
+  }
+
+  /// Restores the given assets from the Android system trash.
+  ///
+  /// The assets must be instances retained by the caller before they were
+  /// moved to trash. Android hides trashed assets from normal MediaStore
+  /// queries, so they cannot be fetched again through the usual asset APIs.
+  ///
+  /// Android shows a system prompt unless the app has media management access.
+  /// The returned list contains the IDs restored after the user accepts the
+  /// prompt, or is empty if the user cancels it.
+  ///
+  /// This method requires Android 11 (API 30) or newer.
+  Future<List<String>> restoreFromTrash(List<AssetEntity> list) {
+    return plugin.restoreFromTrash(list);
+  }
+}
+
+/// An editor for OpenHarmony.
+class OhosEditor {
+  /// Creates a new [OhosEditor] object.
+  const OhosEditor();
+
+  /// Returns column names of the photo access.
+  Future<List<String>> ohosColumns() {
+    return plugin.ohosColumns();
+  }
+
+  /// Sets the favorite status of the given [entity].
+  ///
+  /// Returns the updated [AssetEntity] if the operation was successful; otherwise, `null`.
+  Future<AssetEntity> favoriteAsset({
+    required AssetEntity entity,
+    required bool favorite,
+  }) async {
+    final bool result = await plugin.favoriteAsset(entity.id, favorite);
+    if (result) {
+      return entity.copyWith(isFavorite: favorite);
+    }
+    throw StateError(
+      'Failed to favorite the asset '
+      '${entity.id} for unknown reason',
+    );
+  }
+}

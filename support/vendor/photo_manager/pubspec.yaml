@@ -1,0 +1,34 @@
+name: photo_manager
+description: A Flutter plugin that provides album assets abstraction management APIs on Android, iOS, macOS, and OpenHarmony.
+repository: https://github.com/fluttercandies/flutter_photo_manager
+version: 3.12.0
+
+environment:
+  sdk: ">=2.13.0 <4.0.0"
+  flutter: ">=2.2.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  path: ^1.8.0
+
+dev_dependencies:
+  flutter_lints: any
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.fluttercandies.photo_manager
+        pluginClass: PhotoManagerPlugin
+      ios:
+        pluginClass: PhotoManagerPlugin
+        sharedDarwinSource: true
+      macos:
+        pluginClass: PhotoManagerPlugin
+        sharedDarwinSource: true
+      ohos:
+        pluginClass: PhotoManagerPlugin

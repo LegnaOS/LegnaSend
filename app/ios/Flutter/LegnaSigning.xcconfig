@@ -1,0 +1,5 @@
+// Repository defaults are not registered Apple identifiers or signing credentials.
+LEGNASEND_TEAM =
+LEGNASEND_BUNDLE_ID = org.legna.legnasend
+LEGNASEND_APP_GROUP = group.$(LEGNASEND_BUNDLE_ID)
+#include? "LegnaSigning.local.xcconfig"

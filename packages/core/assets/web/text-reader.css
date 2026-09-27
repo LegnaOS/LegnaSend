@@ -1,0 +1,184 @@
+/* Shared by temporary sharing and named directory workspaces. */
+.text-toolbar {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:6px;
+  text-align:left;
+}
+.text-toolbar label {
+  font-size:11px;
+  color:var(--muted);
+}
+.text-toolbar select,.text-toolbar button {
+  font-size:11px;
+  min-height:30px;
+  padding:5px 8px;
+}
+.text-progress,.text-hint {
+  font-size:11px;
+  color:var(--muted);
+  text-align:left;
+  overflow-wrap:anywhere;
+  margin:10px 0;
+}
+.text-hint {
+  margin-bottom:0;
+}
+.text-viewport {
+  position:relative;
+  overflow:auto;
+  height:46vh;
+  max-height:480px;
+  min-height:144px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#fcfdfc;
+  text-align:left;
+  overscroll-behavior:contain;
+}
+.text-spacer {
+  position:relative;
+  min-width:100%;
+}
+.text-rows {
+  position:absolute;
+  top:0;
+  left:0;
+  min-width:100%;
+}
+.text-row {
+  height:24px;
+  font:13px/24px ui-monospace,SFMono-Regular,monospace;
+  white-space:pre;
+  width:max-content;
+  min-width:100%;
+  tab-size:4;
+}
+.text-line-number {
+  display:inline-block;
+  width:9ch;
+  padding-right:1ch;
+  text-align:right;
+  color:#88968d;
+  background:#f1f5f1;
+  user-select:none;
+}
+.text-line {
+  unicode-bidi:plaintext;
+}
+/* Document reader: quiet typography, native wrapping, measured virtual rows. */
+.text-toolbar { padding-bottom:8px; border-bottom:1px solid var(--line); }
+.text-check { display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
+.text-check input { accent-color:var(--green); width:13px; height:13px; margin:0; }
+.text-search { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:10px; }
+.text-search .text-query { flex:1 1 160px; width:160px; min-width:100px; }
+.text-search input,.text-search select,.text-search button { min-height:30px; font-size:12px; padding:4px 8px; }
+.text-search .text-check input { padding:0; min-height:0; }
+.text-search label { font-size:11px; color:var(--muted); }
+.text-search-status { min-height:16px; margin:6px 0 0; font-size:11px; color:var(--muted); overflow-wrap:anywhere; }
+.text-progress { margin:4px 0 10px; }
+.text-viewport,.markdown-viewport { height:50vh; max-height:600px; min-height:160px; overflow:auto; overscroll-behavior:contain; text-align:left; }
+.text-viewport { background:#fff; border:0; border-radius:0; overflow-anchor:none; }
+.text-rows { left:16px; min-width:0; width:calc(100% - 32px); }
+.text-row { height:auto; min-height:28px; width:100%; min-width:0; display:flex; align-items:flex-start; font:14px/28px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; white-space:pre-wrap; overflow-wrap:anywhere; }
+.text-line-number { display:none; background:none; width:6ch; flex:0 0 6ch; font:11px/28px ui-monospace,monospace; color:#92a099; }
+.text-numbered .text-line-number { display:block; }
+.text-line { flex:1; min-width:0; }
+.text-nowrap .text-row { white-space:pre; width:max-content; min-width:100%; }
+.text-nowrap .text-line { flex:none; }
+.text-nowrap .text-rows { width:max-content; min-width:calc(100% - 32px); }
+.text-row mark { border-radius:3px; padding:1px 0; color:inherit; background:#fff0ad; }
+.text-row mark.text-match-current { background:#c2edc8; outline:1px solid #54b865; }
+.markdown-document { max-width:72ch; margin:0 auto; padding:0 16px 20px; font:14px/1.85 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; color:var(--ink); overflow-wrap:anywhere; }
+.markdown-document h1,.markdown-document h2,.markdown-document h3,.markdown-document h4 { letter-spacing:-.02em; line-height:1.4; margin:1.1em 0 .5em; }
+.markdown-document h1 { font-size:25px; }
+.markdown-document h2 { font-size:21px; border-bottom:1px solid var(--line); padding-bottom:6px; }
+.markdown-document h3 { font-size:17px; }
+.markdown-document p { margin:.6em 0; }
+.markdown-document li p { margin:.2em 0; }
+.markdown-document ul,.markdown-document ol { padding-left:24px; }
+.markdown-document blockquote { margin:12px 0; padding:2px 14px; border-left:3px solid var(--green); color:var(--muted); background:#f5faf6; }
+.markdown-document code { font:12px/1.8 ui-monospace,monospace; background:#f0f5f1; padding:2px 4px; border-radius:4px; }
+.markdown-document pre { overflow:auto; padding:12px; border-radius:8px; background:#f5f7f5; white-space:pre-wrap; overflow-wrap:anywhere; }
+.markdown-document pre code { background:none; padding:0; }
+.markdown-document a { color:#27783a; text-decoration:underline; text-underline-offset:3px; }
+.markdown-document hr { border:0; border-top:1px solid var(--line); margin:20px 0; }
+.markdown-table { max-width:100%; overflow:auto; }
+.markdown-document table { border-collapse:collapse; width:100%; font-size:13px; }
+.markdown-document th,.markdown-document td { border:1px solid var(--line); padding:6px 10px; }
+.markdown-document th { background:#f5f8f5; text-align:left; }
+.markdown-image-label { color:var(--muted); font-size:12px; }
+@media(max-width:600px) {
+  .text-search { gap:3px; }
+  .text-rows { left:4px; width:calc(100% - 8px); }
+  .text-nowrap .text-rows { min-width:calc(100% - 8px); }
+  .markdown-document { padding:0 4px 16px; }
+  .text-search .text-query { flex-basis:calc(100% - 44px); }
+  .text-search .text-search-clear { order:1; flex:0 0 36px; }
+  .text-search > :not(.text-query):not(.text-search-clear) { order:2; }
+}
+/* Large Markdown: one section, only nearby complete blocks retained in the DOM. */
+.markdown-navigation { display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:2; padding:5px 0; background:var(--surface,#fff); }
+.markdown-navigation button { min-height:32px; padding:4px 10px; font-size:11px; }
+.markdown-navigation span,.markdown-stream-note,.markdown-stream-error { color:var(--muted); font-size:11px; }
+.markdown-stream-note { margin:5px 0 10px; }
+.markdown-stream-error:empty { display:none; }
+.markdown-block-stage { position:relative; overflow-anchor:none; }
+.markdown-virtual-block { position:absolute; left:0; right:0; padding-bottom:0; display:flow-root; }
+.markdown-virtual-block > :first-child { margin-top:8px; }
+.markdown-virtual-block > :last-child { margin-bottom:8px; }
+@media(max-width:600px) { .markdown-navigation button { min-height:44px; } .markdown-navigation { gap:4px; flex-wrap:wrap; } }
+.markdown-scan { min-height:30px; padding:4px 8px; font-size:11px; }
+
+:root[data-theme="dark"] .markdown-navigation { background:#18231b; }
+@media(max-width:600px) {
+  .markdown-navigation { display:grid; grid-template-columns:1fr 1fr; }
+  .markdown-navigation span { grid-row:2; grid-column:1 / -1; text-align:center; }
+  .markdown-scan { min-height:44px; }
+}
+
+/* Consecutive bounded windows of one large fenced code block. */
+.markdown-fence-window pre { margin:0; border-radius:0; padding-top:0; padding-bottom:0; }
+.markdown-fence-window > :first-child,.markdown-fence-window > :last-child { margin-top:0; margin-bottom:0; }
+
+.markdown-table-window table { table-layout:fixed; }
+/* Format guidance stays outside preview content so failures cannot remove it. */
+.preview-support { flex-shrink:0; color:var(--muted); font-size:12px; line-height:1.65; overflow-wrap:anywhere; }
+.preview-support-hint { margin:4px 0; }
+.preview-support-details { margin:4px 0 10px; }
+.preview-support-details > summary { cursor:pointer; color:var(--link-ink,var(--ink)); padding:6px 0; min-height:24px; }
+.preview-support-details > summary:focus-visible { outline:2px solid var(--focus,var(--green)); outline-offset:2px; border-radius:4px; }
+.preview-support-body { max-height:24vh; max-height:24dvh; overflow:auto; overscroll-behavior:contain; border-left:2px solid var(--line); padding:0 10px; }
+.preview-support-body p { margin:6px 0; }
+@media(max-width:600px) { .preview-support-details > summary { min-height:32px; } }
+
+.preview-dialog > .preview-support { padding:0 20px; }
+@media(max-width:600px) { .preview-dialog > .preview-support { padding:0 12px; } }
+/* Physical-line jump indexes in the background without an unbounded DOM. */
+.text-jump { display:flex; flex:1 1 100%; align-items:center; flex-wrap:wrap; gap:6px; }
+.text-jump-label { display:flex; align-items:center; gap:5px; }
+.text-jump .text-jump-input { width:10ch; min-width:80px; max-width:136px; padding:5px 7px; font:inherit; border:1px solid var(--line); border-radius:6px; background:var(--surface,#fff); color:var(--ink); }
+.text-jump-status { flex:1 1 100%; font-size:11px; color:var(--muted); overflow-wrap:anywhere; }
+.text-jump-status:empty,.text-jump [hidden] { display:none; }
+.text-line-target { box-shadow:inset 3px 0 var(--green); background:var(--soft,#edf6ee); }
+
+/* Large paragraph source stays wrapped prose, not a nested editor. */
+.markdown-paragraph-window > p:not(.markdown-stream-note) { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.markdown-paragraph-window > :last-child { margin-bottom:0; }
+.markdown-paragraph-window > :first-child:not(.markdown-stream-note) { margin-top:0; }
+
+/* Oversized list items/table rows keep exact source in the same reading flow. */
+.markdown-source-window > p:not(.markdown-stream-note) { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+.markdown-source-window > :last-child { margin-bottom:0; }
+.markdown-source-window > :first-child:not(.markdown-stream-note) { margin-top:0; }
+
+/* One logical oversized list item continues across virtual sections. */
+.markdown-document li.markdown-list-continuation { list-style-type:none; }
+
+/* Inline-semantic windows keep normal Markdown whitespace and typography. */
+.markdown-inline-window > p:not(.markdown-stream-note) { margin:0; white-space:normal; overflow-wrap:anywhere; }
+.markdown-inline-window.markdown-inline-first > p:first-child { margin-top:.6em; }
+.markdown-inline-window > :last-child { margin-bottom:0; }
+.markdown-stream-progress { margin:5px 0; color:var(--muted); font-size:11px; }
+.markdown-stream-progress:empty { display:none; }

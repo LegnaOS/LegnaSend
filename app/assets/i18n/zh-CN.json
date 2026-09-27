@@ -1,0 +1,945 @@
+{
+  "appName": "LegnaSend",
+  "general": {
+    "accept": "接受",
+    "accepted": "已接受",
+    "add": "添加",
+    "advanced": "高级",
+    "cancel": "取消",
+    "close": "关闭",
+    "confirm": "确认",
+    "continueStr": "继续",
+    "copy": "复制",
+    "copiedToClipboard": "已复制到剪贴板",
+    "decline": "拒绝",
+    "done": "完成",
+    "delete": "删除",
+    "edit": "编辑",
+    "error": "错误",
+    "example": "示例",
+    "files": "文件",
+    "finished": "已完成",
+    "hide": "隐藏",
+    "off": "关",
+    "offline": "离线",
+    "on": "开",
+    "online": "在线",
+    "open": "打开",
+    "queue": "队列",
+    "quickSave": "自动保存",
+    "quickSaveFromFavorites": "自动保存来自“收藏夹(白名单)”设备的文件",
+    "renamed": "重命名成功",
+    "reset": "重置",
+    "restart": "重启",
+    "settings": "设置",
+    "skipped": "已跳过",
+    "start": "开始",
+    "stop": "停止",
+    "save": "保存",
+    "unchanged": "未更改",
+    "unknown": "未知",
+    "noItemInClipboard": "剪贴板为空"
+  },
+  "receiveTab": {
+    "title": "接收",
+    "infoBox": {
+      "ip": "IP：",
+      "port": "端口：",
+      "alias": "设备名称："
+    },
+    "quickSave": {
+      "off": "@:general.off",
+      "favorites": "收藏夹",
+      "on": "@:general.on"
+    },
+    "link": "链接工作区"
+  },
+  "sendTab": {
+    "title": "发送",
+    "selection": {
+      "title": "选择",
+      "files": "文件：{files}",
+      "size": "大小：{size}"
+    },
+    "picker": {
+      "file": "文件",
+      "folder": "文件夹",
+      "media": "媒体",
+      "text": "文本",
+      "app": "应用",
+      "clipboard": "剪贴板"
+    },
+    "shareIntentInfo": "你也可以通过移动设备中的“分享”功能更简单地发送文件。",
+    "nearbyDevices": "附近的设备",
+    "thisDevice": "这台设备",
+    "scan": "扫描设备",
+    "manualSending": "手动发送",
+    "sendMode": "发送模式",
+    "sendModes": {
+      "single": "一个接收者",
+      "multiple": "多个接收者",
+      "link": "通过链接分享"
+    },
+    "sendModeHelp": "提示",
+    "help": "请确保目标连接到同一个 Wi‑Fi 网络。",
+    "placeItems": "列出要分享的项目。"
+  },
+  "settingsTab": {
+    "title": "设置",
+    "general": {
+      "title": "通用",
+      "brightness": "主题",
+      "brightnessOptions": {
+        "system": "跟随系统",
+        "dark": "深色",
+        "light": "浅色"
+      },
+      "color": "颜色",
+      "colorOptions": {
+        "system": "跟随系统",
+        "oled": "OLED",
+        "custom": "自定义"
+      },
+      "language": "语言",
+      "languageOptions": {
+        "system": "跟随系统"
+      },
+      "saveWindowPlacement": "退出时保存窗口位置",
+      "saveWindowPlacementWindows": "退出时保存窗口位置",
+      "minimizeToTray": "关闭时最小化到系统托盘",
+      "launchAtStartup": "登录系统后自动启动程序",
+      "launchMinimized": "启动时最小化到任务栏",
+      "showInContextMenu": "在“发送到...”文件菜单中显示 LocalSend",
+      "animations": "动画效果"
+    },
+    "receive": {
+      "title": "接收",
+      "quickSave": "@:general.quickSave",
+      "quickSaveFromFavorites": "@:general.quickSaveFromFavorites",
+      "requirePin": "@:webSharePage.requirePin",
+      "autoFinish": "自动完成传输任务",
+      "destination": "保存目录",
+      "downloads": "(下载)",
+      "saveToGallery": "保存到相册",
+      "saveToHistory": "保存到历史记录",
+      "verifyChecksums": "接收文件时验证校验和"
+    },
+    "send": {
+      "title": "发送",
+      "shareViaLinkAutoAccept": "通过链接分享：自动同意接收请求",
+      "createChecksums": "发送文件时创建校验和"
+    },
+    "network": {
+      "title": "网络",
+      "needRestart": "重启服务器后生效！",
+      "server": "服务器",
+      "alias": "设备名称",
+      "deviceType": "设备类型",
+      "deviceModel": "设备型号",
+      "port": "端口",
+      "network": "网络",
+      "networkOptions": {
+        "all": "所有",
+        "filtered": "已过滤"
+      },
+      "discoveryTimeout": "搜索设备超时",
+      "useSystemName": "使用系统名称",
+      "generateRandomAlias": "生成随机昵称",
+      "portWarning": "由于正在使用自定义端口，你可能不会被其他设备检测到。（默认端口：{defaultPort}）",
+      "encryption": "加密",
+      "multicastGroup": "多播",
+      "multicastGroupWarning": "由于正在使用自定义多播地址，你可能不会被其他设备检测到。（默认地址：{defaultMulticast}）"
+    },
+    "other": {
+      "title": "其他",
+      "support": "支持 LocalSend",
+      "donate": "捐赠",
+      "privacyPolicy": "隐私政策",
+      "termsOfUse": "使用条款"
+    },
+    "advancedSettings": "高级设置"
+  },
+  "troubleshootPage": {
+    "title": "故障排除",
+    "subTitle": "应用没有按预期工作？您可以在这里找到常用解决方案。",
+    "solution": "解决方案：",
+    "fixButton": "自动修复",
+    "firewall": {
+      "symptom": "此设备可以发送文件至其他设备，但其它设备无法发送文件到此设备。",
+      "solution": "这最可能是由防火墙规则设定引起的。你可以通过在端口 {port} 上允许（UDP 和 TCP 的）传入请求来解决这个问题。",
+      "openFirewall": "打开防火墙"
+    },
+    "noDiscovery": {
+      "symptom": "此设备未能发现其他设备。",
+      "solution": "确保所有设备都处于同一个 Wi‑Fi 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。您可以尝试手动输入目标设备的 IP 地址。如果起到了效果，请考虑将此设备添加到收藏夹中，以便将来可以自动发现。"
+    },
+    "noConnection": {
+      "symptom": "双方设备均无法发现对方或者分享文件。",
+      "solution": "当问题发生在双方设备上时，请先确认双方设备处于同一个 Wi‑Fi 网络上，且共享相同的网络配置（端口、多播地址、加密选项）。若因 Wi‑Fi 不允许参与者间通信，那么请在路由器中关闭“接入点(AP)隔离”选项。"
+    }
+  },
+  "networkInterfacesPage": {
+    "title": "网络接口",
+    "info": "默认情况下，LocalSend 使用所有可用的网络接口。您可以在此处排除不需要的网络接口。您需要重新启动服务器以应用更改。",
+    "preview": "预览",
+    "whitelist": "白名单",
+    "blacklist": "黑名单"
+  },
+  "receiveHistoryPage": {
+    "title": "历史",
+    "openFolder": "打开目录",
+    "deleteHistory": "删除历史记录",
+    "empty": "无历史记录。",
+    "entryActions": {
+      "open": "打开文件",
+      "showInFolder": "在文件管理器中显示",
+      "info": "信息",
+      "deleteFromHistory": "从历史记录中删除"
+    }
+  },
+  "apkPickerPage": {
+    "title": "应用（APK）",
+    "excludeSystemApps": "排除系统应用",
+    "excludeAppsWithoutLaunchIntent": "排除无法启动的应用",
+    "apps": "{n} 个应用"
+  },
+  "selectedFilesPage": {
+    "deleteAll": "全部删除"
+  },
+  "deviceDetailsPage": {
+    "title": "设备详情",
+    "favorite": "收藏",
+    "verify": "验证",
+    "info": {
+      "name": "名称",
+      "address": "地址",
+      "version": "版本",
+      "protocol": "协议 v{version}"
+    },
+    "logs": {
+      "title": "日志",
+      "empty": "没有可用的日志。",
+      "discovered": "通过 {protocol} 发现 ({host})",
+      "updated": "通过 {protocol} 更新 ({host})"
+    }
+  },
+  "verifyPage": {
+    "title": "验证",
+    "icons": "图标",
+    "text": "文本",
+    "question": "在另一台设备上显示的内容相同吗？"
+  },
+  "receivePage": {
+    "verifyingReceivedData": "正在校验接收数据",
+    "idleExpired": "接收会话已闲置10分钟且没有正在上传的文件，因此已过期。请让发送端重新发起传输；已完成的文件会保留。",
+    "subTitle": {
+      "one": "想要发送给你一个文件",
+      "other": "想要发送给你 {n} 个文件"
+    },
+    "subTitleMessage": "发送给你了一条消息：",
+    "subTitleLink": "发送给你了一个链接：",
+    "canceled": "发送者取消了请求。",
+    "destinationUnavailable": "下载目录暂不可用，请检查存储权限、可用空间和保存位置后重试。"
+  },
+  "receiveOptionsPage": {
+    "title": "设置",
+    "destination": "@:settingsTab.receive.destination",
+    "appDirectory": "(LocalSend 文件夹)",
+    "saveToGallery": "@:settingsTab.receive.saveToGallery",
+    "saveToGalleryOff": "由于分享内容中存在文件夹，已自动关闭。"
+  },
+  "sendPage": {
+    "verifyingSourceData": "正在校验源文件",
+    "calculatingChecksum": "正在计算校验和（{curr} / {n}）",
+    "waiting": "等待响应中……",
+    "rejected": "对方拒绝了请求。",
+    "tooManyAttempts": "@:web.tooManyAttempts",
+    "busy": "对方正在处理另一个请求。"
+  },
+  "progressPage": {
+    "titleSending": "正在发送文件",
+    "titleReceiving": "正在接收文件",
+    "savedToGallery": "已保存到相册",
+    "total": {
+      "title": {
+        "sending": "总进度 ({time})",
+        "finishedError": "已完成，但发生错误",
+        "canceledSender": "发送者已取消",
+        "canceledReceiver": "接收者已取消"
+      },
+      "count": "文件：{curr} / {n}",
+      "size": "大小：{curr} / {n}",
+      "speed": "速度：{speed}/s"
+    },
+    "remainingTime": {
+      "minutesUnit(plural, param=m)": {
+        "other": "{m}分钟"
+      },
+      "hoursUnit(plural, param=h)": {
+        "other": "{h}小时"
+      },
+      "minutes": "{m}:{ss}",
+      "hours": "@:.hoursUnit @:.minutesUnit"
+    }
+  },
+  "webSharePage": {
+    "title": "分享为链接",
+    "loading": "正在启动服务器……",
+    "stopping": "正在停止服务器……",
+    "error": "在启动服务器过程中发生了错误。",
+    "openLink": {
+      "one": "在浏览器中打开链接：",
+      "other": "在浏览器中打开其中一个链接："
+    },
+    "requests": "请求",
+    "noRequests": "尚无请求。",
+    "encryption": "@:settingsTab.network.encryption",
+    "autoAccept": "自动接受请求",
+    "requirePin": "启用 PIN 密码",
+    "pinHint": "PIN 为 “{pin}”",
+    "encryptionHint": "LocalSend 使用自签名证书。您需要在浏览器中允许它。",
+    "pendingRequests": "待处理请求：{n}"
+  },
+  "webReceivePage": {
+    "title": "通过链接接收"
+  },
+  "aboutPage": {
+    "title": "关于 LegnaSend",
+    "description": [
+      "LegnaSend 是开源文件共享工具，提供多网卡链接、设备网络标签和连续发送队列。"
+    ],
+    "author": "作者",
+    "contributors": "贡献者",
+    "packagers": "打包者",
+    "translators": "翻译者",
+    "upstreamCredits": "开源致谢",
+    "version": "版本 {version}",
+    "licenseNotices": "许可证声明",
+    "debugging": "诊断"
+  },
+  "donationPage": {
+    "title": "捐赠",
+    "info": "LocalSend 免费、开源、无广告。如果您喜欢这款应用程序，可以捐款支持开发。",
+    "donate": "捐款 {amount}",
+    "thanks": "非常感谢您的支持！",
+    "restore": "恢复购买"
+  },
+  "directoryWorkspaces": {
+    "title": "工作区",
+    "create": "创建工作区",
+    "name": "名称",
+    "slug": "访问路径",
+    "root": "本地目录",
+    "choose": "选择目录",
+    "visible": "索引可见",
+    "hidden": "索引隐藏",
+    "hide": "隐藏",
+    "show": "显示",
+    "closed": "已关闭",
+    "serving": "正在共享",
+    "previousServing": "旧配置仍在共享",
+    "invalid": "来源失效",
+    "syncing": "正在应用配置",
+    "serverOff": "服务已停止",
+    "readOnly": "只读目录",
+    "readOnlyHint": "工作区默认只读。可分别开启网页上传，已有文件不会被覆盖。",
+    "empty": "从本地目录创建工作区，文件保留在原位置。",
+    "failed": "操作失败，请检查名称、唯一访问路径、目录权限和服务状态。",
+    "syncFailed": "服务端尚未确认变更，原先发布的路径可能仍在提供服务。请重试同步。",
+    "retry": "重试同步",
+    "enable": "开启",
+    "close": "关闭",
+    "destroy": "销毁工作区",
+    "validate": "检查目录",
+    "stopHint": "停止本工作区的访问请求，其他工作区和原生收发继续运行。不会删除源文件。",
+    "hiddenHint": "隐藏的工作区不显示在索引中，知道链接仍可访问。隐藏不等于密码保护。",
+    "closeToEdit": "修改访问路径或源目录前，请先关闭工作区。",
+    "invalidInput": "请填写名称、workspace1 形式的小写访问路径和本地目录。",
+    "reasons(map)": {
+      "missing": "目录不存在",
+      "notDirectory": "不是本地目录",
+      "permissionDenied": "目录权限不足",
+      "grantUnavailable": "目录授权不可用，请重新选择文件夹",
+      "ioError": "目录读取失败",
+      "timeout": "目录检查超时"
+    },
+    "access": "访问保护",
+    "protected": "密码保护",
+    "openAccess": "开放访问",
+    "password": "新密码或 PIN",
+    "confirmPassword": "确认密码",
+    "keepPassword": "留空保留现有密码。",
+    "passwordInvalid": "请输入 4–128 个字符，两次输入应一致。",
+    "passwordHint": "保存新的密码或访问方式会撤销旧授权，并停止本工作区正在进行的下载。HTTPS 保护传输，密码控制访问权限。",
+    "accessPending": "访问策略待服务确认",
+    "uploadPermission": "上传权限",
+    "allowUpload": "允许网页上传",
+    "uploadHint": "开启后，能访问此工作区的浏览器可直接将文件和文件夹上传到该目录，不覆盖已有文件。关闭会停止未完成上传，已保存文件保留。设有密码的工作区仍需先解锁。",
+    "uploadPending": "上传权限待同步",
+    "permissionHint": "每个工作区独立控制上传"
+  },
+  "changelogPage": {
+    "title": "更新日志",
+    "language": "更新记录语言",
+    "followApp": "跟随应用语言",
+    "fallback": "当前语言的译文尚未提供，现显示 {language}。",
+    "loadError": "更新记录加载失败。",
+    "retry": "重试"
+  },
+  "whatsNewPage": {
+    "title": "{version} 中的新增功能",
+    "changes(interface=WhatsNewStrings)": {
+      "v1_0_0": {
+        "changes": [
+          "1.0.0 当前为开发版本，尚未正式发布。",
+          "文件和文件夹可排队发送，失败文件单独重试；统一面板管理收发，离开页面不停止传输。",
+          "兼容的设备和存储支持大文件续传。重启后复用进度需要重新批准接收，其他目标保留整文件重试。",
+          "iOS 可从“文件”选择接收目录，Android 可选择系统文档目录；权限失效时明确提示，不擅自切换保存位置。",
+          "核对中断保存，自动清理核验通过的临时副本；成品、活动传输和归属不明的残留继续保留。",
+          "浏览器共享文件和目录工作区，支持密码、批准上传、批量 ZIP 下载及可选的授权目录下载管理。",
+          "预览图片、音视频、文本和 Markdown，搜索正文，文件刷新后保留阅读位置。",
+          "按发送任务选择网络连接、查看连接信息，并使用可选集成 API 和应用内说明。",
+          "iOS 重启后恢复待发送分享但不自动发送；改善小屏幕、大字体体验，隐私政策可离线查看。",
+          "修复 macOS 沙箱启动时误报恢复记录保存失败。"
+        ]
+      }
+    }
+  },
+  "aliasGenerator(ignoreMissing, ignoreGpt)": {
+    "@info": "由于英文中一些近义词无法被翻译为不同的中文，这里与英文会有所差异",
+    "adjectives": [
+      "迷人",
+      "美丽",
+      "巨大",
+      "明亮",
+      "干净",
+      "聪明",
+      "帅气",
+      "可爱",
+      "狡猾",
+      "坚定",
+      "有活力",
+      "高效",
+      "极好",
+      "快速",
+      "不错",
+      "新鲜",
+      "好",
+      "华丽",
+      "伟大",
+      "英俊",
+      "炽热",
+      "善良",
+      "诚实",
+      "神秘",
+      "整洁",
+      "开心",
+      "耐心",
+      "漂亮",
+      "强大",
+      "富有",
+      "秘密",
+      "聪明",
+      "稳固",
+      "特别",
+      "战略性",
+      "强大",
+      "整洁",
+      "智慧"
+    ],
+    "fruits": [
+      "苹果",
+      "鳄梨",
+      "香蕉",
+      "黑莓",
+      "蓝莓",
+      "西兰花",
+      "胡萝卜",
+      "樱桃",
+      "椰子",
+      "葡萄",
+      "柠檬",
+      "莴苣",
+      "芒果",
+      "甜瓜",
+      "蘑菇",
+      "洋葱",
+      "橙子",
+      "木瓜",
+      "桃子",
+      "梨",
+      "菠萝",
+      "土豆",
+      "南瓜",
+      "覆盆子",
+      "草莓",
+      "番茄"
+    ],
+    "combination": "{adjective}的{fruit}"
+  },
+  "dialogs": {
+    "addFile": {
+      "title": "添加文件",
+      "content": "你想添加什么文件？"
+    },
+    "openFile": {
+      "title": "打开文件",
+      "content": "您是否要打开接收的文件？"
+    },
+    "addressInput": {
+      "title": "输入地址",
+      "hashtag": "标签",
+      "ip": "IP 地址",
+      "recentlyUsed": "最近使用： "
+    },
+    "cancelSession": {
+      "title": "取消文件传输",
+      "content": "要取消文件传输吗？"
+    },
+    "cannotOpenFile": {
+      "title": "无法打开文件",
+      "content": "无法打开 “{file}”。这个文件是否已被移动、重命名或删除？"
+    },
+    "encryptionDisabledNotice": {
+      "title": "加密已关闭",
+      "content": "正在通过未加密的 HTTP 协议连接。要使用 HTTPS 协议，请开启加密选项。"
+    },
+    "errorDialog": {
+      "title": "@:general.error"
+    },
+    "favoriteDialog": {
+      "title": "收藏夹",
+      "noFavorites": "还没有收藏的设备。",
+      "addFavorite": "新建"
+    },
+    "favoriteDeleteDialog": {
+      "title": "删除收藏",
+      "content": "确定要取消收藏 “{name}” 吗?"
+    },
+    "favoriteEditDialog": {
+      "titleAdd": "添加到收藏夹",
+      "titleEdit": "设置",
+      "name": "名称",
+      "auto": "(自动)",
+      "ip": "IP 地址",
+      "port": "端口"
+    },
+    "fileInfo": {
+      "title": "文件信息",
+      "fileName": "文件名：",
+      "path": "路径：",
+      "size": "大小：",
+      "sender": "发送者：",
+      "time": "时间："
+    },
+    "fileNameInput": {
+      "title": "输入文件名",
+      "original": "原名：{original}"
+    },
+    "historyClearDialog": {
+      "title": "清空历史记录",
+      "content": "确定要清空全部历史记录吗？"
+    },
+    "localNetworkUnauthorized": {
+      "title": "@:dialogs.noPermission.title",
+      "description": "LocalSend 在没有扫描本地网络的权限的情况下无法找到其他设备。请在设置中授予此权限。",
+      "gotoSettings": "设置"
+    },
+    "messageInput": {
+      "title": "输入消息",
+      "multiline": "多行"
+    },
+    "noFiles": {
+      "title": "未选择文件",
+      "content": "请至少选择一个文件。"
+    },
+    "noPermission": {
+      "title": "没有权限",
+      "content": "您尚未授予必要的权限。请在设置中授予权限。"
+    },
+    "notAvailableOnPlatform": {
+      "title": "不可用",
+      "content": "此功能只在以下平台可用："
+    },
+    "qr": {
+      "title": "二维码"
+    },
+    "quickActions": {
+      "title": "快速操作",
+      "counter": "计数器",
+      "prefix": "前缀",
+      "padZero": "以零填充",
+      "sortBeforeCount": "事先以字母顺序排序",
+      "random": "随机"
+    },
+    "quickSaveNotice": {
+      "title": "@:general.quickSave",
+      "content": "自动接受所有文件传输请求。请注意，这会让此网络中的所有人都可以向你发送文件。"
+    },
+    "quickSaveFromFavoritesNotice": {
+      "title": "@:general.quickSaveFromFavorites",
+      "content": [
+        "当前会自动接受收藏夹中设备的文件请求。"
+      ]
+    },
+    "pin": {
+      "title": "输入 PIN"
+    },
+    "sendModeHelp": {
+      "title": "发送模式",
+      "single": "加入设备发送队列，完成后保留文件选择，方便再次发送。",
+      "multiple": "发送文件给多个接收者。已选择的文件在发送后不会取消选择。",
+      "link": "未安装 LocalSend 的接收者可以在浏览器中打开链接以下载选中的文件。"
+    },
+    "zoom": {
+      "title": "URL"
+    }
+  },
+  "sanitization": {
+    "empty": "文件名不能为空",
+    "invalid": "文件名包含无效字符"
+  },
+  "tray": {
+    "@info": "Apple Guidelines are very strict about the \"close\" wording.",
+    "open": "@:general.open",
+    "close": "退出 LocalSend",
+    "closeWindows": "退出"
+  },
+  "web": {
+    "waiting": "@:sendPage.waiting",
+    "enterPin": "输入 PIN",
+    "invalidPin": "PIN 无效",
+    "tooManyAttempts": "尝试次数过多",
+    "rejected": "已拒绝",
+    "files": "文件",
+    "fileName": "文件名",
+    "size": "大小"
+  },
+  "assetPicker": {
+    "@info": "Android 和 iPhone 媒体选择工具的翻译",
+    "confirm": "确认",
+    "cancel": "取消",
+    "edit": "编辑",
+    "gifIndicator": "GIF",
+    "loadFailed": "加载失败",
+    "original": "原文件",
+    "preview": "预览",
+    "select": "选择",
+    "emptyList": "清空列表",
+    "unSupportedAssetType": "不支持该文件格式",
+    "unableToAccessAll": "无法访问设备上的所有文件",
+    "viewingLimitedAssetsTip": "应用程序仅能查看您允许的文件和相册。",
+    "changeAccessibleLimitedAssets": "点击以更改可访问文件范围",
+    "accessAllTip": "应用程序只能访问设备上的部分文件，请转到系统设置并允许该应用访问设备上的所有媒体文件。",
+    "goToSystemSettings": "转到系统设置",
+    "accessLimitedAssets": "继续受限访问",
+    "accessiblePathName": "可访问的文件",
+    "sTypeAudioLabel": "音频",
+    "sTypeImageLabel": "图片",
+    "sTypeVideoLabel": "视频",
+    "sTypeOtherLabel": "其他媒体文件",
+    "sActionPlayHint": "播放",
+    "sActionPreviewHint": "预览",
+    "sActionSelectHint": "选择",
+    "sActionSwitchPathLabel": "更改路径",
+    "sActionUseCameraHint": "使用摄像头",
+    "sNameDurationLabel": "时长",
+    "sUnitAssetCountLabel": "计数"
+  },
+  "networkLabels": {
+    "refresh": "刷新网络",
+    "noAddress": "暂无可用 IPv4 地址，请连接网络后刷新。",
+    "unknownSubnet": "网段未知",
+    "networkMatch": "匹配的本地网络（实际路由由操作系统选择）",
+    "routedOrUnknown": "跨路由 / 网络未知",
+    "overlappingNetworks": "多个网卡匹配 · 路由未确认"
+  },
+  "sendQueue": {
+    "singleFileRetryNewTask": "将此文件作为新传输任务重试",
+    "singleFileRetryStarted": "已创建新的传输任务，已完成文件保持不变。",
+    "title": "发送队列",
+    "queued": "排队中",
+    "running": "发送中",
+    "succeeded": "已完成",
+    "failed": "发送失败",
+    "canceled": "已取消",
+    "retry": "重试未完成文件",
+    "files": "{n} 个文件",
+    "drop": "松开发送给 {device}",
+    "added": "已加入队列：{device}，{n} 个文件"
+  },
+  "transferActivity": {
+    "title": "传输任务",
+    "send": "发送",
+    "receive": "接收",
+    "empty": "该方向暂无任务",
+    "preparing": "准备／校验中",
+    "waiting": "等待确认",
+    "transferring": "传输中",
+    "acknowledge": "收起已结束任务提示",
+    "details": "任务详情",
+    "back": "返回任务列表",
+    "ended": "该任务已结束或已移除。",
+    "files": "文件清单",
+    "accept": "接收所选文件",
+    "decline": "拒绝接收",
+    "failed": "失败",
+    "succeeded": "已完成",
+    "recoveryWaiting": "等待重试",
+    "recoveryRetryable": "可以重试",
+    "recoveryAuthorization": "需要重新授权",
+    "recoverySourceChanged": "来源已变化 · 请新建发送",
+    "recoveryInvalidResponse": "恢复响应未通过校验",
+    "recoveryRetained": "已保留部分数据",
+    "recoveryRetentionUnknown": "保留状态未确认",
+    "recoveryNotRetained": "无可复用检查点",
+    "retrying": "等待重连",
+    "sourceEnded": "源已失效"
+  },
+  "webPreview": {
+    "preview": "预览",
+    "closePreview": "关闭预览",
+    "downloadOriginal": "下载原文件",
+    "previewLoading": "正在加载预览…",
+    "previewError": "预览失败，请下载原文件后打开。",
+    "previewUnsupported": "当前浏览器或文件格式不支持预览。",
+    "imageZoomIn": "放大",
+    "imageZoomOut": "缩小",
+    "imageFit": "适应窗口",
+    "imageActual": "实际尺寸",
+    "imageView": "图片预览",
+    "imageScale": "缩放比例",
+    "imageHint": "拖动平移，双指或 Ctrl/⌘ + 滚轮缩放。键盘：加减、方向键，0 适应窗口，1 实际尺寸。"
+  },
+  "webTextPreview": {
+    "encoding": "编码",
+    "auto": "自动（BOM / UTF-8）",
+    "previous": "上一节",
+    "next": "下一节",
+    "more": "加载更多",
+    "retry": "重新加载预览",
+    "indexed": "已索引",
+    "lines": "行数",
+    "section": "节",
+    "complete": "文件末尾",
+    "loading": "正在加载文本…",
+    "view": "文本预览",
+    "range": "此数据源不支持按范围读取文本，请下载原文件。",
+    "changed": "共享文件已变化，请重新打开共享后预览。",
+    "decode": "文本编码不匹配，请选择其他编码或下载原文件。",
+    "failed": "文本加载失败，请检查连接后重新加载预览。",
+    "unsupported": "此浏览器不支持流式文本预览。",
+    "hint": "仅渲染可见行与少量缓冲行，自动换行让长文本自然适应页面宽度。",
+    "wrap": "自动换行",
+    "numbers": "显示行号",
+    "search": "搜索正文内容",
+    "searchScope": "搜索范围",
+    "loaded": "已索引内容",
+    "full": "整个文件",
+    "find": "查找",
+    "stop": "停止搜索",
+    "caseSensitive": "区分大小写",
+    "previousMatch": "上一个匹配",
+    "nextMatch": "下一个匹配",
+    "matches": "匹配",
+    "scanned": "已扫描",
+    "searching": "正在搜索…",
+    "searchDone": "搜索完成",
+    "searchStopped": "搜索已停止",
+    "noMatches": "已扫描内容中没有匹配",
+    "searchLimit": "已显示前 1,000 个匹配，请缩小关键词范围继续查找。",
+    "clearSearch": "清空搜索",
+    "rendered": "阅读视图",
+    "source": "源文本",
+    "markdownHint": "Markdown 搜索覆盖源文本正文，结果定位到准确的源文本位置。",
+    "markdownLimit": "按小节懒加载完整语法块；引用链接随定义被索引而更新。",
+    "markdownFailed": "此文档暂未完成排版，可继续使用源文本阅读器。",
+    "diagramQueued": "图表 · 接近视口时加载",
+    "diagramLoading": "正在绘制图表…",
+    "diagramReady": "图表",
+    "diagramFailed": "此图表暂未绘制成功，可查看源代码或重试。",
+    "diagramLimit": "此图表超出预览限制，仍可查看源代码。",
+    "diagramSource": "源代码",
+    "diagramRender": "图表",
+    "diagramRetry": "重试",
+    "diagramFit": "适应",
+    "diagramZoomIn": "放大",
+    "diagramZoomOut": "缩小",
+    "diagramExpand": "全部展开",
+    "diagramCollapse": "折叠分支",
+    "diagramHint": "拖动平移；使用按钮或 Ctrl/⌘ + 滚轮缩放。",
+    "diagramUnavailable": "当前浏览器未启用图表渲染，已保留源代码。",
+    "markdownStreaming": "按小节懒加载完整语法块；引用链接随定义被索引而更新。",
+    "markdownParagraphSource": "超大段落 · 以阅读窗口展示完整源文本，跨窗口行内语法保持原文。",
+    "markdownBlockLimit": "当前语法块超出阅读预算，请切换源文本继续查看完整内容。",
+    "markdownScan": "索引引用定义",
+    "markdownStop": "停止索引",
+    "markdownSourceWindow": "超大语法块 · 以阅读窗口展示完整源文本，跨窗口的格式保持原文。"
+  },
+  "transportSecurity": {
+    "title": "HTTPS 传输（TLS）",
+    "description": "保护设备间传输链路上的数据，不对保存的文件加密，也不会给文件设置密码。",
+    "certificate": "LegnaSend 使用本机生成的自签名 TLS 证书，浏览器可能显示此设备的证书信任提示。",
+    "httpTitle": "正在使用 HTTP 传输",
+    "httpDescription": "HTTPS 传输已关闭，当前使用 HTTP，传输链路不受 TLS 保护。开启“HTTPS 传输（TLS）”可保护连接，不会改变保存的文件。",
+    "discoveryHint": "请检查网络是否可达、发现端口与多播设置以及 HTTP/HTTPS 配置。发现失败时可尝试目标设备的 IP 和实际服务端口。",
+    "connectionHint": "请检查目标 IP 和实际服务端口是否可达，以及 HTTP/HTTPS 配置是否兼容。Wi-Fi 接入点隔离或防火墙可能阻止设备间通信。",
+    "updateFailed": "传输协议切换失败，请检查实际服务状态后重试。",
+    "peerProtocol": "对端 · {protocol}"
+  },
+  "transferSpeed": {
+    "current": "当前速度：{speed}",
+    "average": "平均速度：{speed}",
+    "measuring": "正在测速…"
+  },
+  "transferNavigation": {
+    "hide": "收起面板",
+    "keepRunning": "返回和收起不会停止传输。",
+    "sharing": "链接共享中",
+    "keepSharing": "返回只隐藏页面，共享继续运行；可从共享悬标重新打开。",
+    "stopSharing": "停止链接共享",
+    "stopTitle": "停止链接共享？",
+    "stopBody": "仅结束临时链接的下载会话并停止新的网页上传；目录工作区、监听服务、API 和已批准的原生传输继续运行。",
+    "restartTitle": "重新启动共享服务？",
+    "restartBody": "切换 HTTP／HTTPS 会重启共用监听器，中断其活动连接；工作区定义和临时文件选择会保留。",
+    "unknown": "当前没有共享",
+    "replaceTitle": "更新临时共享访问？",
+    "replaceBody": "仅结束本临时共享的下载会话，目录工作区和原生传输继续运行。"
+  },
+  "networkEnvironment": {
+    "vpn": "系统 VPN",
+    "tunnel": "VPN／隧道接口",
+    "local": "本地接口",
+    "proxy": "系统代理",
+    "title": "网络路径",
+    "unknown": "状态未知",
+    "detected": "已检测到",
+    "notDetected": "未检测到",
+    "routeHint": "本地地址和 VPN／隧道地址分别标记；实际可达性取决于两端系统路由及 VPN 规则。原生设备请求忽略应用层 HTTP 代理，但不绕过系统 VPN 路由。网卡名称只是接口线索，尚未验证强制直连。"
+  },
+  "linkWorkspace": {
+    "title": "链接工作区",
+    "sharedCount": "已分享文件：{n}",
+    "allowUpload": "允许网页上传",
+    "allowUploadHint": "仅控制新的网页请求，已批准的传输继续；新请求仍遵循客户端的接收确认设置。",
+    "autoReceive": "自动接收网页上传",
+    "autoDownload": "自动批准网页下载",
+    "appendHint": "追加文件保留在当前工作区，已有文件链接和已批准会话继续有效。"
+  },
+  "integrationApi": {
+    "title": "API",
+    "subtitle": "本地程序集成，沿用当前共享端口。",
+    "enable": "启用 API",
+    "requireKey": "要求 API 密钥",
+    "isolation": "API 开关不会停止原生传送或网页工作区。",
+    "live": "已生效",
+    "off": "已禁用",
+    "waiting": "已保存 · 等待服务",
+    "syncing": "正在应用策略…",
+    "previous": "旧策略可能仍在生效",
+    "failed": "保存或应用失败，请在下方重试。",
+    "corrupt": "API 配置需要恢复。原数据已保留，可重试读取或明确重置。",
+    "reset": "重置 API 配置",
+    "resetHint": "删除全部 API 密钥并恢复默认禁用状态，保留原生传送和工作区文件。",
+    "refresh": "刷新状态",
+    "startService": "启动接收服务",
+    "addresses": "服务地址",
+    "addressHint": "使用实际地址；HTTPS 需信任设备证书。网络标签描述接口，不代表已验证绕过 VPN。",
+    "policy": "访问与限额",
+    "editPolicy": "编辑策略",
+    "fixedWindow": "秒与分钟固定窗口同时约束；并发是活动响应数，不是连接数或下载带宽。0 仅取消该项限额，服务器资源上限仍生效。",
+    "global": "全局",
+    "perKey": "每个密钥",
+    "anonymous": "匿名来源",
+    "second": "请求／秒",
+    "minute": "请求／分钟",
+    "concurrent": "活动响应",
+    "origins": "允许的跨域来源",
+    "originsHint": "每行一个规范 http(s) 来源，不含路径；同源调用仍允许。",
+    "anonymousHint": "不带密钥时仅可读取匿名范围内可见、未保护的工作区。隐藏／密码工作区和请求历史不开放，错误密钥不会降级匿名。",
+    "allowAnonymous": "允许匿名访问？",
+    "disableHint": "只停止集成 API 响应；其他共享及原 LocalSend 传送继续。",
+    "keys": "API 密钥",
+    "createKey": "生成密钥",
+    "keyName": "密钥名称",
+    "empty": "还没有 API 密钥。",
+    "once": "现在保存此密钥",
+    "onceHint": "明文仅在此展示，不保存；可重复调用，直到撤销或到期。关闭不会自动复制。",
+    "revoke": "撤销密钥",
+    "revokeHint": "撤销此密钥并结束其活动 API 响应；其他密钥和原生传送继续。",
+    "pendingKey": "已保存 · 尚未确认生效",
+    "removedLive": "已移除的密钥可能仍生效，需重试应用待处理策略。",
+    "permissions": "动作权限",
+    "scopeService": "服务状态与契约",
+    "scopeWorkspaces": "工作区描述",
+    "scopeFiles": "文件清单与下载",
+    "scopeRequests": "全局脱敏请求历史",
+    "allWorkspaces": "全部现有及未来工作区",
+    "selectWorkspaces": "工作区范围",
+    "grantHint": "仅授予所需动作和工作区。上传及工作区管理是独立的明确授权；已有和默认密钥保持只读。",
+    "expiry": "到期时间",
+    "days30": "30 天",
+    "days90": "90 天",
+    "never": "不过期",
+    "expired": "已到期",
+    "invalid": "请检查名称、限额、来源和所选权限／工作区。",
+    "copy": "复制",
+    "copied": "已复制",
+    "close": "完成",
+    "more": "下一页密钥",
+    "previousPage": "上一页密钥",
+    "readOnly": "读取与明确授权写入",
+    "nextStage": "明确授权的密钥可上传、管理本机批准来源的工作区，以及发现设备和控制自身 API 创建的发送任务；通用缓存／设置接口及无关原生任务控制仍待开发。",
+    "copyFailed": "复制失败，可选中文本手动复制。",
+    "updated": "更新于",
+    "unconfirmed": "等待服务确认",
+    "fallback": "API text is shown in English.",
+    "documentation": "开发文档",
+    "directoryContract": "目录接口契约",
+    "documentationHint": "离线查阅：配置、权限、各接口、参数、错误、重试，以及 cURL／JavaScript／Python 示例。",
+    "scopeUpload": "上传文件（明确写权限）",
+    "scopeManage": "管理工作区信息与共享状态"
+  },
+  "apiExplorer": {
+    "title": "API 接口浏览与测试",
+    "search": "搜索接口或说明",
+    "execute": "执行请求",
+    "hint": "请求使用实际本机监听及其鉴权／配额：读取最多 12 秒，工作区管理 35 秒，上传按文件大小设置预算。请求和凭据不保存。",
+    "all": "全部",
+    "service": "服务",
+    "workspaces": "工作区",
+    "files": "文件",
+    "history": "请求记录",
+    "noResults": "没有匹配接口",
+    "readOnly": "只读测试",
+    "token": "API 密钥（可留空）",
+    "tokenHint": "粘贴已生成密钥，或留空测试匿名访问。仅在此页面打开时保留，不写入调用示例。",
+    "clear": "清除凭据",
+    "running": "请求中…",
+    "reset": "重置参数",
+    "invalid": "请检查必填字段和参数范围。",
+    "failed": "请求失败或服务已变化，请对当前监听器重试。",
+    "headers": "响应头",
+    "response": "响应内容",
+    "truncated": "响应最多显示 256 KiB，二进制样本最多 4 KiB；这不是完整下载。",
+    "binary": "十六进制文件样本，不会保存文件；默认 Range 为 bytes=0-4095。",
+    "examples": "调用示例",
+    "responses": "响应契约",
+    "schemas": "数据模型"
+  },
+  "sharedFileManagement": {
+    "title": "共享文件",
+    "hint": "撤下或替换文件，不关闭共享；其他文件和接收任务继续。",
+    "search": "搜索共享文件",
+    "withdraw": "撤下文件",
+    "replace": "替换文件",
+    "confirmBody": "仅停止此文件的待处理和活动下载。替换文件会生成新链接，旧下载不会续传到新内容；不会删除源文件。",
+    "selectOne": "请选择一个替换文件。",
+    "changed": "共享或文件已变化，请重新打开文件管理后再试。",
+    "applied": "共享文件已更新。",
+    "failed": "更新未确认，保留原清单；请重试或重新打开共享。",
+    "empty": "没有匹配的共享文件。",
+    "previous": "上一页",
+    "next": "下一页"
+  }
+}

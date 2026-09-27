@@ -1,0 +1,15 @@
+{
+  "name": "legnasend-offline-diagrams",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Reproducible offline diagram assets for LegnaSend",
+  "type": "module",
+  "scripts": { "build": "node build.mjs" },
+  "dependencies": {
+    "dompurify": "3.4.15",
+    "markmap-lib": "0.18.12",
+    "markmap-view": "0.18.12",
+    "mermaid": "12.0.0"
+  },
+  "devDependencies": { "esbuild": "0.25.12" }
+}

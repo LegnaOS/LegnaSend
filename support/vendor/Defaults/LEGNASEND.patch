@@ -1,0 +1,22 @@
+--- a/Sources/Defaults/UserDefaults.swift
++++ b/Sources/Defaults/UserDefaults.swift
+@@ -35,7 +35,7 @@
+ 		}
+ 
+ 		do {
+-			return try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? Value
++			return try NSKeyedUnarchiver.unarchivedObject(ofClasses: [Value.self], from: data) as? Value
+ 		} catch {
+ 			print(error)
+ 		}
+--- a/Sources/Defaults/Observation.swift
++++ b/Sources/Defaults/Observation.swift
+@@ -72,7 +72,7 @@
+ 			return nil
+ 		}
+ 
+-		return try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(dataValue) as? Value
++		return try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [Value.self], from: dataValue) as? Value
+ 	}
+ 
+ 	struct BaseChange {

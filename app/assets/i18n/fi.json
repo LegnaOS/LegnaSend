@@ -1,0 +1,571 @@
+{
+  "appName": "LegnaSend",
+  "general": {
+    "accept": "Hyväksy",
+    "accepted": "Hyväksytty",
+    "add": "Lisää",
+    "advanced": "Edistynyt",
+    "cancel": "Peruuta",
+    "close": "Sulje",
+    "confirm": "Vahvista",
+    "continueStr": "Jatka",
+    "copy": "Kopioi",
+    "copiedToClipboard": "Kopioitu leikepöydälle",
+    "decline": "Hylkää",
+    "done": "Valmis",
+    "delete": "Poista",
+    "edit": "Muokkaa",
+    "error": "Virhe",
+    "example": "Esimerkki",
+    "files": "Tiedostot",
+    "finished": "Valmis",
+    "hide": "Piilota",
+    "off": "Pois",
+    "offline": "Offline",
+    "on": "Päällä",
+    "online": "Online",
+    "open": "Avaa",
+    "queue": "Jono",
+    "quickSave": "Pikatallennus",
+    "quickSaveFromFavorites": "Pikatallennus suosikeiksi",
+    "renamed": "Nimetty uudelleen",
+    "reset": "Nollaa",
+    "restart": "Käynnistä uudelleen",
+    "settings": "Asetukset",
+    "skipped": "Ohitettu",
+    "start": "Aloita",
+    "stop": "Pysäytä",
+    "save": "Tallenna",
+    "unchanged": "Muuttumaton",
+    "unknown": "Tuntematon",
+    "noItemInClipboard": "Leikepöydällä ei ole mitään."
+  },
+  "receiveTab": {
+    "title": "Ota vastaan",
+    "infoBox": {
+      "ip": "IP-osoite:",
+      "port": "Portti:",
+      "alias": "Laitteen nimi:"
+    },
+    "quickSave": {
+      "off": "@:general.off",
+      "favorites": "Suosikit",
+      "on": "@:general.on"
+    },
+    "link": "Vastaanota linkin kautta"
+  },
+  "sendTab": {
+    "title": "Lähetä",
+    "selection": {
+      "title": "Valinta",
+      "files": "Tiedostot: {files}",
+      "size": "Koko: {size}"
+    },
+    "picker": {
+      "file": "Tiedosto",
+      "folder": "Kansio",
+      "media": "Media",
+      "text": "Teksti",
+      "app": "Sovellus",
+      "clipboard": "Liitä"
+    },
+    "shareIntentInfo": "Sinä voit myös käyttää laitteesi \"Jaa\"-toimintoa valitaksesi tiedostoja helpommin.",
+    "nearbyDevices": "Lähellä olevat laitteet",
+    "thisDevice": "Tämä laite",
+    "scan": "Etsi laitteita",
+    "manualSending": "Manuaalinen lähetys",
+    "sendMode": "Lähetystapa",
+    "sendModes": {
+      "single": "Yksi vastaanottaja",
+      "multiple": "Monta vastaanottajaa",
+      "link": "Jaa linkillä"
+    },
+    "sendModeHelp": "Selitys",
+    "help": "Varmista, että haluttu kohde on myös samassa Wi-Fi-verkossa.",
+    "placeItems": "Lisää tiedostot tähän, jotta voit lähettää ne."
+  },
+  "settingsTab": {
+    "title": "Asetukset",
+    "general": {
+      "title": "Yleinen",
+      "brightness": "Teema",
+      "brightnessOptions": {
+        "system": "Järjestelmä",
+        "dark": "Tumma",
+        "light": "Vaalea"
+      },
+      "color": "Väri",
+      "colorOptions": {
+        "system": "Järjestelmä",
+        "oled": "OLED",
+        "custom": "Mukautettu"
+      },
+      "language": "Kieli",
+      "languageOptions": {
+        "system": "Järjestelmä"
+      },
+      "saveWindowPlacement": "Poistu: Tallenna ikkunan sijainti",
+      "saveWindowPlacementWindows": "Tallenna ikkunan sijainti poistumisen jälkeen",
+      "minimizeToTray": "Poistu: Minimoi ilmoitusalueelle",
+      "launchAtStartup": "Automaattinen käynnistys",
+      "launchMinimized": "Automaattinen käynnistys: Käynnistä piiilotettuna",
+      "showInContextMenu": "Näytä LocalSend kontekstivalikossa",
+      "animations": "Animaatiot"
+    },
+    "receive": {
+      "title": "Vastaanotto",
+      "quickSave": "Automaattinen tallennus",
+      "quickSaveFromFavorites": "Automaattinen tallennus suosikeista",
+      "requirePin": "Kiinnitä",
+      "autoFinish": "Automaattinen lopetus",
+      "destination": "Kohde",
+      "downloads": "(Lataukset)",
+      "saveToGallery": "Tallenna media galleriaan",
+      "saveToHistory": "Tallenna historiaan",
+      "verifyChecksums": "Vahvista tarkistussummat tiedostoja vastaanotettaessa"
+    },
+    "send": {
+      "title": "Lähetys",
+      "shareViaLinkAutoAccept": "Jaa linkki: Hyväksy automaattisesti",
+      "createChecksums": "Luo tarkistussummat tiedostoja lähetettäessä"
+    },
+    "network": {
+      "title": "Verkko",
+      "needRestart": "Käynnistä LocalSend uudelleen saadaksesi muutokset käyttöön!",
+      "server": "Palvelin",
+      "alias": "Laitteen nimi",
+      "deviceType": "Laitteen tyyppi",
+      "deviceModel": "Laitteen malli",
+      "port": "Portti",
+      "network": "Verkko",
+      "networkOptions": {
+        "all": "Kaikki",
+        "filtered": "Suodatettu"
+      },
+      "discoveryTimeout": "Laitteiden etsintäaika",
+      "useSystemName": "Käytä järjestelmän nimeä",
+      "generateRandomAlias": "Luo satunnainen alias",
+      "portWarning": "Sinua ei ehkä havaita muiden laitteiden toimesta, koska käytät mukautettua porttia. (oletus: {defaultPort})",
+      "encryption": "Salaus",
+      "multicastGroup": "Multicast",
+      "multicastGroupWarning": "Sinua ei ehkä havaita muiden laitteiden toimesta, koska käytät mukautettua multicast-osoitetta. (oletus: {defaultMulticast})"
+    },
+    "other": {
+      "title": "Muut",
+      "support": "Tue LocalSendia",
+      "donate": "Lahjoita",
+      "privacyPolicy": "Tietosuojakäytäntö",
+      "termsOfUse": "Käyttöehdot"
+    },
+    "advancedSettings": "Edistyneet asetukset"
+  },
+  "troubleshootPage": {
+    "title": "Ongelmanratkaisu",
+    "subTitle": "Eikö sovellus toimi odotetusti? Täältä löydät joitain yleisiä ratkaisuja.",
+    "solution": "Ratkaisu:",
+    "fixButton": "Automaattinen korjaus",
+    "firewall": {
+      "symptom": "Tämä sovellus voi lähettää tiedostoja muihin laitteisiin, mutta muut laitteet eivät voi lähettää tiedostoja tähän laitteeseen.",
+      "solution": "Tämä on todennäköisesti palomuuriongelma. Voit ratkaista tämän sallimalla saapuvat yhteydet (UDP ja TCP) porttiin {port}.",
+      "openFirewall": "Avaa palomuuri"
+    },
+    "noDiscovery": {
+      "symptom": "Tämä laite ei pysty löytämään muita laitteita.",
+      "solution": "Varmista, että kaikki laitteet ovat samassa Wi-Fi-verkossa ja jakavat saman kokoonpanon (portti, monilähetysosoite, salaus). Voit yrittää kirjoittaa kohdelaitteen IP-osoitteen manuaalisesti. Jos tämä toimii, harkitse tämän laitteen lisäämistä suosikkeihin, jotta se voidaan löytää automaattisesti tulevaisuudessa."
+    },
+    "noConnection": {
+      "symptom": "Molemmat laitteet eivät voi löytää toisiaan eivätkä jakaa tiedostoja.",
+      "solution": "Onko ongelma olemassa molemmin puolin? Jos on, sinun on varmistettava, että molemmat laitteet ovat samassa Wi-Fi-verkossa ja jakavat saman kokoonpanon (portti, multicast-osoite, salaus). Verkko ei ehkä salli viestintää osallistujien välillä. Tässä tapauksessa tämä vaihtoehto on otettava käyttöön reitittimessä."
+    }
+  },
+  "networkInterfacesPage": {
+    "title": "Verkkokäyttöliittymät",
+    "info": "Oletuksena LocalSend käyttää kaikkia saatavilla olevia verkkoliitäntöjä. Voit sulkea pois verkkoliitännät, joita et halua. Sinun tulee uudelleenkäynnistää LocalSend ottaaksesi muutokset käyttöön.",
+    "preview": "Esikatselu",
+    "whitelist": "Sallittujen lista",
+    "blacklist": "Estettyjen lista"
+  },
+  "receiveHistoryPage": {
+    "title": "Historia",
+    "openFolder": "Avaa kansio",
+    "deleteHistory": "Tyhjennä historia",
+    "empty": "Historia on tyhjä.",
+    "entryActions": {
+      "open": "Avaa tiedosto",
+      "showInFolder": "Näytä kansiossa",
+      "info": "Tiedot",
+      "deleteFromHistory": "Poista historiasta"
+    }
+  },
+  "apkPickerPage": {
+    "title": "Sovellukset (APK)",
+    "excludeSystemApps": "lukuun ottamatta järjestelmäsovelluksia",
+    "excludeAppsWithoutLaunchIntent": "lukuun ottamatta sovelluksia, joilla ei ole käynnistysintentiota",
+    "apps": "{n} sovellusta"
+  },
+  "selectedFilesPage": {
+    "deleteAll": "Poista kaikki"
+  },
+  "deviceDetailsPage": {
+    "title": "Laitteen tiedot",
+    "favorite": "Suosikki",
+    "verify": "Vahvista",
+    "info": {
+      "name": "Nimi",
+      "address": "Osoite",
+      "version": "Versio",
+      "protocol": "Protokolla v{version}"
+    },
+    "logs": {
+      "title": "Lokit",
+      "empty": "Lokeja ei ole saatavilla.",
+      "discovered": "Löydetty {protocol}-protokollan kautta ({host})",
+      "updated": "Päivitetty {protocol}-protokollan kautta ({host})"
+    }
+  },
+  "verifyPage": {
+    "title": "Vahvista",
+    "icons": "Kuvakkeet",
+    "text": "Teksti",
+    "question": "Näyttääkö se samalta toisella laitteella?"
+  },
+  "receivePage": {
+    "subTitle": {
+      "one": "on lähettämässä sinulle tiedostoa",
+      "other": "on lähettämässä sinulle {n} tiedostoa"
+    },
+    "subTitleMessage": "lähetti sinulle viestin:",
+    "subTitleLink": "lähetti sinulle linkin:",
+    "canceled": "Lähettäjä on peruuttanut pyynnön."
+  },
+  "receiveOptionsPage": {
+    "title": "Asetukset",
+    "destination": "Vastaanottoasetukset",
+    "appDirectory": "(LocalSend-kansio)",
+    "saveToGallery": "Tallenna galleriaan",
+    "saveToGalleryOff": "Poistettu käytöstä automaattisesti, koska lähetetyissä tiedostoissa on kansioita."
+  },
+  "sendPage": {
+    "calculatingChecksum": "Lasketaan tarkistussummaa ({curr} / {n})",
+    "waiting": "Odotetaan vastausta...",
+    "rejected": "Vastaanottaja on peruuttanut pyynnön.",
+    "tooManyAttempts": "Liian monta yritystä",
+    "busy": "Vastaanottaja vastaanottaa toista pyyntöä."
+  },
+  "progressPage": {
+    "titleSending": "Tiedostojen lähetys",
+    "titleReceiving": "Tiedostojen vastaanotto",
+    "savedToGallery": "Tallennettu Kuvat-kansioon",
+    "total": {
+      "title": {
+        "sending": "Lähetysprosessi ({time})",
+        "finishedError": "Päättynyt virheellä",
+        "canceledSender": "Lähettäjä peruutti",
+        "canceledReceiver": "Vastaanottaja peruutti"
+      },
+      "count": "Tiedostot: {curr} / {n}",
+      "size": "Koko: {curr} / {n}",
+      "speed": "Nopeus: {speed}/s"
+    },
+    "remainingTime": {
+      "minutesUnit(plural, param=m)": {
+        "other": "{m}min"
+      },
+      "hoursUnit(plural, param=h)": {
+        "other": "{h}t"
+      },
+      "minutes": "{m}:{ss}",
+      "hours": "@:.hoursUnit @:.minutesUnit"
+    }
+  },
+  "webSharePage": {
+    "title": "Jaa linkin kautta",
+    "loading": "Käynnistetään palvelinta…",
+    "stopping": "Pysäytetään palvelinta…",
+    "error": "Palvelimen käynnistyksessä tapahtui virhe.",
+    "openLink": {
+      "one": "Avaa tämä linkki selaimessasi:",
+      "other": "Avaa jokin näistä linkeistä selaimessasi:"
+    },
+    "requests": "Pyynnöt",
+    "noRequests": "Ei pyyntöjä vielä.",
+    "encryption": "Verkon salaus",
+    "autoAccept": "Hyväksy pyynnöt automaattisesti",
+    "requirePin": "Vaadi PIN-koodi",
+    "pinHint": "PIN-koodi on \"{pin}\"",
+    "encryptionHint": "LocalSend käyttää itse allekirjoitettua sertifikaattia. Sinun on hyväksyttävä se selaimessasi.",
+    "pendingRequests": "Odottavat pyynnöt: {n}"
+  },
+  "webReceivePage": {
+    "title": "Vastaanota linkin kautta"
+  },
+  "aboutPage": {
+    "title": "Tietoja LegnaSendista",
+    "author": "Tekijä",
+    "contributors": "Avustajat",
+    "packagers": "Pakkaajat",
+    "translators": "Kääntäjät"
+  },
+  "donationPage": {
+    "title": "Lahjoita",
+    "info": "LocalSend on ilmainen, avoimen lähdekoodin sovellus ilman mainoksia. Voit tukea projektia lahjoituksella, jos pidät sovelluksesta.",
+    "donate": "Lahjoita {amount}",
+    "thanks": "Suuret kiitokset!",
+    "restore": "Palauta ostos"
+  },
+  "changelogPage": {
+    "title": "Muutosloki"
+  },
+  "whatsNewPage": {
+    "title": "Uutta versiossa {version}"
+  },
+  "aliasGenerator(ignoreMissing, ignoreGpt)": {
+    "@info": "Eri sijainneissa voi olla käytössä eri sanoja. Ne eivät täsmää toisiaan tasantarkkaan.",
+    "adjectives": [
+      "Stydi",
+      "Jämä",
+      "Raju",
+      "Makee",
+      "Siisti",
+      "Kummallinen",
+      "Hurja",
+      "Hörisevä",
+      "Naurava",
+      "Suriseva",
+      "Pöhelö",
+      "Hölmö",
+      "Spede",
+      "Kummallinen",
+      "Rampainen",
+      "Jonne",
+      "Lössi",
+      "Kuuli",
+      "Aukiva",
+      "Lutsi",
+      "Wallahi",
+      "Pummi",
+      "Köyhä",
+      "Saunassa käyvä",
+      "Bulkki",
+      "Chilli",
+      "Dokkaava",
+      "Känni",
+      "Broidi",
+      "Kundi",
+      "Göntsä",
+      "Pelleilevä",
+      "Haiseva",
+      "Hakkeri"
+    ],
+    "fruits": [
+      "Omena",
+      "Banaani",
+      "Appelsiini",
+      "Mango",
+      "Päärynä",
+      "Kiivi",
+      "Kirsikka",
+      "Vadelma",
+      "Mustikka",
+      "Mansikka",
+      "Luumu",
+      "Persikka",
+      "Punaherukka",
+      "Mustaherukka",
+      "Karhunvatukka",
+      "Vesimeloni",
+      "Hedelmä",
+      "Päärynä",
+      "Pihlajanmarja",
+      "Karpalo",
+      "Puolukka",
+      "Lakka",
+      "Kuusenkerkkä",
+      "Kataja",
+      "Kuusama",
+      "Ananas",
+      "Granaattiomena",
+      "Sitruuna",
+      "Lime",
+      "Papaija",
+      "Passionhedelmä",
+      "Pomelo",
+      "Kiinalainen karviainen",
+      "Lychee",
+      "Taateli",
+      "Viikuna",
+      "Rypäle"
+    ],
+    "combination": "{adjective} {fruit}",
+    "@combination": "In some languages, the adjective must be last."
+  },
+  "dialogs": {
+    "addFile": {
+      "title": "Lisää valintaan",
+      "content": "Mitä haluat lisätä?"
+    },
+    "openFile": {
+      "title": "Avaa tiedosto",
+      "content": "Haluatko avata vastaanotetun tiedoston?"
+    },
+    "addressInput": {
+      "title": "Anna osoite",
+      "hashtag": "Hashtag",
+      "ip": "IP-osoite",
+      "recentlyUsed": "Äskettäin käytetty: "
+    },
+    "cancelSession": {
+      "title": "Peruuta tiedostonsiirto",
+      "content": "Haluatko varmasti peruuttaa tiedostonsiirron?"
+    },
+    "cannotOpenFile": {
+      "title": "Tiedostoa ei voi avata",
+      "content": "Tiedostoa \"{file}\" ei voitu avata. Onko tämä tiedosto siirretty, nimetty uudelleen tai poistettu?"
+    },
+    "encryptionDisabledNotice": {
+      "title": "Salaus poistettu käytöstä",
+      "content": "Viestintä tapahtuu nyt salaamattoman HTTP-protokollan kautta. Jos haluat käyttää HTTPS:ää, ota salaus uudelleen käyttöön."
+    },
+    "errorDialog": {
+      "title": "@:general.error"
+    },
+    "favoriteDialog": {
+      "title": "Suosikit",
+      "noFavorites": "Ei suosikkilaitteita vielä.",
+      "addFavorite": "Lisää"
+    },
+    "favoriteDeleteDialog": {
+      "title": "Poista suosikeista",
+      "content": "Haluatko varmasti poistaa suosikeista \"{name}\"?"
+    },
+    "favoriteEditDialog": {
+      "titleAdd": "Lisää suosikkeihin",
+      "titleEdit": "Asetukset",
+      "name": "Laitteen nimi",
+      "auto": "(automaattinen)",
+      "ip": "IP-osoite",
+      "port": "Portti"
+    },
+    "fileInfo": {
+      "title": "Tiedoston tiedot",
+      "fileName": "Tiedoston nimi:",
+      "path": "Polku:",
+      "size": "Koko:",
+      "sender": "Lähettäjä:",
+      "time": "Aika:"
+    },
+    "fileNameInput": {
+      "title": "Anna tiedoston nimi",
+      "original": "Alkuperäinen: {original}"
+    },
+    "historyClearDialog": {
+      "title": "Tyhjennä historia",
+      "content": "Haluatko varmasti poistaa koko historian?"
+    },
+    "localNetworkUnauthorized": {
+      "title": "@:dialogs.noPermission.title",
+      "description": "LocalSend ei löydä muita laitteita ilman lupaa skannata paikallisverkkoa. Anna tämä lupa asetuksissa.",
+      "gotoSettings": "Asetukset"
+    },
+    "messageInput": {
+      "title": "Kirjoita viesti",
+      "multiline": "Monirivinen"
+    },
+    "noFiles": {
+      "title": "Ei tiedostoa valittuna",
+      "content": "Valitse vähintään yksi tiedosto."
+    },
+    "noPermission": {
+      "title": "Ei oikeuksia",
+      "content": "Et ole myöntänyt tarvittavia oikeuksia. Myönnä ne asetuksissa."
+    },
+    "notAvailableOnPlatform": {
+      "title": "Ei saatavilla",
+      "content": "Tämä ominaisuus on saatavilla vain:"
+    },
+    "qr": {
+      "title": "QR-koodi"
+    },
+    "quickActions": {
+      "title": "Pikatoiminnot",
+      "counter": "Laskuri",
+      "prefix": "Etuliite",
+      "padZero": "Täytä nollilla",
+      "sortBeforeCount": "Lajittele aakkosjärjestykseen ennen laskentaa",
+      "random": "Satunnainen"
+    },
+    "quickSaveNotice": {
+      "title": "Pikatallennus",
+      "content": "Tiedostopyynnöt hyväksytään automaattisesti. Huomaa, että kuka tahansa paikallisverkossa voi lähettää sinulle tiedostoja."
+    },
+    "quickSaveFromFavoritesNotice": {
+      "title": "@:general.quickSaveFromFavorites",
+      "content": [
+        "Tiedostopyynnöt hyväksytään nyt automaattisesti suosikkiluettelossasi olevilta laitteilta."
+      ]
+    },
+    "pin": {
+      "title": "Syötä PIN-koodi"
+    },
+    "sendModeHelp": {
+      "title": "Lähetystilat",
+      "single": "Lähettää tiedostoja yhdelle vastaanottajalle. Valinta tyhjennetään tiedostonsiirron päätyttyä.",
+      "multiple": "Lähettää tiedostoja useille vastaanottajille. Valinta ei tyhjene.",
+      "link": "Vastaanottajat, joilla ei ole LocalSendia asennettuna, voivat ladata valitut tiedostot avaamalla linkin selaimessaan."
+    },
+    "zoom": {
+      "title": "URL"
+    }
+  },
+  "sanitization": {
+    "empty": "Tiedostonimi ei voi olla tyhjä",
+    "invalid": "Tiedostonimi sisältää kiellettyjä merkkejä"
+  },
+  "tray": {
+    "@info": "Applen ohjeistukset ovat hyvin tiukat 'sulje'-sanan käytöstä.",
+    "open": "Avaa",
+    "close": "Lopeta LocalSend",
+    "closeWindows": "Poistu"
+  },
+  "web": {
+    "waiting": "Odotetaan vastausta...",
+    "enterPin": "Syötä PIN-koodi",
+    "invalidPin": "Virheellinen PIN-koodi",
+    "tooManyAttempts": "Liian monta yritystä",
+    "rejected": "Hylätty",
+    "files": "Tiedostot",
+    "fileName": "Tiedoston nimi",
+    "size": "Koko"
+  },
+  "assetPicker": {
+    "@info": "Translations for the Media selection tool for Android and Iphone",
+    "confirm": "Vahvista",
+    "cancel": "Peruuta",
+    "edit": "Muokkaa",
+    "gifIndicator": "GIF",
+    "loadFailed": "Lataus epäonnistui",
+    "original": "Alkuperäinen",
+    "preview": "Esikatselu",
+    "select": "Valitse",
+    "emptyList": "Tyhjä lista",
+    "unSupportedAssetType": "Tiedostotyyppiä ei tueta.",
+    "unableToAccessAll": "Kaikkien tiedostojen käyttö laitteella ei onnistu",
+    "viewingLimitedAssetsTip": "Näytä vain sovelluksen käyttöön saatavilla olevat tiedostot ja albumit.",
+    "changeAccessibleLimitedAssets": "Päivitä käytettävissä olevat tiedostot napsauttamalla",
+    "accessAllTip": "Sovellus pääsee käsiksi vain osaan laitteen tiedostoista. Siirry järjestelmäasetuksiin ja salli sovelluksen pääsy kaikkiin laitteen mediaan.",
+    "goToSystemSettings": "Siirry järjestelmäasetuksiin",
+    "accessLimitedAssets": "Jatka rajoitetulla pääsyllä",
+    "accessiblePathName": "Käytettävissä olevat tiedostot",
+    "sTypeAudioLabel": "Ääni",
+    "sTypeImageLabel": "Kuva",
+    "sTypeVideoLabel": "Video",
+    "sTypeOtherLabel": "Muut mediat",
+    "sActionPlayHint": "toista",
+    "sActionPreviewHint": "esikatsele",
+    "sActionSelectHint": "valitse",
+    "sActionSwitchPathLabel": "vaihda polkua",
+    "sActionUseCameraHint": "käytä kameraa",
+    "sNameDurationLabel": "kesto",
+    "sUnitAssetCountLabel": "määrä"
+  }
+}

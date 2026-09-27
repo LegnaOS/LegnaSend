@@ -1,0 +1,1261 @@
+<!-- Copyright 2018 The FlutterCandies author. All rights reserved.
+Use of this source code is governed by an Apache license
+that can be found in the LICENSE file. -->
+
+# CHANGELOG
+
+To know more about breaking changes, see the [Migration Guide][].
+
+## Unreleased
+
+*None.*
+
+## 3.12.0
+
+**Breaking changes**
+
+- The Darwin (iOS/macOS) implementation no longer links `CoreLocation`, so apps that do not save assets with location no longer need an `NSLocationWhenInUseUsageDescription` purpose string (#1428). Saving with `latitude`/`longitude` on iOS/macOS now throws; install the `photo_manager_location` plugin to keep that capability (which links `CoreLocation`).
+
+**Fixes**
+
+- Avoid App Store rejections caused by referencing the private `PHAsset.filename` selector. The Darwin `title` lookup now uses the public `PHAssetResource.originalFilename` API directly instead of KVC'ing into the non-public `filename` selector.
+
+## 3.11.0
+
+**Features**
+
+- Add `AndroidEditor.restoreFromTrash` to restore assets from the Android system trash.
+- Add `AssetEntity.isTrashed` exposing the Android `MediaStore.MediaColumns.IS_TRASHED` state.
+
+**Fixes**
+
+- Fix Gradle 9 configuration failures in the legacy Kotlin fallback and correctly select built-in Kotlin when `android.builtInKotlin` is unset.
+
+## 3.10.0
+
+**Features**
+
+- Add an optional `type` parameter to `AssetPathEntity.getAssetListPaged` and `AssetPathEntity.getAssetListRange` so callers can filter to a specific `RequestType` within a single album (e.g. read videos out of a `common` album) without constructing a new `AssetPathEntity`. Defaults to the album's own `type` when omitted.
+- Add Darwin (iOS/macOS) only namespaced accessors `AssetEntity.darwin` and `AssetPathEntity.darwin` that group PhotoKit-specific reads without bloating the shared entity classes:
+  - `asset.darwin.cloudIdentifier` and the batch `PhotoManager.plugin.getCloudIdentifiers` resolve stable cross-device cloud identifiers (iOS 15+/macOS 12+).
+  - `asset.darwin.hasAdjustments` reports whether an asset has edits, and `asset.darwin.getBaseFile()` exports the unedited base file.
+  - `asset.darwin.getAdjustmentData()` exports the raw AAE adjustment (edit-history) data backing an asset's edits, so callers can access the original resource, the edit metadata, and the rendered result separately (non-destructive editing).
+  - `path.darwin.getParentPathList()` returns the parent folders containing an album or folder.
+- Add `updateCreationDate` to `PhotoManager.editor.darwin` and `PhotoManager.editor.android` for modifying an asset's creation date after it has been saved.
+  - On iOS/macOS: updates the `PHAsset.creationDate` property.
+  - On Android Q (API 29)+: updates the MediaStore `DATE_TAKEN` field; unsupported on API 28 and below.
+- Add `PhotoManager.canManageMedia()` and `PhotoManager.requestManageMedia()` for the Android 12 (API 31+) `MANAGE_MEDIA` special permission.
+
+**Improvements**
+
+- Migrate the Android plugin to Flutter's built-in Kotlin integration with a compatibility fallback for projects that still require `kotlin-android`, without changing the package's public Flutter or Dart version constraints.
+- Fix the Android plugin `namespace` to `com.fluttercandies.photo_manager` so it matches the plugin package and Kotlin sources.
+
+**Fixes**
+
+- Fix Android `PlatformException`s from `IllegalArgumentException: Volume external_primary not found` by returning an empty cursor when MediaProvider reports the primary volume as unavailable, and guard the media-store `ContentObserver` against the same exception.
+- Fix Darwin `AssetEntity.originFile` returning the locally-downsampled proxy for iCloud + "Optimize iPhone Storage"-affected photos by preferring `PHImageManager` with `HighQualityFormat` over `writeDataForAssetResource` on unedited raster primaries.
+- Fix Darwin `PhotoManager.editor.darwin.saveLivePhoto` returning `PHPhotosErrorDomain (-1)` when the caller-supplied image and video lacked the shared Live Photo pairing identifier `PHAssetCreationRequest` requires.
+- Fix iOS 18+ raising `Unsupported fetch for asset collections with type 2 and subtype 2` when navigating into the primary album, caused by an invalid `SmartAlbum` + `AlbumRegular` combination in the recent-collection check.
+- Fix Darwin `AssetEntity.loadFile` / `originFile` sporadically failing with `PHPhotosErrorDomain (-1)` for edited assets and Live Photos by walking multiple `PHAssetResource` candidates and falling back to `PHImageManager` for plain videos/images when `writeDataForAssetResource` exhausts them.
+- Reduce built-in Kotlin migration warnings for supported project configurations while preserving legacy Flutter compatibility.
+- Fix Darwin crashes when querying assets by local identifier by catching PhotoKit exceptions and returning safe fallback results instead of aborting the process.
+- Fix the `AssetEntity.duration` API docs to clarify that audio and video durations are returned in seconds across supported platforms, preserving the existing API behavior.
+- Fix Android 14+ limited permission photo selection not reflecting deselection in Flutter layer. When users modify their photo selection via `presentLimited()`, the changes are now properly notified to the Flutter layer.
+- Fix delayed native deletion confirmation dialogs on iOS by elevating the dispatch queue priority of `deleteWithIds`, `removeInAlbum`, and `deleteAlbum` to `QOS_CLASS_USER_INITIATED`.
+- Fix Android 14+ permission requests incorrectly short-circuiting when only part of the requested media access was already granted.
+- Fix Android permission requests always asking for both image and video access regardless of `RequestType`. The plugin now only requests `READ_MEDIA_IMAGES` / `READ_MEDIA_VIDEO` matching the caller's `RequestType`, so the Android 14+ system photo picker only shows the media types the app actually asked for.
+- Fix Darwin video durations being truncated instead of rounded, so `AssetEntity.duration` matches the system album display more closely.
+- Fix Darwin `getTitleAsync` returning a null channel result by falling back to an empty string.
+- Fix Darwin Live Photo exports with an explicit `darwinFileType`, restoring iOS conversions such as Live Photo MOV-to-MP4 output.
+- Fix Darwin image `loadFile(isOrigin: false)` blocking the iOS UI thread by making the request asynchronous and moving JPEG file conversion off the main thread, allowing `PMProgressHandler` updates to arrive while loading.
+- Fix `presentLimited()` on iOS resolving the presenting view controller through the deprecated `UIApplication.keyWindow`, which can return the wrong window (or none) once an app adopts the UIScene life cycle. The plugin now prefers the `FlutterViewController` attached to its own engine and falls back to scanning the foreground-active `UIWindowScene` for the key window.
+- Fix `latitude`/`longitude`/`latLng` being dropped whenever a coordinate component was exactly `0.0` (e.g. assets near the equator or prime meridian). Dart, Android, and iOS/macOS all used `0.0` as a "no location" sentinel; `0.0` is now treated as a valid coordinate, and the native platforms report the absence of location data as an explicit `null` instead.
+- Replace the internal `CC_MD5`-based hash used to derive Darwin full-image cache filenames from `PHAsset.localIdentifier` with `CC_SHA256`, silencing the macOS 10.15+ deprecation warnings from `CommonCrypto` without changing observable behavior. Existing cached files under the plugin cache directory are re-created on first access after upgrade.
+
+## 3.9.0
+
+**Improvements**
+
+- Improve output file extension recognition for Darwin platforms.
+- Refactor `CustomColumns` to use platform-separated architecture.
+- Add public platform behavior classes
+  (`AndroidCustomColumns`, `DarwinCustomColumns`, `OhosCustomColumns`) for `CustomColumns`.
+- Avoid `UnsupportedError` when using `CustomFilter` in non-mobile environments (e.g., CI/Unit tests).
+- Bump `compileSdkVersion` to 36 for Android.
+- Bump EXIF interface and Glide for Android.
+- Code lints update for Android.
+
+## 3.8.3
+
+**Fixes**
+
+- Fix all media assets being returned when `filterOption` is not specified instead of respecting the requested type.
+
+## 3.8.2
+
+**Fixes**
+
+- Fix type error when calling `presentLimited` due to map type inference issue with `putIfAbsent`.
+
+## 3.8.1
+
+**Fixes**
+
+- Fix SQL syntax error on Android when querying assets with pagination. This caused "Failed to obtain the cursor" errors on some devices (e.g., Huawei, realme) due to missing space between ORDER BY clause and LIMIT clause.
+
+## 3.8.0
+
+**Features**
+
+- Add Swift Package Manager support for iOS and macOS.
+- Add `cancelToken` parameter to `AssetEntity.loadFile`.
+- Add `cancelAllRequest` method to `PhotoManager`.
+- The `AssetEntity.getFile` and `AssetEntity.getOriginBytes` methods are public.
+- Add `relativePathAsync` getter to `AssetPathEntity`.
+- Add iOS 18 smart album subtypes support:
+  - `smartAlbumSpatial` - For spatial/3D photos
+  - `smartAlbumProRes` - For ProRes videos
+  - `smartAlbumScreenRecordings` - For screen recordings
+  - `smartAlbumReceipts` - For receipts in the Utilities section
+  - `smartAlbumHandwriting` - For handwriting in the Utilities section
+  - `smartAlbumIllustrations` - For illustrations in the Utilities section
+  - `smartAlbumQRCodes` - For QR codes in the Utilities section
+- Add optional `latitude`, `longitude`, and `creationDate` parameters to `saveImage`, `saveImageWithPath`, and `saveVideo` methods.
+  - On iOS: Sets location and creation date metadata for saved assets.
+  - On Android Q+: Sets DATE_TAKEN field and location metadata for saved assets.
+- Add batch asset move functionality using `createWriteRequest` API for Android 11+.
+
+**Improvements**
+
+- Remove implied `FilterOptionGroup`s when querying paths and assets.
+  This fixes assets finding when they were created in the future.
+  Some edge cases regarding performance drops caused by the complicated sort queries might also get fixed.
+- Add `PermissionState.isLimited`.
+
+**Fixes**
+
+- Fix `type 'Null' is not a subtype of type 'Map<dynamic, dynamic>'` error on Android when copying or moving assets fails.
+  - Android now properly throws exceptions instead of returning null when `copyAssetToGallery` or `moveAssetToGallery` operations fail.
+  - Dart side now handles null responses gracefully by throwing a `PlatformException`.
+- Fix PHImageManager crash on iOS by ensuring all PHImageManager/PHCachingImageManager methods are called on the main thread.
+  This resolves race conditions and deadlocks when thumbnail operations are dispatched to QoS background queues.
+- Fix EXC_BAD_ACCESS crash caused by accessing deallocated memory in async blocks on iOS.
+  - Fixed PHCachingImageManager methods: `fetchThumb`, `exportAssetToFile`, `fetchFullSizeImageFile`.
+  - Fixed PHAssetResourceManager methods: `fetchVideoResourceToFile`, `fetchOriginImageFile`.
+  - Fixed PHPhotoLibrary save methods: `saveImage`, `saveImageWithPath`, `saveVideo`, `saveLivePhoto`.
+- Fix `AssetEntity.latlngAsync()` returning zero location for videos on Android by using `MediaMetadataRetriever` to extract location data from video files.
+- Fix nullability mismatch for `title` parameter in `saveVideo` and `saveImageWithPath` methods.
+
+## 3.7.1
+
+**Fixes**
+
+- Fix inconsistent `jvmTarget` compatibility on Android.
+
+## 3.7.0
+
+**Features**
+
+- Add `includeHiddenAssets` option to `PMFilter` and `FilterOptionGroup` to include hidden assets in the results on iOS.
+
+**Fixes**
+
+- Fix `SizeConstraint` not working for videos on Android. (#1275)
+- Fix inconsistent resizing behavior between iOS and Android in `thumbnailDataWithSize`. (#1271)
+
+**Improvements**
+
+- No longer set `sourceCompatibility` and `targetCompatibility` for Android dynamically.
+- Make native library's version parsed from the yaml.
+
+## 3.6.4
+
+**Fixes**
+
+- Fix potential nil class value when unwrapping caught exceptions on Darwin.
+
+## 3.6.3
+
+**Improvements**
+
+- Optimize task priority handling on Darwin by automatically assigning QoS levels based on method types.
+- Optimize the default sort descriptors on Darwin.
+
+**Fixes**
+
+- Fix the incorrect type of conversion with the Live-Photo's duration on Darwin.
+
+## 3.6.2
+
+**Fixes**
+
+- Fix request permissions for images and videos on Android API 33+.
+
+## 3.6.1
+
+**Fixes**
+
+- Do not throw when querying non-existing assets in bulk on Android.
+
+## 3.6.0
+
+**Features**
+
+- Allows to get the duration of a Live Photo with `AssetEntity.durationWithOptions` on iOS and macOS.
+
+**Improvements**
+
+- Improves the options when fetching a fixed number of assets on iOS and macOS.
+
+**Fixes**
+
+- Do not use `privateFileURL` on iOS 18+.
+- Fixes saving MP4 videos will result in 3GP on Android API 30-.
+- Fixes nullable results returned when saving images and videos on Android.
+
+## 3.5.2
+
+**Improvements**
+
+- Get rid of `@try` `@catch` when toggling favorite on Darwin.
+
+**Fixes**
+
+- Fix no returned IDs after successful deletion on Android API 29+.
+- Fix mediaLocation = true does not work on Android API 34.
+
+## 3.5.1
+
+**Improvements**
+
+- Reuse files when saving images on Darwin.
+- Returns non-nullable results as much as possible.
+- Fix export session file type with videos for the first time on Darwin.
+
+## 3.5.0
+
+**Features**
+
+- Provide `PMDarwinAVFileType` to help convert entities' files on iOS and macOS by making explicit exports.
+
+**Improvements**
+
+- Improve cache output path equality on iOS and macOS.
+- Get the current resource filename rather than the raw one on iOS and macOS.
+  Also the plugin expands the ability when getting titles.
+- Use `PHCachingImageManager` to improve image memory caches on iOS and macOS.
+
+**Fixes**
+
+- Fix incorrect download finished prediction during iCloud file downloading.
+
+## 3.4.0
+
+**Breaking Changes**
+
+`saveLivePhoto` now requires `title` rather than `filename`.
+
+**Features**
+
+- Add `getPermissionState` method to `PhotoManager`.
+
+**Improvements**
+
+- Adds a detached state for managers. Callers with those managers will first be aware of the detaching state
+  before any actual calls to avoid crashes.
+- Errors replied by the channel do not include detailed messages before.
+  Now the code will unwrap certain exceptions to extract details from them.
+- Expose `progressHandler` for `AssetEntity.getMediaUrl`.
+- Expose `withSubtype` for `AssetEntity.isLocallyAvailable` to request if a Live Photo resource is available.
+
+**Fixes**
+
+- `PHAssetResource` with the type `PHAssetResourceTypeFullSizeVideo` does not count as a video type before,
+  making the resource obtain ignore them.
+- Fixes potential range exception when converting `NSTimeInterval` on Darwin.
+- Fixes progress not being updated when getting the non-original video file on iOS.
+- Fixes incorrect Live Photo resource being obtained which will result in a wrong aspect ratio.
+- Fixes Live Photos saving exceptions with the paired video.
+- Other lints and type promotion fixes.
+
+## 3.3.0
+
+**Breaking Changes**
+
+`saveImage` now requires `filename` rather than `title`, other save methods do not require `title` anymore.
+
+**Improvements**
+
+- Allows saving assets with a given orientation value.
+- Improves the reading sequence when saving assets, which likely fixes issues with wrong orientation value.
+- Reads image size from EXIF rather than decoding from the bitmap factory.
+- Upgrades Android EXIF library.
+- Add verbose log for `MethodChannelPlugin`. (Use `PhotoManager.setLog` and pass `verboseFilePath` to enable it.)
+- Add `getVerboseFilePath` for `PhotoManager`.
+
+## 3.2.3
+
+**Fixes**
+
+- Access `PMProgressHandler` more safely on iOS/macOS to avoid crashes and unfinished results.
+
+## 3.2.2
+
+**Fixes**
+
+- Do not require `WRITE_EXTERNAL_STORAGE` if not declared in the manifest with Android 29-.
+- Fix `fetchPathProperties` exception on Android of API 28.
+
+## 3.2.1
+
+**Improvements**
+
+* Declare `NSPrivacyAccessedAPICategoryFileTimestamp` for iOS privacy policies.
+
+**Fixes**
+
+* Fixes compile exceptions with Xcode versions that are not compatible with iOS 17.0.
+* Modified the way to read the Java version in `build.gradle`.
+
+## 3.2.0
+
+**Improvements**
+
+* Restores `containsLivePhotos` to `true` by default and deprecates it.
+* Use the main resource's filename for the title by default on iOS.
+* Support more methods on the OpenHarmony.
+
+**Fixes**
+
+* Fix obtaining the correct resource from various types of resources on iOS.
+* Fix `isLocallyAvailable` for edited assets on iOS.
+
+## 3.1.1
+
+**Improvements**
+
+* Update plugin structure for OpenHarmony.
+
+## 3.1.0
+
+**Breaking Changes**
+
+- `AssetPathEntity.darwinType` and `AssetPathEntity.darwinSubtype` are deprecated.
+- `containsLivePhotos` now defaults to `false`.
+
+See the [Migration Guide][] for details of breaking changes.
+
+**Features**
+
+- Support OpenHarmony.
+
+**Fixes**
+
+- Do not predicate subtype images as adjusted on Darwin.
+- Fix `PMProgressHandler` not getting notified when failed on Darwin.
+- Merge Android API 29 and 30 `PermissionDelegate`s
+  which allows Android API 29 to grant permissions without `WRITE_EXTERNAL_STORAGE`.
+
+**Improvements**
+
+- Improve code formatting.
+- Add privacy file for iOS/macOS. (#1120)
+
+## 3.0.0
+
+**Breaking Changes**
+
+See the [Migration Guide][] for details of breaking changes.
+
+**Improvements**
+
+- Remove the restriction of `getMediaUrl`.
+
+**Fixes**
+
+- Fix `PhotoManager.editor.deleteWithIds` method not working on Android API 29.
+- Dispatch channel calls in main thread on Darwin.
+- Fix `presentLimit` did not finish on Android. (#1052)
+- Fix `requestPermissionExtend` returns the incorrect status on Android API 34.
+
+## 2.8.1
+
+**Fixes**
+
+- Upgrade android/build.gradle to load the current java version from some environment variables.
+- Fix the `setIgnorePermissionCheck` method not working on Android.
+
+## 2.8.0
+
+**Breaking Changes**
+
+See the [Migration Guide][] for details of breaking changes.
+
+**Features**
+
+- Support Android 14 with limited access to assets.
+
+**Fixes**
+
+- Correct the key when fetching video info with MMR on Android. (#997)
+- Retrieve original media instead of one with adjustments/filters for subtype files on iOS. (#976)
+- Returns original file name instead of `FullSizeRender.*` if this has adjustments on iOS. (#976)
+
+**Improvements**
+
+- Add locks to the image provider.
+
+## 2.7.1
+
+**Fixes**
+
+- Fix namespace on Android.
+- Remove the package definition from the manifest.
+- Use `math.pow(2^63)-1` to make Web compile work again.
+- Fix the `end` argument of `PhotoManager.getAssetListRange` is being handled incorrectly on Darwin. (#962)
+
+## 2.7.0
+
+**Features**
+
+- Support `darwinType` and `darwinSubType` in `AssetPathEntity` on iOS and macOS. (#950)
+
+**Improvements**
+
+- Roll dependencies on Android. (#933)
+
+**Fixes**
+
+- Fix filter option group. (#919)
+- Fix `originFileWithSubtype` and `fileWithSubtype` for livePhoto.
+- Fix: support only add permission for iOS/macOS. (#944)
+- Fix: modified the output path for iOS(add id in next path).
+- Fix: Fixed a possible problem with the permission for darwin.
+- Fix: `needTitle` for `CustomFilter`.
+
+## 2.6.0
+
+**Features**
+
+- Support `CustomFilter` for more filter options. (#901)
+- Add two new static methods for `PhotoManager`:
+  - `getAssetCount` for getting assets count.
+  - `getAssetListRange` for getting assets between start and end.
+
+## 2.5.2
+
+**Improvements**
+
+- Reply errors when thumbnails are failed to load on Android. (#883)
+
+## 2.5.1+1
+
+**Fixes**
+
+- Fix pending permissions request on Android. (#879)
+
+## 2.5.1
+
+**Improvements**
+
+- Always declare `READ_EXTERNAL_STORAGE` permission on Android. (#874)
+- Upgrade Glide and Kotlin libraries version. (#872)
+- Avoid using file-based saving methods on Android. (#871)
+- Use `ContentUris` for retrieving Media URIs on Android. (#870)
+- Improve media subtype on iOS. (#863)
+
+## 2.5.0
+
+**Features**
+
+- Support saving Live Photos on iOS and macOS. (#851)
+- Introduce `DarwinEditor` to replace `IosEditor`. (#855)
+
+## 2.4.2
+
+**Improvements**
+
+- Expose `frame` for `AssetEntity.thumbnailDataWithSize`. (#850)
+
+## 2.4.1
+
+**Improvements**
+
+- Use last modified date for Glide caches key on Android. (#848)
+
+## 2.4.0
+
+**Features**
+
+- Support both legacy and scoped storage on Android. (#833)
+
+**Fixes**
+
+- Avoid duplicate `copyItemAtURL` for videos on iOS. (#840)
+- Correct permission checks with `requestPermissionExtend` on Android 13. (#843)
+
+## 2.3.0
+
+**Features**
+
+- Support Android 13 (API 33) permissions.
+
+**Improvements**
+
+- Adapt Flutter 3.3. (#820)
+- Retrieve metadata for videos when empty on Android. (#819)
+
+**Fixes**
+
+- Fix saving videos with path on Android 29-. (#829)
+
+## 2.2.1
+
+**Fixes**
+
+- Fix saving images with path on Android 29-. (#815)
+
+## 2.2.0
+
+**Breaking Changes**
+
+- Introduce `AssetPathEntity.assetCountAsync` getter,
+  which improves the speed when loading paths mainly on iOS, also:
+  - Deprecate `AssetPathEntity.assetCount`.
+  - Remove `FilterOptionGroup.containsEmptyAlbum`.
+
+**Improvements**
+
+- Improve assets change notify with better methods signature and checks. (#790)
+- Add `PermissionState.hasAccess` getter for better condition judgement. (#792)
+- Remove unnecessary assets fetch in `getMediaUrl` on iOS. (#793)
+- Improve `AssetEntity.obtainForNewProperties` on iOS. (#794)
+- Improve `MD5Utils` on iOS. (#802)
+- Improve cache container mutations on iOS. (#803)
+- Improve assets count assignments. (#804)
+- Improve cursors conversion on Android. (#806)
+
+**Fixes**
+
+- Purpose video creation correctly on iOS. (#791)
+- Mark assets as favorite on iOS. (#794)
+- Fix not replied method calls (#800).
+- Fix invalid `RELATIVE_PATH` obtains with cursors on Android Q-. (#810)
+
+## 2.1.4
+
+**Improvements**
+
+- [iOS] Check `canPerformEditOperation` before performing change requests. (#782)
+
+**Fixes**
+
+- [Android] Fix `orientation` missing during conversions. (#783)
+
+## 2.1.3
+
+**Improvements**
+
+- Expose `PhotoManager.plugin`. (#778)
+
+**Fixes**
+
+- Fix `forceOldApi` not well-called. (#778)
+- Fix invalid type cast with `AssetEntity.exists`. (#777)
+
+## 2.1.2
+
+**Improvements**
+
+- Correct `PermissionRequestOption` typo with a class type alias.
+  Which also raised the Dart SDK constraint to `2.13.0`.
+- Catch throwables when reading EXIF.
+- Improve Live-Photos filtering.
+
+## 2.1.1
+
+**Improvements**
+
+- Protect cursors convert on Android. (#761)
+- Present exceptions in the image provider when debugging. (#766)
+
+**Fixes**
+
+- Fix `ACCESS_MEDIA_LOCATION` checks on Android. (#765)
+
+## 2.1.0+2
+
+**Improvements**
+
+- Support Flutter 3.
+
+## 2.0.9
+
+**Improvements**
+
+- (Not working) Ignore the null-aware operator for
+  `PaintingBinding`'s instance in order to solve
+  the coming lint issues with Flutter 2.13,
+  and keeps the compatibility of previous Flutter versions.
+- Fix dart docs generate issues.
+
+## 2.0.8
+
+**Improvements**
+
+- Using `ContentResolver` as much as possible on Android. (#755)
+
+## 2.0.7
+
+**Fixes**
+
+- Fix assets pagination issues on Android 29+. (#748)
+
+## 2.0.6
+
+**Fixes**
+
+- Fix file caches clearing on iOS. (#743)
+
+## 2.0.5
+
+**Improvements**
+
+- Improve `AssetEntity.titleAsync`'s implementation on iOS. (#740)
+
+## 2.0.4
+
+**Fixes**
+
+- Fix invalid `InputStream` when saving images on Android. (#736)
+
+## 2.0.3
+
+**Improvements**
+
+- Improve `getMediaUrl` on iOS.
+- Read orientation when saving images on Android. (#730)
+- Improve generic type casts on Android. (#732)
+
+## 2.0.2
+
+**Fixes**
+
+- Ensure file exists before reading EXIF on Android. (#728)
+
+## 2.0.1
+
+**Improvements**
+
+- Update legacy external storage exception on Android.
+
+**Fixes**
+
+- Predicate more precise permissions requirements on Android <29. (#723)
+
+## 2.0.0
+
+A major version release for performance improvements, new features, issues fixed, and breaking changes.
+Also, the LICENSE has been updated with the new author [FlutterCandies](https://github.com/fluttercandies).
+
+**Breaking Changes**
+
+See the [Migration Guide][] for details of breaking changes.
+
+**Features**
+
+- Add `mimeTypeAsync`. (#717)
+- Add `ThumbnailSize`. (#709)
+- Add `DurationConstraint.allowNullable`. (#681)
+- Introduce `AssetEntityImageProvider`. (#669, #709)
+- Support "Live Photos" with obtaining and filtering. (#667, #670, #673, #719)
+- Support to obtain the first frame for the video thumbnail on Android. (#658)
+- Allow plugin to be mocked/overridden with tests. (#703)
+
+**Improvements**
+
+- Improve path modified injection and asset count fetching. (#712)
+- Make all entities immutable. (#708)
+- Improve the performance when using the `file` getter on iOS. (#705)
+- Force legacy storage on Android Q. (#701)
+- Enhance request types filtering.
+- Compile for API 31 on Android.
+- Throw when obtaining media URL that asset is not locally available on iOS.
+- Retrieve width/height from ExifInterface for fallback on Android. (#686)
+- Request `WRITE_EXTERNAL_STORAGE` only when needed. (#675)
+- Provided a single-page example. (#672)
+- Improve the default sort order on all platforms. (#659)
+- Add equality comparison for various classes. (#657)
+- Run Glide on the current thread on Android. (#656)
+- Improve thread pool on Android. (#637)
+- Improved all documents and code formats. (#626, #660, #664, #671)
+- Reorganized all internal structures.
+- Rename org to `com.fluttercandies`. (#624)
+- `ImageScanner` -> `PhotoManager`. (#611)
+
+**Fixes**
+
+- Fix `Activity` leaks when detached on Android. (#716)
+- Fix potential NPE when moving assets on Android.
+- Fix edited images/videos are not returned correctly on iOS. (#622, #636)
+- Fix `title` argument causes saving methods failed. (#619, #635)
+- Fix `PhotoManager.editor.copyAssetToPath` returns `null`. (#619)
+- Fix sort order issues on iOS/macOS. (#603, #655)
+
+## 1.3.10
+
+**Improvements**
+
+- Allow all kinds of `PHAssetCollection` which should expand the support for shared albums. (#641)
+
+## 1.3.9+1
+
+**Fixes**
+
+- Fix compile error on Xcode 12 for iOS 14. (#630)
+
+## 1.3.9
+
+**Fixes**
+
+- Fix `presentLimited` issues on iOS 14 real devices. (#627)
+
+## 1.3.8
+
+**Improvements**
+
+- Improve sort orders on all platforms. (#623)
+
+## 1.3.7
+
+**Improvements**
+
+- Improve sort orders on iOS. (#620)
+
+## 1.3.6
+
+**Improvements**
+
+- Prettify file name on iOS. (#615)
+
+## 1.3.5
+
+**Improvements**
+
+- Support `presentLimited` with the new API on iOS 15. (#609)
+
+## 1.3.4
+
+**Improvements**
+
+- Obtain more albums on iOS/macOS. (#601)
+
+## 1.3.3
+
+**Improvements**
+
+- Loosen comparison between `AssetEntity`s.
+
+## 1.3.2
+
+**Improvements**
+
+- Apply more fields to compare between entities.
+
+## 1.3.1
+
+**Fixes**
+
+- `fetchPathProperties` returned wrong `isAll` on iOS. (#580)
+- `updateTimeCond` not constructed correctly with `FilterOptionGroup`.
+
+## 1.3.0
+
+**Improvements**
+
+- Repo cleanup.
+
+**Fixes**
+
+- Removed recursive calls with progress handler. (#577)
+
+We're bumping the minor version because we've achieved recent goals
+and applied multiple **Fixes** which make this plugin as the most solid ever.
+
+## 1.2.9
+
+**Features**
+
+- Add orientated getters. (#575)
+
+## 1.2.8
+
+**Fixes**
+
+- Saving methods return null. (#573)
+
+## 1.2.7
+
+**Improvements**
+
+- Improve `AssetEntity.getMediaUrl()` behaviors.
+
+**Fixes**
+
+- Merge all fields for `FilterOptionGroup`.
+- Make `AssetEntity.isLocallyAvailable` as a `Future` getter.
+
+## 1.2.6+1
+
+**Fixes**
+
+- Apply further fix to #559 .
+- Repo cleanup.
+
+## 1.2.6
+
+**Fixes**
+
+- #558
+- #559
+- #560
+
+## 1.2.5
+
+**Fixes**
+
+- Fix `open` setting for macOS.
+- Fix `setLog` for iOS and macOS.
+
+## 1.2.4
+
+**Fixes**
+
+- `saveImage` method missing file extension for the fallback title.
+- `openSettings` method.
+
+## 1.2.3
+
+**Features**
+
+- Add assets count change when notify on iOS.
+- Add some properties and methods for change notify.
+
+**Fixes**
+
+- Change notify issue on remove callback.
+- Reply result for `presentLimited` method.
+
+## 1.2.2
+
+**Fixes**
+
+- Add request permissions result listener when activity re-attached. (#515)
+
+## 1.2.1
+
+**Fixes**
+
+- An error of iOS. See #509 and #510 .
+
+## 1.2.0
+
+**Features**
+
+- Add `requestPermissionExtend` code to support iOS 14 permission.
+- Add update limited photos method for iOS 14.
+
+**Fixes**
+
+- Permissions dialog of launch on old iOS versions. (#503)
+
+## 1.1.6
+
+- The `MEDIA_LOCATION` permission of android can be removed through configuration.
+
+## 1.1.5
+
+- Revert #478 .
+- Fix thumbnail size of the entity on iOS/macOS.
+
+## 1.1.4
+
+- Merged #478 .
+
+## 1.1.3
+
+- Merged the code of macOS and ios.
+
+## 1.1.2
+
+- Updated the code in the macOS part.
+
+## 1.1.1
+
+**Fixes**
+
+- `thumbWithSize` of `AssetEntity`.
+
+## 1.1.0
+
+**Features**
+
+- `modified` of `AssetPathEntity`.
+- Update constructor of `FilterOptionGroup`.
+
+**Fixes**
+
+- Order option of the `FilterOptionGroup`.
+
+## 1.0.6
+
+- Add relative path when saving files to the MediaStore on Android 29+ (#462)
+- Fix deleteWithIds typecast issue with Android 29- (#460)
+
+## 1.0.4
+
+- Add mime type for android.
+
+## 1.0.3
+
+- Fix serious code usage issue in convert utils.
+
+## 1.0.2
+
+- Improve the constructor for `AssetEntity`.
+
+## 1.0.1
+
+- Fix orientation bug.
+
+## 1.0.0
+
+**Breaking Changes**
+
+- Migrate to null safety.
+- Correct type in `PMRequestState` .
+
+## 0.6.0
+
+**Breaking Changes**
+
+- Support multiple sorting conditions, and the `asc` of `DateTimeCond` is removed.
+
+**Features**
+
+- Support android API 30.
+- Support show empty album in iOS (#365).
+- User can ignore check permission(User can choose favorite permission plugin,
+  but at the same time user have to bear the risks corresponding to the permission).
+- Support clean file cache.
+- Experimental
+  - Preload image (Use `PhotoCachingManager` api.)
+- Add `OrderOption` as sort condition. The option default value is order by create date desc;
+- Support icloud asset progress.
+
+**Fixes**
+
+- #362
+- Delete assets in androidQ.
+- Edited image data in iOS.
+- Fix delete error in androidR.
+
+## 0.5.8
+
+**Fixes**
+
+- Delete assets in androidQ.
+
+## 0.5.7
+
+**Fixes**
+
+- Audio asset error for androidQ. See #340 and #341 .
+
+## 0.5.6
+
+- Fix save image with path for android.
+
+## 0.5.5+1
+
+- Remove verbose log.
+
+## 0.5.5
+
+- Add `merge` for `FilterOptionGroup` and `FilterOption` .
+
+## 0.5.4
+
+- Add `copyWith` for `FilterOption` .
+
+## 0.5.3+1
+
+- Support android v2 model.
+
+## 0.5.3
+
+**Fixes**
+
+- Cannot get audio problem in androidQ.
+
+## 0.5.2
+
+- Support macOS.
+- From the version, Starting from this version, 1.9 or earlier versions are not supported.
+
+## 0.5.1
+
+**Features**
+
+- Save image asset with file path.
+- Copy asset to another album.
+- Create AssetEntity with id.
+- Create AssetPathEntity from id.
+- Only iOS
+  - Create folder or album.
+  - Remove assets in album.
+  - Delete folder or album.
+  - Favorite asset.
+- Only android
+  - move asset to another path.
+  - Remove all non-existing rows.
+  - add `relativePath` for android.
+
+**Improvements**
+
+- Modified `AssetEntity.file`'s behavior on iOS,
+  it will return a picture in jpg format instead of heic/gif/png currently.
+  Now more in line with the description in the doc,
+  this is suitable for uploading images (theoretically, no Exif information will be included).
+- Update android change media url from file scheme to content scheme.
+- Clean up some unused code.
+
+**Fixes**
+
+- Problem of AssetPathEntity.refreshPathProperties.
+- Open setting in iOS.
+- Edited asset in iOS.
+- Audio properties of FilterOption.
+- Android onlyAll assetCount bug.
+
+## 0.5.0
+
+**Breaking Changes**
+
+- Add date condition to filter datetime
+- Add class `DateTimeCond`
+- Add `dateTimeCond` to `FilterOptionGroup`
+- Remove `fetchDateTime` from `getAssetPathList`
+- Remove param `dt` from `AssetPathEntity.refreshPathProperties`,
+  and add `refreshPathProperties` params to the method.
+- Split video filter and image filter.
+
+**Features**
+
+- Add `getSubPathEntities` for `AssetPathEntity`.
+- Add `quality` for `AssetEntity.thumbDataWithSize`.
+- Add `orientation` for `AssetEntity`.
+- Add `onlyAll` for `getAssetPathList`.
+- Support audio type(Only android, iOS Photos have no audio)
+
+**Improvements**
+
+- iOS code is running background thread.
+- getThumb is running in background thread.
+
+**Fixes**
+
+- exists error on android.
+- use edited origin file on iOS.
+- galleryName maybe is null in android.
+- thumb of android 10.
+
+## 0.4.8
+
+**Fixes**
+
+- #169
+- #170
+
+## 0.4.7
+
+**Features**
+
+- Add `FilterOption` for method `getAssetPathList`.
+
+## 0.4.6
+
+**Fixes**
+
+- originFile of `AssetEntity`
+
+**Features**
+
+- location(`latitude`,`longitude`) of `AssetEntity`
+- `title` of `AssetEntity`
+- `originBytes` of `AssetEntity`
+- param `format` in `thumbDataWithSize` of assetEntity.
+
+## 0.4.5
+
+**Fixes**
+
+- Can't get thumb/file of video on androidQ.
+
+## 0.4.4
+
+**Fixes**
+
+- Compatibility code, when the width and height of the video is empty, it can still be scanned.
+- Add a default value to `type` of `getAssetPathList`.
+
+## 0.4.3
+
+**Features**
+
+- Delete asset.
+- Add Image.
+- Add Video.
+- Add modifyDate property.
+- Fix videoDuration error.
+
+**Fixes**
+
+- CreateDate error.
+
+## 0.4.2
+
+- Fix ios get full file size error.
+
+## 0.4.1
+
+- Fix ios build error.
+
+## 0.4.0
+
+**Breaking Changes**
+
+- Some properties in the entity were modified from asynchronous to synchronous.
+- Remove `isCache` params. Now, `getAssetPathList` will reload info everytime.
+  If user want to cache `List<AssetPathEntity>`, then user must do it manually.
+
+**Features**
+
+- Added a method `getAssetListPaged` for paging loading resources to path.
+  The paging implementation is lazy loading, that is, the resource corresponding information is loaded when requested.
+  The entity corresponding to the path is no longer placed in the memory,
+  but is implemented by PHPhoto (ios) and sqlite's limit offset (android).
+- Support AndroidQ privacy.
+
+## 0.3.5
+
+- Fix iCloud image problem.
+
+## 0.3.4
+
+- Support flutter 1.6.0 android's thread changes for channel.
+
+## 0.3.3
+
+- Fix customizing album containing folders on iOS.
+
+## 0.3.2
+
+- `AssetEntity` add property: `originFile`.
+
+## 0.3.1
+
+- `AssetEntity` add property: `exists`.
+
+## 0.3.0
+
+**Breaking Changes**
+
+- Support Android X.
+  This shouldn't result in any functional changes,
+  but it requires any Android apps using this plugin to also migrate
+  if they're using the original support library.
+
+**Features**
+
+- Add a method to create `AssetEntity` with id.
+- Add `isCache` for method `getImageAsset`,`getVideoAsset` or `getAssetPathList`.
+- Add observer for photo change.
+- Add field `createTime` for `AssetEntity`.
+
+**Fixes**
+
+- Fix NPE for image crash on android.
+
+## 0.2.1
+
+- Add `getVideoAsset` and `getImageAsset` to load video / image.
+
+## 0.2.0
+
+- Add asset size field.
+- Add cache release method.
+
+## 0.1.10
+
+- Fix when number of photo/video is 0, will crash.
+
+## 0.1.9
+
+- Add video duration.
+
+## 0.1.8
+
+- Sort asset by date.
+
+## 0.1.7
+
+- Fix Android's latest picture won't be found.
+- Update gradle wrapper version.
+- Update kotlin version.
+
+## 0.1.6
+
+- Fix Android to get pictures that are empty bug.
+
+## 0.1.5
+
+- Support ios icloud image and video.
+
+## 0.1.4
+
+- Update all path `hasVideo` property.
+
+## 0.1.3
+
+- Add a params to help user disable get video.
+
+## 0.1.2
+
+- iOS get video file is async.
+
+## 0.1.1
+
+- Fix 'ios video full file is a jpg' problem.
+
+## 0.1.0
+
+- Support video in android.
+- Change API from ImageXXXX to AssetXXXX.
+
+## 0.0.3
+
+- Update for the issue #1. (NPE when request other permission on android)
+
+## 0.0.2
+
+- Update README.
+
+## 0.0.1
+
+First version.
+
+- API for photo.
+
+[Migration Guide]: MIGRATION_GUIDE.md

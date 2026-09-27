@@ -1,0 +1,38 @@
+name: Publish verified LegnaSend release
+on:
+  workflow_dispatch:
+    inputs:
+      primary_run:
+        description: Successful Windows x64, Linux and Android package run ID
+        required: true
+        type: string
+      arm64_run:
+        description: Successful Windows ARM64 package run ID
+        required: true
+        type: string
+      tag:
+        description: New release tag (existing releases are never overwritten)
+        default: v1.0.0
+        required: true
+        type: string
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: legnasend-publish-${{ inputs.tag }}
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Validate completed jobs, download artifacts and publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRIMARY_RUN: ${{ inputs.primary_run }}
+          ARM64_RUN: ${{ inputs.arm64_run }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: python3 support/scripts/ci/publish_release.py

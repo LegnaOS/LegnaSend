@@ -1,0 +1,564 @@
+{
+  "appName": "LegnaSend",
+  "general": {
+    "accept": "Accepta",
+    "accepted": "Acceptat",
+    "add": "Afegeix",
+    "advanced": "Avançades",
+    "cancel": "Cancel·la",
+    "close": "Tanca",
+    "confirm": "Confirma",
+    "continueStr": "Continua",
+    "copy": "Copia",
+    "copiedToClipboard": "S'ha copiat al porta-retalls",
+    "decline": "Rebutja",
+    "done": "Fet",
+    "delete": "Elimina",
+    "edit": "Edita",
+    "error": "Error",
+    "example": "Exemple",
+    "files": "Fitxers",
+    "finished": "Finalitzat",
+    "hide": "Amaga",
+    "off": "Desactivat",
+    "offline": "Desconnectat",
+    "on": "Activat",
+    "online": "En línia",
+    "open": "Obre",
+    "queue": "Cua",
+    "quickSave": "Desat ràpid",
+    "quickSaveFromFavorites": "Desat ràpid per als «Preferits»",
+    "renamed": "Canvia el nom",
+    "reset": "Desfés els canvis",
+    "restart": "Reinicia",
+    "settings": "Configuració",
+    "skipped": "Omès",
+    "start": "Inicia",
+    "stop": "Atura",
+    "save": "Desa",
+    "unchanged": "Sense canvis",
+    "unknown": "Desconegut",
+    "noItemInClipboard": "No hi ha elements al porta-retalls."
+  },
+  "receiveTab": {
+    "title": "Recepció",
+    "infoBox": {
+      "ip": "IP:",
+      "port": "Port:",
+      "alias": "Nom del dispositiu:"
+    },
+    "quickSave": {
+      "off": "@:general.off",
+      "favorites": "Preferits",
+      "on": "@:general.on"
+    },
+    "link": "Rebre mitjançant enllaç"
+  },
+  "sendTab": {
+    "title": "Envia",
+    "selection": {
+      "title": "Selecció",
+      "files": "Fitxers: {files}",
+      "size": "Mida: {size}"
+    },
+    "picker": {
+      "file": "Fitxer",
+      "folder": "Carpeta",
+      "media": "Multimèdia",
+      "text": "Text",
+      "app": "Aplicació",
+      "clipboard": "Enganxa"
+    },
+    "shareIntentInfo": "També podeu utilitzar l'opció «Comparteix» del vostre dispositiu mòbil per a seleccionar fitxers d'una manera més fàcil.",
+    "nearbyDevices": "Dispositius propers",
+    "thisDevice": "Aquest dispositiu",
+    "scan": "Cerca dispositius",
+    "manualSending": "Enviament manual",
+    "sendMode": "Mode d'enviament",
+    "sendModes": {
+      "single": "Destinatari únic",
+      "multiple": "Múltiples destinataris",
+      "link": "Comparteix via enllaç"
+    },
+    "sendModeHelp": "Explicació",
+    "help": "Comproveu que el destinatari està en la mateixa xarxa Wi-Fi.",
+    "placeItems": "Col·loqueu els elements per compartir."
+  },
+  "settingsTab": {
+    "title": "Configuració",
+    "general": {
+      "title": "General",
+      "brightness": "Tema",
+      "brightnessOptions": {
+        "system": "Sistema",
+        "dark": "Fosc",
+        "light": "Clar"
+      },
+      "color": "Color",
+      "colorOptions": {
+        "system": "Sistema",
+        "oled": "OLED",
+        "custom": "Personalitzat"
+      },
+      "language": "Llengua",
+      "languageOptions": {
+        "system": "Sistema"
+      },
+      "saveWindowPlacement": "Desa la posició de la finestra en sortir",
+      "saveWindowPlacementWindows": "Desa la posició de la finestra després de sortir",
+      "minimizeToTray": "Minimitza a la safata del sistema/barra de menú en tancar",
+      "launchAtStartup": "Inici automàtic en iniciar la sessió",
+      "launchMinimized": "Inici automàtic: Inici minimitzat",
+      "showInContextMenu": "Mostra el LocalSend al menú contextual",
+      "animations": "Animacions"
+    },
+    "receive": {
+      "title": "Recepció",
+      "quickSave": "@:general.quickSave",
+      "quickSaveFromFavorites": "@:general.quickSaveFromFavorites",
+      "requirePin": "@:webSharePage.requirePin",
+      "autoFinish": "Finalització automàtica",
+      "destination": "Desa en la carpeta",
+      "downloads": "(Baixades)",
+      "saveToGallery": "Desa els fitxers multimèdia a la galeria",
+      "saveToHistory": "Desa a l'historial",
+      "verifyChecksums": "Verifica les sumes de verificació en rebre fitxers"
+    },
+    "send": {
+      "title": "Enviament",
+      "shareViaLinkAutoAccept": "Accepta peticions de manera automàtica en el mode «Comparteix via enllaç»",
+      "createChecksums": "Crea sumes de verificació en enviar fitxers"
+    },
+    "network": {
+      "title": "Xarxa",
+      "needRestart": "Reinicieu el servidor per a aplicar la configuració.",
+      "server": "Servidor",
+      "alias": "Nom del dispositiu",
+      "deviceType": "Tipus de dispositiu",
+      "deviceModel": "Model del dispositiu",
+      "port": "Port",
+      "network": "Xarxa",
+      "networkOptions": {
+        "all": "Totes",
+        "filtered": "Filtrades"
+      },
+      "discoveryTimeout": "Temps d'espera de descobriment",
+      "useSystemName": "Utilitza el nom del sistema",
+      "generateRandomAlias": "Genera un àlies aleatori",
+      "portWarning": "Altres dispositius podrien no detectar-vos perquè utilitzeu un port personalitzat. (predefinit: {defaultPort})",
+      "encryption": "Xifratge",
+      "multicastGroup": "Adreça del Multicast",
+      "multicastGroupWarning": "Altres dispositius podrien no detectar-vos perquè utilitzeu una adreça multicast personalitzada. (predefinida: {defaultMulticast})"
+    },
+    "other": {
+      "title": "Altres",
+      "support": "Doneu suport al LocalSend",
+      "donate": "Donació",
+      "privacyPolicy": "Política de privadesa",
+      "termsOfUse": "Condicions d'ús"
+    },
+    "advancedSettings": "Configuració avançada"
+  },
+  "troubleshootPage": {
+    "title": "Solució de problemes",
+    "subTitle": "L'aplicació no funciona com s'espera? Aquí podeu trobar solucions als problemes més comuns.",
+    "solution": "Solució:",
+    "fixButton": "Corregeix de manera automàtica",
+    "firewall": {
+      "symptom": "Aquest dispositiu pot enviar fitxers a d'altres, però altres dispositius no poden enviar fitxers a aquest.",
+      "solution": "El més probable és que sigui un problema del tallafocs. Podeu solucionar-ho permetent les connexiions entrants (UDP i TCP) al port {port}.",
+      "openFirewall": "Obre el tallafocs"
+    },
+    "noDiscovery": {
+      "symptom": "Aquest dispositiu no pot descobrir altres dispositius.",
+      "solution": "Comproveu que tots els dispositius estan a la mateixa xarxa Wi-Fi i tenen la mateixa configuració (port, adreça multicast i xifratge). Podeu provar d'escriure l'adreça IP del dispositiu de destí de manera manual. Si això funciona, considereu afegir aquest dispositiu als preferits perquè pugui ser descobert automàticament en un futur."
+    },
+    "noConnection": {
+      "symptom": "Cap dels dos dispositius no poden trobar-se ni compartir fitxers.",
+      "solution": "Existeix el problema als dos costats? Si és així, cal que comproveu que els dispositius estan a la mateixa xarxa Wi-Fi i comparteixen la mateixa configuració (port, adreça multicast i xifratge). La Wi-Fi podria no permetre la comunicació entre els participants a causa de l'aïllament del punt d'accés (Access Point, AP). En aquest cas, cal que desactiveu aquesta opció a l'encaminador."
+    }
+  },
+  "networkInterfacesPage": {
+    "title": "Interfícies de xarxa",
+    "info": "De manera predefinida, el LocalSend utilitza totes les interfícies de xarxa disponibles. Podeu excloure les xarxes no desitjades aquí. Cal que reinicieu el servidor per a aplicar els canvis.",
+    "preview": "Previsualitza",
+    "whitelist": "Llista de permeses",
+    "blacklist": "Llista de denegades"
+  },
+  "receiveHistoryPage": {
+    "title": "Historial",
+    "openFolder": "Obre la carpeta",
+    "deleteHistory": "Elimina l'historial",
+    "empty": "L'historial està buit.",
+    "entryActions": {
+      "open": "Obre el fitxer",
+      "showInFolder": "Mostra a la carpeta",
+      "info": "Informació",
+      "deleteFromHistory": "Elimina de l'historial"
+    }
+  },
+  "apkPickerPage": {
+    "title": "Aplicacions (APK)",
+    "excludeSystemApps": "Exclou les aplicacions del sistema",
+    "excludeAppsWithoutLaunchIntent": "Exclou les aplicacions no executables",
+    "apps": "{n} Aplicacions"
+  },
+  "selectedFilesPage": {
+    "deleteAll": "Elimina-ho tot"
+  },
+  "deviceDetailsPage": {
+    "title": "Detalls del dispositiu",
+    "favorite": "Preferit",
+    "verify": "Verifica",
+    "info": {
+      "name": "Nom",
+      "address": "Adreça",
+      "version": "Versió",
+      "protocol": "Protocol v{version}"
+    },
+    "logs": {
+      "title": "Registres",
+      "empty": "No hi ha registres disponibles.",
+      "discovered": "Descobert mitjançant {protocol} ({host})",
+      "updated": "Actualitzat mitjançant {protocol} ({host})"
+    }
+  },
+  "verifyPage": {
+    "title": "Verifica",
+    "icons": "Icones",
+    "text": "Text",
+    "question": "Es veu igual a l'altre dispositiu?"
+  },
+  "receivePage": {
+    "subTitle": {
+      "one": "vol enviar-vos un fitxer",
+      "other": "vol enviar-vos {n} fitxers"
+    },
+    "subTitleMessage": "us ha enviat un missatge:",
+    "subTitleLink": "us ha enviat un enllaç:",
+    "canceled": "El remitent ha cancel·lat la petició."
+  },
+  "receiveOptionsPage": {
+    "title": "Opcions",
+    "destination": "@:settingsTab.receive.destination",
+    "appDirectory": "(Carpeta LocalSend)",
+    "saveToGallery": "@:settingsTab.receive.saveToGallery",
+    "saveToGalleryOff": "S'ha desactivat automàticament perquè hi ha carpetes."
+  },
+  "sendPage": {
+    "calculatingChecksum": "S'està calculant la suma de verificació ({curr} / {n})",
+    "waiting": "S'està esperant una resposta…",
+    "rejected": "El destinatari ha rebutjat la petició.",
+    "tooManyAttempts": "@:web.tooManyAttempts",
+    "busy": "El destinatari està ocupat amb una altra petició."
+  },
+  "progressPage": {
+    "titleSending": "S'estan enviant els fitxers",
+    "titleReceiving": "S'estan rebent els fitxers",
+    "savedToGallery": "Desat a Fotos",
+    "total": {
+      "title": {
+        "sending": "Progrés total ({time})",
+        "finishedError": "Finalitzat amb error",
+        "canceledSender": "Cancel·lat pel remitent",
+        "canceledReceiver": "Cancel·lat pel destinatari"
+      },
+      "count": "Fitxers: {curr} / {n}",
+      "size": "Mida: {curr} / {n}",
+      "speed": "Velocitat: {speed}/s"
+    },
+    "remainingTime": {
+      "minutesUnit(plural, param=m)": {
+        "other": "{m}min"
+      },
+      "hoursUnit(plural, param=h)": {
+        "other": "{h}h"
+      },
+      "minutes": "{m}:{ss}",
+      "hours": "@:.hoursUnit @:.minutesUnit"
+    }
+  },
+  "webSharePage": {
+    "title": "Comparteix via enllaç",
+    "loading": "S'està iniciant el servidor…",
+    "stopping": "S'està aturant el servidor…",
+    "error": "Hi ha hagut un error en iniciar el servidor.",
+    "openLink": {
+      "one": "Obre l'enllaç al navegador:",
+      "other": "Obre un d'aquests enllaços al navegador:"
+    },
+    "requests": "Peticions",
+    "noRequests": "Encara no hi ha peticions.",
+    "encryption": "@:settingsTab.network.encryption",
+    "autoAccept": "Accepta les peticions automàticament",
+    "requirePin": "Demana un PIN",
+    "pinHint": "El PIN és «{pin}»",
+    "encryptionHint": "El LocalSend utilitza un certificat auto-signat. Cal que l'accepteu al navegador.",
+    "pendingRequests": "Peticions pendents: {n}"
+  },
+  "webReceivePage": {
+    "title": "Rebre mitjançant enllaç"
+  },
+  "aboutPage": {
+    "title": "Quant al LegnaSend",
+    "author": "Autor",
+    "contributors": "Col·laboradors",
+    "packagers": "Empaquetadors",
+    "translators": "Traductors"
+  },
+  "donationPage": {
+    "title": "Donació",
+    "info": "El LocalSend és gratuït, de codi obert i sense anuncis. Si us agrada l'aplicació, podeu donar suport al desenvolupament amb una donació.",
+    "donate": "Donació: {amount}",
+    "thanks": "Moltes gràcies!",
+    "restore": "Restaura la compra"
+  },
+  "changelogPage": {
+    "title": "Registre de canvis"
+  },
+  "whatsNewPage": {
+    "title": "Novetats de la versió {version}"
+  },
+  "aliasGenerator(ignoreMissing, ignoreGpt)": {
+    "@info": "Llengües diferents poden tenir paraules diferents, podrien no coincidir al 100%",
+    "adjectives": [
+      "Adorable",
+      "Bonic",
+      "Gran",
+      "Brillant",
+      "Neteja",
+      "Intel·ligent",
+      "Guai",
+      "Bonic",
+      "Astúcia",
+      "Determinat",
+      "Energètic",
+      "Eficient",
+      "Fantàstic",
+      "Ràpid",
+      "Bé",
+      "Fresca",
+      "Bo",
+      "Preciós",
+      "Genial",
+      "Guapo",
+      "Calent",
+      "Amable",
+      "Encantador",
+      "Místic",
+      "Producte",
+      "Bonic",
+      "Pacient",
+      "Bonic",
+      "Potent",
+      "Ric",
+      "Secret",
+      "Intel·ligent",
+      "Sòlid",
+      "Especial",
+      "Estratègic",
+      "Fort",
+      "Endreçat",
+      "Savi"
+    ],
+    "fruits": [
+      "Poma",
+      "Alvocat",
+      "Plàtan",
+      "Blackberry",
+      "Nabiu",
+      "Bròquil",
+      "Pastanaga",
+      "Cirera",
+      "Coco",
+      "Raïm",
+      "Llimona",
+      "Enciam",
+      "Mango",
+      "Meló",
+      "Bolet",
+      "Ceba",
+      "Taronja",
+      "Papaia",
+      "Préssec",
+      "Pera",
+      "Pinya",
+      "Patata",
+      "Carbassa",
+      "Gerd",
+      "Maduixa",
+      "Tomàquet"
+    ],
+    "combination": "{fruit} {adjective}",
+    "@combination": "In some languages, the adjective must be last."
+  },
+  "dialogs": {
+    "addFile": {
+      "title": "Afegeix-ho a la selecció",
+      "content": "Què voleu afegir?"
+    },
+    "openFile": {
+      "title": "Obre el fitxer",
+      "content": "Voleu obrir el fitxer rebut?"
+    },
+    "addressInput": {
+      "title": "Introduïu l'adreça",
+      "hashtag": "Etiqueta",
+      "ip": "Adreça IP",
+      "recentlyUsed": "Utilitzades recentment: "
+    },
+    "cancelSession": {
+      "title": "Cancel·la la transferència de fitxers",
+      "content": "Segur que voleu cancel·lar la transferència dels fitxers?"
+    },
+    "cannotOpenFile": {
+      "title": "No es pot obrir el fitxer",
+      "content": "No s'ha pogut obrir «{file}». S'ha mogut, reanomenat o eliminat?"
+    },
+    "encryptionDisabledNotice": {
+      "title": "Xifratge desactivat",
+      "content": "La comunicació ara es fa mitjançant el protocol HTTP no xifrat. Per a utilitzar HTTPS, torneu a activar el xifratge."
+    },
+    "errorDialog": {
+      "title": "@:general.error"
+    },
+    "favoriteDialog": {
+      "title": "Preferits",
+      "noFavorites": "Encara no hi ha cap dispositiu preferit.",
+      "addFavorite": "Afegeix"
+    },
+    "favoriteDeleteDialog": {
+      "title": "Elimina dels preferits",
+      "content": "Voleu eliminar «{name}» dels preferits?"
+    },
+    "favoriteEditDialog": {
+      "titleAdd": "Afegeix als preferits",
+      "titleEdit": "Configuració",
+      "name": "Nom del dispositiu",
+      "auto": "(auto)",
+      "ip": "Adreça IP",
+      "port": "Port"
+    },
+    "fileInfo": {
+      "title": "Informació del fitxer",
+      "fileName": "Nom del fitxer:",
+      "path": "Ruta:",
+      "size": "Mida:",
+      "sender": "Remitent:",
+      "time": "Temps:"
+    },
+    "fileNameInput": {
+      "title": "Introduïu el nom del fitxer",
+      "original": "Original: {original}"
+    },
+    "historyClearDialog": {
+      "title": "Esborra l'historial",
+      "content": "Segur que voleu eliminar tot l'historial?"
+    },
+    "localNetworkUnauthorized": {
+      "title": "@:dialogs.noPermission.title",
+      "description": "El LocalSend no pot trobar altres dispositius sense tenir permís per a escanejar la xarxa local. Concediu aquest permís a la configuració.",
+      "gotoSettings": "Configuració"
+    },
+    "messageInput": {
+      "title": "Tipus de missatge",
+      "multiline": "Multilínia"
+    },
+    "noFiles": {
+      "title": "No s'ha seleccionat cap fitxer",
+      "content": "Seleccioneu com a mínim un fitxer."
+    },
+    "noPermission": {
+      "title": "Sense permisos",
+      "content": "No heu concedit els permisos necessaris. Concediu-los a la configuració."
+    },
+    "notAvailableOnPlatform": {
+      "title": "No disponible",
+      "content": "Aquesta característica només està disponible a:"
+    },
+    "qr": {
+      "title": "Codi QR"
+    },
+    "quickActions": {
+      "title": "Accions ràpides",
+      "counter": "Comptador",
+      "prefix": "Prefix",
+      "padZero": "Reomple amb zeros",
+      "sortBeforeCount": "Ordena abans alfabèticament",
+      "random": "Aleatori"
+    },
+    "quickSaveNotice": {
+      "title": "@:general.quickSave",
+      "content": "Les sol·licituds de fitxers s'accepten automàticament. Tingueu en compte que tothom a la xarxa local us pot enviar fitxers."
+    },
+    "quickSaveFromFavoritesNotice": {
+      "title": "@:general.quickSaveFromFavorites",
+      "content": [
+        "Les sol·licituds de fitxers s'accepten automàticament dels dispositius de la llista de preferits."
+      ]
+    },
+    "pin": {
+      "title": "Introduïu el PIN"
+    },
+    "sendModeHelp": {
+      "title": "Modes d'enviament",
+      "single": "Envia fitxers a un destinatari. La selecció s'esborrarà un cop finalitzada la transferència de fitxers.",
+      "multiple": "Envia fitxers a diversos destinataris. La selecció no s'esborrarà en finalitzar la trasferència.",
+      "link": "Els destinataris que no tinguin el LocalSend instal·lat poden baixar els fitxers seleccionats obrint l'enllaç al seu navegador."
+    },
+    "zoom": {
+      "title": "URL"
+    }
+  },
+  "sanitization": {
+    "empty": "El nom del fitxer no pot estar buit",
+    "invalid": "El nom del fitxer conté caràcters no vàlids"
+  },
+  "tray": {
+    "@info": "Les directrius d'Apple són molt estrictes quant a l'expressió «tanca».",
+    "open": "@:general.open",
+    "close": "Surt del LocalSend",
+    "closeWindows": "Surt"
+  },
+  "web": {
+    "waiting": "@:sendPage.waiting",
+    "enterPin": "Introduïu el PIN",
+    "invalidPin": "PIN no vàlid",
+    "tooManyAttempts": "Massa intents",
+    "rejected": "Rebutjat",
+    "files": "Fitxers",
+    "fileName": "Nom del fitxer",
+    "size": "Mida"
+  },
+  "assetPicker": {
+    "@info": "Traduccions per a l'eina de selecció de mitjans per a Android i iPhone",
+    "confirm": "Confirma",
+    "cancel": "Cancel·la",
+    "edit": "Edita",
+    "gifIndicator": "GIF",
+    "loadFailed": "Càrrega fallida",
+    "original": "Origen",
+    "preview": "Previsualitza",
+    "select": "Seleccioneu",
+    "emptyList": "Llista buida",
+    "unSupportedAssetType": "Tipus de fitxer no compatible.",
+    "unableToAccessAll": "No es pot accedir a tots els fitxers del dispositiu",
+    "viewingLimitedAssetsTip": "Visualitza només fitxers i àlbums accessibles per l'aplicació.",
+    "changeAccessibleLimitedAssets": "Feu clic per a actualitzar els fitxers accessibles",
+    "accessAllTip": "L'aplicació només pot accedir a alguns fitxers del dispositiu. Aneu a la configuració del sistema i permeteu que l'aplicació accedeixi a tots els mitjans del dispositiu.",
+    "goToSystemSettings": "Vés a la configuració del sistema",
+    "accessLimitedAssets": "Continua amb accés limitat",
+    "accessiblePathName": "Fitxers accessibles",
+    "sTypeAudioLabel": "Àudio",
+    "sTypeImageLabel": "Imatge",
+    "sTypeVideoLabel": "Vídeo",
+    "sTypeOtherLabel": "Altres fitxers",
+    "sActionPlayHint": "reprodueix",
+    "sActionPreviewHint": "previsualitza",
+    "sActionSelectHint": "selecccioneu",
+    "sActionSwitchPathLabel": "canvia la ruta",
+    "sActionUseCameraHint": "utilitza la càmera",
+    "sNameDurationLabel": "duració",
+    "sUnitAssetCountLabel": "compte"
+  }
+}

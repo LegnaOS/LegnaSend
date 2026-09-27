@@ -1,0 +1,9 @@
+{
+  "version": "4.2.2",
+  "source": "https://github.com/sindresorhus/Defaults/tree/v4.2.2",
+  "license_sha256": "48da2f39e100d4085767e94966b43f4fa95ff6a0698fba57ed460914e35f94a0",
+  "patched_file_sha256": {
+    "Sources/Defaults/UserDefaults.swift": "7aace2f26a3cc912ccf9fd05f2f22d927606af8751bfb1b828b003d5e331660b",
+    "Sources/Defaults/Observation.swift": "49eac47656f951c88e74bb1831f299bf74dd436248e247eacb365c0d7fb22cc6"
+  }
+}

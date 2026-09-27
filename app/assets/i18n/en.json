@@ -1,0 +1,946 @@
+{
+  "appName": "LegnaSend",
+  "general": {
+    "accept": "Accept",
+    "accepted": "Accepted",
+    "add": "Add",
+    "advanced": "Advanced",
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirm": "Confirm",
+    "continueStr": "Continue",
+    "copy": "Copy",
+    "copiedToClipboard": "Copied to Clipboard",
+    "decline": "Decline",
+    "done": "Done",
+    "delete": "Delete",
+    "edit": "Edit",
+    "error": "Error",
+    "example": "Example",
+    "files": "Files",
+    "finished": "Finished",
+    "hide": "Hide",
+    "off": "Off",
+    "offline": "Offline",
+    "on": "On",
+    "online": "Online",
+    "open": "Open",
+    "queue": "Queue",
+    "quickSave": "Quick Save",
+    "quickSaveFromFavorites": "Quick Save for \"Favorites\"",
+    "renamed": "Renamed",
+    "reset": "Undo changes",
+    "restart": "Restart",
+    "settings": "Settings",
+    "skipped": "Skipped",
+    "start": "Start",
+    "stop": "Stop",
+    "save": "Save",
+    "unchanged": "Unchanged",
+    "unknown": "Unknown",
+    "noItemInClipboard": "No items in Clipboard."
+  },
+  "receiveTab": {
+    "title": "Receive",
+    "infoBox": {
+      "ip": "IP:",
+      "port": "Port:",
+      "alias": "Device name:"
+    },
+    "quickSave": {
+      "off": "@:general.off",
+      "favorites": "Favorites",
+      "on": "@:general.on"
+    },
+    "link": "Link workspace"
+  },
+  "sendTab": {
+    "title": "Send",
+    "selection": {
+      "title": "Selection",
+      "files": "Files: {files}",
+      "size": "Size: {size}"
+    },
+    "picker": {
+      "file": "File",
+      "folder": "Folder",
+      "media": "Media",
+      "text": "Text",
+      "app": "App",
+      "clipboard": "Paste"
+    },
+    "shareIntentInfo": "You can also use the \"Share\" feature of your mobile device to select files more easily.",
+    "nearbyDevices": "Nearby devices",
+    "thisDevice": "This Device",
+    "scan": "Search devices",
+    "manualSending": "Manual sending",
+    "sendMode": "Send mode",
+    "sendModes": {
+      "single": "Single recipient",
+      "multiple": "Multiple recipients",
+      "link": "Share via link"
+    },
+    "sendModeHelp": "Explanation",
+    "help": "Please ensure that the desired target is also on the same Wi-Fi network.",
+    "placeItems": "Place items to share."
+  },
+  "settingsTab": {
+    "title": "Settings",
+    "general": {
+      "title": "General",
+      "brightness": "Theme",
+      "brightnessOptions": {
+        "system": "System",
+        "dark": "Dark",
+        "light": "Light"
+      },
+      "color": "Color",
+      "colorOptions": {
+        "system": "System",
+        "oled": "OLED",
+        "custom": "Custom"
+      },
+      "language": "Language",
+      "languageOptions": {
+        "system": "System"
+      },
+      "saveWindowPlacement": "Save window position after quit",
+      "saveWindowPlacementWindows": "Save window position after exit",
+      "minimizeToTray": "Minimize to the System Tray/Menu Bar when closing",
+      "launchAtStartup": "Autostart after login",
+      "launchMinimized": "Autostart: Start hidden",
+      "showInContextMenu": "Show LocalSend in context menu",
+      "animations": "Animations"
+    },
+    "receive": {
+      "title": "Receive",
+      "quickSave": "@:general.quickSave",
+      "quickSaveFromFavorites": "@:general.quickSaveFromFavorites",
+      "requirePin": "@:webSharePage.requirePin",
+      "autoFinish": "Auto Finish",
+      "destination": "Save to folder",
+      "downloads": "(Downloads)",
+      "saveToGallery": "Save media to gallery",
+      "saveToHistory": "Save to history",
+      "verifyChecksums": "Verify checksums when receiving files"
+    },
+    "send": {
+      "title": "Send",
+      "shareViaLinkAutoAccept": "Automatically accept requests in \"Share via link\" mode",
+      "createChecksums": "Create checksums when sending files"
+    },
+    "network": {
+      "title": "Network",
+      "needRestart": "Restart the server to apply the settings!",
+      "server": "Server",
+      "alias": "Device name",
+      "deviceType": "Device type",
+      "deviceModel": "Device model",
+      "port": "Port",
+      "network": "Network",
+      "networkOptions": {
+        "all": "All",
+        "filtered": "Filtered"
+      },
+      "discoveryTimeout": "Discovery Timeout",
+      "useSystemName": "Use system name",
+      "generateRandomAlias": "Generate random alias",
+      "portWarning": "You might not be detected by other devices because you are using a custom port. (default: {defaultPort})",
+      "encryption": "Encryption",
+      "multicastGroup": "Multicast address",
+      "multicastGroupWarning": "You might not be detected by other devices because you are using a custom multicast address. (default: {defaultMulticast})"
+    },
+    "other": {
+      "title": "Other",
+      "support": "Support LocalSend",
+      "donate": "Donate",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfUse": "Terms of Use"
+    },
+    "advancedSettings": "Advanced settings"
+  },
+  "troubleshootPage": {
+    "title": "Troubleshoot",
+    "subTitle": "Does the app not work as expected? Here you can find some common solutions to problems.",
+    "solution": "Solution:",
+    "fixButton": "Fix automatically",
+    "firewall": {
+      "symptom": "This device can send files to other devices but other devices cannot send files to this device.",
+      "solution": "This is most likely a firewall issue. You can solve this by allowing incoming connections (UDP and TCP) on port {port}.",
+      "openFirewall": "Open Firewall"
+    },
+    "noDiscovery": {
+      "symptom": "This device cannot discover other devices.",
+      "solution": "Please make sure that all devices are on the same Wi-Fi network and share the same configuration (port, multicast address, encryption). You can try to type the IP address of the target device manually. If this works, consider adding this device to the favorites so it can be automatically discovered in the future."
+    },
+    "noConnection": {
+      "symptom": "Both devices cannot discover each other nor can they share files.",
+      "solution": "Does the problem exist on both sides? If so, you need to make sure that both devices are on the same Wi-Fi network and share the same configuration (port, multicast address, encryption). The Wi-Fi network may not allow communication between participants due to Access Point (AP) Isolation. In this case, this option must be disabled on the router."
+    }
+  },
+  "networkInterfacesPage": {
+    "title": "Network Interfaces",
+    "info": "By default, LocalSend uses all available network interfaces. You can exclude unwanted networks here. You need to restart the server to apply the changes.",
+    "preview": "Preview",
+    "whitelist": "Whitelist",
+    "blacklist": "Blacklist"
+  },
+  "receiveHistoryPage": {
+    "title": "History",
+    "openFolder": "Open folder",
+    "deleteHistory": "Delete history",
+    "empty": "The history is empty.",
+    "entryActions": {
+      "open": "Open file",
+      "showInFolder": "Show in folder",
+      "info": "Information",
+      "deleteFromHistory": "Delete from history"
+    }
+  },
+  "apkPickerPage": {
+    "title": "Apps (APK)",
+    "excludeSystemApps": "Exclude system apps",
+    "excludeAppsWithoutLaunchIntent": "Exclude non-launchable apps",
+    "apps": "{n} Apps"
+  },
+  "selectedFilesPage": {
+    "deleteAll": "Delete all"
+  },
+  "deviceDetailsPage": {
+    "title": "Device Details",
+    "favorite": "Favorite",
+    "verify": "Verify",
+    "info": {
+      "name": "Name",
+      "address": "Address",
+      "version": "Version",
+      "protocol": "Protocol v{version}"
+    },
+    "logs": {
+      "title": "Logs",
+      "empty": "No logs available.",
+      "discovered": "Discovered via {protocol} ({host})",
+      "updated": "Updated via {protocol} ({host})"
+    }
+  },
+  "verifyPage": {
+    "title": "Verify",
+    "icons": "Icons",
+    "text": "Text",
+    "question": "Does it look the same on the other device?"
+  },
+  "receivePage": {
+    "verifyingReceivedData": "Verifying received data",
+    "idleExpired": "This receive session expired after 10 idle minutes with no file upload in progress. Ask the sender to start a new transfer. Completed files are preserved.",
+    "subTitle": {
+      "one": "wants to send you a file",
+      "other": "wants to send you {n} files"
+    },
+    "subTitleMessage": "sent you a message:",
+    "subTitleLink": "sent you a link:",
+    "canceled": "The sender has canceled the request.",
+    "destinationUnavailable": "The download directory is unavailable. Check storage permissions, free space and the save location, then retry."
+  },
+  "receiveOptionsPage": {
+    "title": "Options",
+    "destination": "@:settingsTab.receive.destination",
+    "appDirectory": "(LocalSend folder)",
+    "saveToGallery": "@:settingsTab.receive.saveToGallery",
+    "saveToGalleryOff": "Turned off automatically because there are folders."
+  },
+  "sendPage": {
+    "verifyingSourceData": "Verifying source data",
+    "calculatingChecksum": "Calculating checksum ({curr} / {n})",
+    "waiting": "Waiting for response…",
+    "rejected": "The recipient has rejected the request.",
+    "tooManyAttempts": "@:web.tooManyAttempts",
+    "busy": "The recipient is busy with another request."
+  },
+  "progressPage": {
+    "titleSending": "Sending files",
+    "titleReceiving": "Receiving files",
+    "savedToGallery": "Saved in Photos",
+    "total": {
+      "title": {
+        "sending": "Total progress ({time})",
+        "finishedError": "Finished with error",
+        "canceledSender": "Canceled by sender",
+        "canceledReceiver": "Canceled by receiver"
+      },
+      "count": "Files: {curr} / {n}",
+      "size": "Size: {curr} / {n}",
+      "speed": "Speed: {speed}/s"
+    },
+    "remainingTime": {
+      "minutesUnit(plural, param=m)": {
+        "other": "{m}m"
+      },
+      "hoursUnit(plural, param=h)": {
+        "other": "{h}h"
+      },
+      "minutes": "{m}:{ss}",
+      "hours": "@:.hoursUnit @:.minutesUnit"
+    }
+  },
+  "webSharePage": {
+    "title": "Share via link",
+    "loading": "Starting server…",
+    "stopping": "Stopping server…",
+    "error": "An error occurred while starting the server.",
+    "openLink": {
+      "one": "Open this link in your browser:",
+      "other": "Open one of these links in your browser:"
+    },
+    "requests": "Requests",
+    "noRequests": "No requests yet.",
+    "encryption": "@:settingsTab.network.encryption",
+    "autoAccept": "Automatically accept requests",
+    "requirePin": "Require PIN",
+    "pinHint": "The PIN is \"{pin}\"",
+    "encryptionHint": "LocalSend uses a self-signed certificate. You need to accept it in your browser.",
+    "pendingRequests": "Pending requests: {n}"
+  },
+  "webReceivePage": {
+    "title": "Receive via link"
+  },
+  "aboutPage": {
+    "title": "About LegnaSend",
+    "description": [
+      "LegnaSend is an open-source file-sharing app with interface-aware links, device network tags and repeat-send queues."
+    ],
+    "author": "Author",
+    "contributors": "Contributors",
+    "packagers": "Packagers",
+    "translators": "Translators",
+    "upstreamCredits": "Open-source acknowledgements",
+    "version": "Version {version}",
+    "licenseNotices": "License notices",
+    "debugging": "Diagnostics"
+  },
+  "donationPage": {
+    "title": "Donate",
+    "info": "LocalSend is free, open-source and without any ads. If you like the app, you can support the development with a donation.",
+    "donate": "Donate {amount}",
+    "thanks": "Thank you very much!",
+    "restore": "Restore purchase"
+  },
+  "directoryWorkspaces": {
+    "title": "Workspaces",
+    "create": "Create workspace",
+    "name": "Name",
+    "slug": "URL path",
+    "root": "Local directory",
+    "choose": "Choose directory",
+    "visible": "Visible in index",
+    "hidden": "Hidden from index",
+    "hide": "Hide",
+    "show": "Show",
+    "closed": "Closed",
+    "serving": "Serving",
+    "previousServing": "Previous configuration still serving",
+    "invalid": "Invalid source",
+    "syncing": "Applying changes",
+    "serverOff": "Server stopped",
+    "readOnly": "Read-only directory",
+    "readOnlyHint": "Workspaces start read-only. Enable browser uploads separately for each directory; existing files are not overwritten.",
+    "empty": "Create a workspace from a local directory. Its files stay in their original location.",
+    "failed": "The operation failed. Check the name, unique URL path, directory access and service status.",
+    "syncFailed": "Changes were not confirmed by the server. Previously published routes may still be active. Retry synchronization.",
+    "retry": "Retry synchronization",
+    "enable": "Open",
+    "close": "Close",
+    "destroy": "Destroy workspace",
+    "validate": "Check directory",
+    "stopHint": "Stop requests for this workspace. Other workspaces and native transfers continue. Source files will not be deleted.",
+    "hiddenHint": "Hidden workspaces are omitted from the index, but remain accessible by direct link. Hiding is not password protection.",
+    "closeToEdit": "Close the workspace before changing its URL path or source directory.",
+    "invalidInput": "Enter a name, a lowercase URL path such as workspace1, and a local directory.",
+    "reasons(map)": {
+      "missing": "Directory missing",
+      "notDirectory": "Not a local directory",
+      "permissionDenied": "Directory permission denied",
+      "grantUnavailable": "Directory permission is unavailable; select the folder again",
+      "ioError": "Directory read failed",
+      "timeout": "Directory check timed out"
+    },
+    "access": "Access protection",
+    "protected": "Password protected",
+    "openAccess": "Open access",
+    "password": "New password or PIN",
+    "confirmPassword": "Confirm password",
+    "keepPassword": "Leave blank to keep the current password.",
+    "passwordInvalid": "Use 4–128 characters and enter the same password twice.",
+    "passwordHint": "Saving a changed password or access mode revokes previous grants and stops this workspace’s active downloads. HTTPS protects transport; the password controls access.",
+    "accessPending": "Access policy awaiting server confirmation",
+    "uploadPermission": "Upload permission",
+    "allowUpload": "Allow browser uploads",
+    "uploadHint": "Anyone who can access this workspace may upload files and folders directly into its directory. Existing files are never overwritten. Turning this off stops unfinished uploads; saved files remain. Password-protected workspaces still require unlocking.",
+    "uploadPending": "Upload permission pending",
+    "permissionHint": "Uploads are controlled per workspace"
+  },
+  "changelogPage": {
+    "title": "Changelog",
+    "language": "Release-note language",
+    "followApp": "Follow app language",
+    "fallback": "This translation is not available yet. Showing {language}.",
+    "loadError": "The release notes could not be loaded.",
+    "retry": "Retry"
+  },
+  "whatsNewPage": {
+    "title": "What's new in {version}",
+    "changes(interface=WhatsNewStrings)": {
+      "v1_0_0": {
+        "changes": [
+          "1.0.0 is a development version and has not been officially released.",
+          "Send files and folders from a queue, retry failed files individually, and manage sending and receiving without leaving your current page.",
+          "Compatible devices and storage can resume large transfers. Reusing progress after restart needs fresh approval; other destinations retain whole-file retry.",
+          "Choose receive folders in iOS Files and Android document storage. Lost access is reported without silently changing the destination.",
+          "Check interrupted saves and automatically clean verified temporary copies. Completed files, active transfers and uncertain leftovers remain protected.",
+          "Share files and folder workspaces in a browser, with passwords, approved uploads, bulk ZIP downloads and optional authorized-folder download controls.",
+          "Preview images, audio, video, text and Markdown. Search document contents and keep your reading position when files refresh.",
+          "Choose a network connection per send task, view connection details, and access the optional integration API and its in-app reference.",
+          "iOS restores pending shares without sending automatically. Smaller screens and large text are easier to use, and the privacy policy is available offline.",
+          "Fixed an incorrect recovery-record save error when starting the sandboxed macOS app."
+        ]
+      }
+    }
+  },
+  "aliasGenerator(ignoreMissing, ignoreGpt)": {
+    "@info": "Different locales may have different words, it may not match 1:1",
+    "adjectives": [
+      "Adorable",
+      "Beautiful",
+      "Big",
+      "Bright",
+      "Clean",
+      "Clever",
+      "Cool",
+      "Cute",
+      "Cunning",
+      "Determined",
+      "Energetic",
+      "Efficient",
+      "Fantastic",
+      "Fast",
+      "Fine",
+      "Fresh",
+      "Good",
+      "Gorgeous",
+      "Great",
+      "Handsome",
+      "Hot",
+      "Kind",
+      "Lovely",
+      "Mystic",
+      "Neat",
+      "Nice",
+      "Patient",
+      "Pretty",
+      "Powerful",
+      "Rich",
+      "Secret",
+      "Smart",
+      "Solid",
+      "Special",
+      "Strategic",
+      "Strong",
+      "Tidy",
+      "Wise"
+    ],
+    "fruits": [
+      "Apple",
+      "Avocado",
+      "Banana",
+      "Blackberry",
+      "Blueberry",
+      "Broccoli",
+      "Carrot",
+      "Cherry",
+      "Coconut",
+      "Grape",
+      "Lemon",
+      "Lettuce",
+      "Mango",
+      "Melon",
+      "Mushroom",
+      "Onion",
+      "Orange",
+      "Papaya",
+      "Peach",
+      "Pear",
+      "Pineapple",
+      "Potato",
+      "Pumpkin",
+      "Raspberry",
+      "Strawberry",
+      "Tomato"
+    ],
+    "combination": "{adjective} {fruit}",
+    "@combination": "In some languages, the adjective must be last."
+  },
+  "dialogs": {
+    "addFile": {
+      "title": "Add to selection",
+      "content": "What do you want to add?"
+    },
+    "openFile": {
+      "title": "Open file",
+      "content": "Do you want to open the received file?"
+    },
+    "addressInput": {
+      "title": "Enter address",
+      "hashtag": "Hashtag",
+      "ip": "IP Address",
+      "recentlyUsed": "Recently used: "
+    },
+    "cancelSession": {
+      "title": "Cancel files transfer",
+      "content": "Do you really want to cancel the files transfer?"
+    },
+    "cannotOpenFile": {
+      "title": "Cannot open file",
+      "content": "Could not open \"{file}\". Has this file been moved, renamed or deleted?"
+    },
+    "encryptionDisabledNotice": {
+      "title": "Encryption disabled",
+      "content": "Communication now takes place via the unencrypted HTTP protocol. To use HTTPS protocol, enable encryption again."
+    },
+    "errorDialog": {
+      "title": "@:general.error"
+    },
+    "favoriteDialog": {
+      "title": "Favorites",
+      "noFavorites": "No favorite devices yet.",
+      "addFavorite": "Add"
+    },
+    "favoriteDeleteDialog": {
+      "title": "Delete from favorites",
+      "content": "Do you really want to delete from favorites \"{name}\"?"
+    },
+    "favoriteEditDialog": {
+      "titleAdd": "Add to favorites",
+      "titleEdit": "Settings",
+      "name": "Device name",
+      "auto": "(auto)",
+      "ip": "IP Address",
+      "port": "Port"
+    },
+    "fileInfo": {
+      "title": "File information",
+      "fileName": "File name:",
+      "path": "Path:",
+      "size": "Size:",
+      "sender": "Sender:",
+      "time": "Time:"
+    },
+    "fileNameInput": {
+      "title": "Enter file name",
+      "original": "Original: {original}"
+    },
+    "historyClearDialog": {
+      "title": "Clear history",
+      "content": "Do you really want to delete the entire history?"
+    },
+    "localNetworkUnauthorized": {
+      "title": "@:dialogs.noPermission.title",
+      "description": "LocalSend can't find other devices without having the permission to scan the local network. Please grant this permission in the settings.",
+      "gotoSettings": "Settings"
+    },
+    "messageInput": {
+      "title": "Type message",
+      "multiline": "Multiline"
+    },
+    "noFiles": {
+      "title": "No files selected",
+      "content": "Please select at least one file."
+    },
+    "noPermission": {
+      "title": "No permission",
+      "content": "You have not granted the necessary permissions. Please grant them in the settings."
+    },
+    "notAvailableOnPlatform": {
+      "title": "Not available",
+      "content": "This feature is only available on:"
+    },
+    "qr": {
+      "title": "QR Code"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "counter": "Counter",
+      "prefix": "Prefix",
+      "padZero": "Pad with zeros",
+      "sortBeforeCount": "Sort alphabetically beforehand (A-Z)",
+      "random": "Random"
+    },
+    "quickSaveNotice": {
+      "title": "@:general.quickSave",
+      "content": "File requests are now accepted automatically. Be aware that everyone on the local network can send you files."
+    },
+    "quickSaveFromFavoritesNotice": {
+      "title": "@:general.quickSaveFromFavorites",
+      "content": [
+        "File requests are now accepted automatically from devices in your favorites list."
+      ]
+    },
+    "pin": {
+      "title": "Enter PIN"
+    },
+    "sendModeHelp": {
+      "title": "Send modes",
+      "single": "Adds a transfer to the device queue. Selection is kept for another send.",
+      "multiple": "Sends files to multiple recipients. Selection will not be cleared after finished files transfer.",
+      "link": "Recipients who do not have LocalSend installed can download the selected files by opening the link in their browser."
+    },
+    "zoom": {
+      "title": "URL"
+    }
+  },
+  "sanitization": {
+    "empty": "Filename cannot be empty",
+    "invalid": "Filename contains invalid characters"
+  },
+  "tray": {
+    "@info": "Apple Guidelines are very strict about the \"close\" wording.",
+    "open": "@:general.open",
+    "close": "Quit LocalSend",
+    "closeWindows": "Exit"
+  },
+  "web": {
+    "waiting": "@:sendPage.waiting",
+    "enterPin": "Enter PIN",
+    "invalidPin": "Invalid PIN",
+    "tooManyAttempts": "Too many attempts",
+    "rejected": "Rejected",
+    "files": "Files",
+    "fileName": "File name",
+    "size": "Size"
+  },
+  "assetPicker": {
+    "@info": "Translations for the Media selection tool for Android and iPhone",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "gifIndicator": "GIF",
+    "loadFailed": "Load failed",
+    "original": "Origin",
+    "preview": "Preview",
+    "select": "Select",
+    "emptyList": "Empty list",
+    "unSupportedAssetType": "Unsupported file type.",
+    "unableToAccessAll": "Unable to access all files on the device",
+    "viewingLimitedAssetsTip": "Only view files and albums accessible to the app.",
+    "changeAccessibleLimitedAssets": "Click to update accessible files",
+    "accessAllTip": "App can only access some files on the device. Go to system settings and allow the app to access all media on the device.",
+    "goToSystemSettings": "Go to system settings",
+    "accessLimitedAssets": "Continue with limited access",
+    "accessiblePathName": "Accessible files",
+    "sTypeAudioLabel": "Audio",
+    "sTypeImageLabel": "Image",
+    "sTypeVideoLabel": "Video",
+    "sTypeOtherLabel": "Other media",
+    "sActionPlayHint": "play",
+    "sActionPreviewHint": "preview",
+    "sActionSelectHint": "select",
+    "sActionSwitchPathLabel": "change path",
+    "sActionUseCameraHint": "use camera",
+    "sNameDurationLabel": "duration",
+    "sUnitAssetCountLabel": "count"
+  },
+  "networkLabels": {
+    "refresh": "Refresh networks",
+    "noAddress": "No usable IPv4 address. Connect to a network and refresh.",
+    "unknownSubnet": "Subnet unknown",
+    "networkMatch": "Matching local networks (the operating system selects the actual route)",
+    "routedOrUnknown": "Routed / network unknown",
+    "overlappingNetworks": "Multiple matching interfaces · route unconfirmed"
+  },
+  "sendQueue": {
+    "singleFileRetryNewTask": "Retry this file as a new transfer task",
+    "singleFileRetryStarted": "A new transfer task was created. Completed files are unchanged.",
+    "title": "Send queue",
+    "queued": "Queued",
+    "running": "Sending",
+    "succeeded": "Completed",
+    "failed": "Failed",
+    "canceled": "Canceled",
+    "retry": "Retry unfinished",
+    "files": "{n} file(s)",
+    "drop": "Drop to send to {device}",
+    "added": "Queued {n} file(s) for {device}"
+  },
+  "transferActivity": {
+    "title": "Transfers",
+    "send": "Sending",
+    "receive": "Receiving",
+    "empty": "No tasks in this direction",
+    "preparing": "Preparing / verifying",
+    "waiting": "Waiting for confirmation",
+    "transferring": "Transferring",
+    "acknowledge": "Dismiss completed notices",
+    "details": "Task details",
+    "back": "Back to tasks",
+    "ended": "This task has ended or was removed.",
+    "files": "Files",
+    "accept": "Accept selected files",
+    "decline": "Decline request",
+    "failed": "Failed",
+    "succeeded": "Completed",
+    "recoveryWaiting": "Waiting to retry",
+    "recoveryRetryable": "Retry available",
+    "recoveryAuthorization": "Authorization required",
+    "recoverySourceChanged": "Source changed · create a new send",
+    "recoveryInvalidResponse": "Recovery response not verified",
+    "recoveryRetained": "Partial data retained",
+    "recoveryRetentionUnknown": "Retention unconfirmed",
+    "recoveryNotRetained": "No reusable checkpoint",
+    "retrying": "Waiting to reconnect",
+    "sourceEnded": "Source no longer available"
+  },
+  "webPreview": {
+    "preview": "Preview",
+    "closePreview": "Close preview",
+    "downloadOriginal": "Download original",
+    "previewLoading": "Loading preview…",
+    "previewError": "Preview failed. Download the original file to open it.",
+    "previewUnsupported": "This browser or file format does not support preview.",
+    "imageZoomIn": "Zoom in",
+    "imageZoomOut": "Zoom out",
+    "imageFit": "Fit",
+    "imageActual": "Actual size",
+    "imageView": "Image preview",
+    "imageScale": "Zoom",
+    "imageHint": "Drag to pan. Pinch or Ctrl/⌘ + wheel to zoom. Keyboard: +/−, arrows, 0 to fit, 1 for actual size."
+  },
+  "webTextPreview": {
+    "encoding": "Encoding",
+    "auto": "Auto (BOM / UTF-8)",
+    "previous": "Previous section",
+    "next": "Next section",
+    "more": "Load more",
+    "retry": "Reload preview",
+    "indexed": "Indexed",
+    "lines": "Lines",
+    "section": "Section",
+    "complete": "End of file",
+    "loading": "Loading text…",
+    "view": "Text preview",
+    "range": "This source does not support bounded text reads. Download the original file.",
+    "changed": "The shared file changed. Reopen the share before previewing it.",
+    "decode": "Invalid text encoding. Choose another encoding or download the original file.",
+    "failed": "Text could not be loaded. Check the connection and reload the preview.",
+    "unsupported": "This browser does not support streaming text preview.",
+    "hint": "Only visible rows and a small buffer are rendered. Wrapping keeps long text within the page.",
+    "wrap": "Wrap text",
+    "numbers": "Line numbers",
+    "search": "Search content",
+    "searchScope": "Search scope",
+    "loaded": "Indexed content",
+    "full": "Entire file",
+    "find": "Find",
+    "stop": "Stop search",
+    "caseSensitive": "Match case",
+    "previousMatch": "Previous match",
+    "nextMatch": "Next match",
+    "matches": "Matches",
+    "scanned": "Scanned",
+    "searching": "Searching…",
+    "searchDone": "Search complete",
+    "searchStopped": "Search stopped",
+    "noMatches": "No matches in scanned content",
+    "searchLimit": "First 1,000 matches shown. Refine the query to search further.",
+    "clearSearch": "Clear search",
+    "rendered": "Reading view",
+    "source": "Source",
+    "markdownHint": "Markdown search covers source text; results open at the exact source position.",
+    "markdownLimit": "Complete blocks load by section. Reference links update as their definitions are indexed.",
+    "markdownFailed": "Formatting is unavailable for this document. The source reader remains available.",
+    "diagramQueued": "Diagram · loads near the viewport",
+    "diagramLoading": "Rendering diagram…",
+    "diagramReady": "Diagram",
+    "diagramFailed": "This diagram could not be rendered. Read its source or try again.",
+    "diagramLimit": "This diagram exceeds the preview limit. Its source is still available.",
+    "diagramSource": "Source",
+    "diagramRender": "Diagram",
+    "diagramRetry": "Try again",
+    "diagramFit": "Fit",
+    "diagramZoomIn": "Zoom in",
+    "diagramZoomOut": "Zoom out",
+    "diagramExpand": "Expand all",
+    "diagramCollapse": "Collapse branches",
+    "diagramHint": "Drag to pan. Use buttons or Ctrl/⌘ + wheel to zoom.",
+    "diagramUnavailable": "Diagram rendering is unavailable in this browser. The source is shown.",
+    "markdownStreaming": "Complete blocks load by section. Reference links update as their definitions are indexed.",
+    "markdownParagraphSource": "Very large paragraph · complete source in reading windows; cross-window inline formatting stays literal.",
+    "markdownBlockLimit": "This syntax block exceeds the reading budget. Use Source to continue without truncation.",
+    "markdownScan": "Index references",
+    "markdownStop": "Stop indexing",
+    "markdownSourceWindow": "Large syntax block · complete source in reading windows; formatting that crosses windows stays literal."
+  },
+  "transportSecurity": {
+    "title": "HTTPS transport (TLS)",
+    "description": "Protects data while it travels between devices. This does not encrypt saved files or add a file password.",
+    "certificate": "LegnaSend uses a locally generated, self-signed TLS certificate. Your browser may show a certificate trust prompt for this device.",
+    "httpTitle": "Using HTTP transport",
+    "httpDescription": "HTTPS transport is off. Data is transferred using HTTP without TLS protection. Enable HTTPS transport (TLS) to protect the connection; saved files are unchanged.",
+    "discoveryHint": "Check network reachability, discovery port and multicast settings, and the HTTP/HTTPS configuration. If discovery fails, try the target IP and its actual server port.",
+    "connectionHint": "Check that the target IP and actual server port are reachable and that HTTP/HTTPS settings are compatible. Wi-Fi access point isolation or a firewall can prevent devices from communicating.",
+    "updateFailed": "Transport could not be changed. Check the current service state and retry.",
+    "peerProtocol": "Peer · {protocol}"
+  },
+  "transferSpeed": {
+    "current": "Current speed: {speed}",
+    "average": "Average speed: {speed}",
+    "measuring": "Measuring speed…"
+  },
+  "transferNavigation": {
+    "hide": "Hide panel",
+    "keepRunning": "Back and hide keep transfers running.",
+    "sharing": "Link sharing active",
+    "keepSharing": "Back hides this page. Link sharing stays active; reopen it from the sharing badge.",
+    "stopSharing": "Stop link sharing",
+    "stopTitle": "Stop link sharing?",
+    "stopBody": "End temporary-link download sessions and stop new browser uploads. Directory workspaces, the listener, API and approved native transfers stay active.",
+    "restartTitle": "Restart the sharing service?",
+    "restartBody": "Changing HTTP/HTTPS restarts the shared listener and interrupts its active connections. Workspace definitions and temporary files remain configured.",
+    "unknown": "No active share",
+    "replaceTitle": "Replace temporary-share access?",
+    "replaceBody": "Only this temporary share’s download sessions will end. Directory workspaces and native transfers stay active."
+  },
+  "networkEnvironment": {
+    "vpn": "System VPN",
+    "tunnel": "VPN/tunnel interface",
+    "local": "Local interface",
+    "proxy": "System proxy",
+    "title": "Network paths",
+    "unknown": "Unknown",
+    "detected": "Detected",
+    "notDetected": "Not detected",
+    "routeHint": "Local addresses and VPN/tunnel addresses are listed separately. Actual reachability follows both devices’ system routes and VPN rules. Native peer requests ignore application HTTP proxies, not system VPN routing. A tunnel name is only an interface hint; no route bypass has been verified."
+  },
+  "linkWorkspace": {
+    "title": "Link workspace",
+    "sharedCount": "Shared files: {n}",
+    "allowUpload": "Allow browser uploads",
+    "allowUploadHint": "Controls new browser requests. Approved transfers continue; each new request still follows your receive-confirmation settings.",
+    "autoReceive": "Automatically accept browser uploads",
+    "autoDownload": "Automatically approve browser downloads",
+    "appendHint": "Added files stay in this workspace. Existing file links and approved sessions remain valid."
+  },
+  "integrationApi": {
+    "title": "API",
+    "subtitle": "Local integrations, on your existing sharing port.",
+    "enable": "Enable API",
+    "requireKey": "Require an API key",
+    "isolation": "API controls do not stop native transfers or browser workspaces.",
+    "live": "Active",
+    "off": "Disabled",
+    "waiting": "Saved · waiting for service",
+    "syncing": "Applying policy…",
+    "previous": "Previous policy may still be active",
+    "failed": "The change could not be saved or applied. Retry below.",
+    "corrupt": "Stored API settings need recovery. The original data is preserved; retry loading or explicitly reset.",
+    "reset": "Reset API settings",
+    "resetHint": "Remove all API keys and restore disabled defaults. Native transfers and workspace files are preserved.",
+    "refresh": "Refresh status",
+    "startService": "Start receiving service",
+    "addresses": "Service addresses",
+    "addressHint": "Use the actual address and trust the device certificate for HTTPS. Network tags describe interfaces, not a verified VPN bypass.",
+    "policy": "Access and limits",
+    "editPolicy": "Edit policy",
+    "fixedWindow": "Second and minute fixed windows apply together. Concurrency counts active responses, not connections or bandwidth. 0 disables only that quota; server resource ceilings still apply.",
+    "global": "Global",
+    "perKey": "Each key",
+    "anonymous": "Anonymous peer",
+    "second": "Requests / second",
+    "minute": "Requests / minute",
+    "concurrent": "Active responses",
+    "origins": "Allowed cross-origin sites",
+    "originsHint": "One canonical http(s) origin per line, without a path. Same-origin calls remain allowed.",
+    "anonymousHint": "Without a key, only assigned visible, unprotected workspaces are readable. Hidden/protected workspaces and request history stay closed. An invalid key never falls back to anonymous.",
+    "allowAnonymous": "Allow anonymous access?",
+    "disableHint": "Stop integration API responses only. Other shares and original LocalSend transfers continue.",
+    "keys": "API keys",
+    "createKey": "Generate key",
+    "keyName": "Key name",
+    "empty": "No API keys yet.",
+    "once": "Copy this key now",
+    "onceHint": "The plaintext is shown only here and is not saved. This reusable key works until revoked or expired. Closing this dialog does not copy it automatically.",
+    "revoke": "Revoke key",
+    "revokeHint": "Revoke this key and end its active API responses. Other keys and native transfers continue.",
+    "pendingKey": "Saved · not confirmed active",
+    "removedLive": "A removed key may still be live until the pending policy is applied. Retry the update.",
+    "permissions": "Permissions",
+    "scopeService": "Service status and contract",
+    "scopeWorkspaces": "Workspace descriptors",
+    "scopeFiles": "File listing and download",
+    "scopeRequests": "Global redacted request history",
+    "allWorkspaces": "All current and future workspaces",
+    "selectWorkspaces": "Workspace access",
+    "grantHint": "Grant only required actions and workspaces. Upload and workspace management are separate opt-in permissions; existing/default keys remain read-only.",
+    "expiry": "Expiration",
+    "days30": "30 days",
+    "days90": "90 days",
+    "never": "No expiry",
+    "expired": "Expired",
+    "invalid": "Check the name, limits, origins and selected permissions/workspaces.",
+    "copy": "Copy",
+    "copied": "Copied",
+    "close": "Done",
+    "more": "Next keys",
+    "previousPage": "Previous keys",
+    "readOnly": "Read + explicitly granted writes",
+    "nextStage": "Explicit keys can upload, manage workspaces from locally approved sources, and discover devices or control their own API-created send tasks. General cache/settings APIs and unrelated native-task control remain planned.",
+    "copyFailed": "Copy failed. Select the text and copy it manually.",
+    "updated": "Updated",
+    "unconfirmed": "Awaiting service acknowledgement",
+    "fallback": "API text is shown in English.",
+    "documentation": "Developer documentation",
+    "directoryContract": "Directory contract",
+    "documentationHint": "Offline guide: setup, permissions, every endpoint, parameters, errors, retries and cURL / JavaScript / Python examples.",
+    "scopeUpload": "Upload files (explicit write access)",
+    "scopeManage": "Manage workspace metadata and sharing"
+  },
+  "apiExplorer": {
+    "title": "API explorer",
+    "search": "Search endpoints or descriptions",
+    "execute": "Execute request",
+    "hint": "Requests use the actual local listener and its authentication/quotas. Reads allow 12 seconds, workspace operations 35 seconds, and uploads a size-based budget. Requests and credentials are not saved.",
+    "all": "All",
+    "service": "Service",
+    "workspaces": "Workspaces",
+    "files": "Files",
+    "history": "Request history",
+    "noResults": "No matching endpoints",
+    "readOnly": "Read only",
+    "token": "API key (optional)",
+    "tokenHint": "Paste a generated key, or leave empty to test anonymous access. Kept only while this page is open; never inserted into examples.",
+    "clear": "Clear credential",
+    "running": "Running…",
+    "reset": "Reset parameters",
+    "invalid": "Check required fields and parameter limits.",
+    "failed": "The request failed or the service changed. Retry against the current listener.",
+    "headers": "Response headers",
+    "response": "Response body",
+    "truncated": "Body capped at 256 KiB (binary sample: 4 KiB). This is not a complete download.",
+    "binary": "Hexadecimal file sample, not a saved file. Default Range is bytes=0-4095.",
+    "examples": "Call examples",
+    "responses": "Response contracts",
+    "schemas": "Data models"
+  },
+  "sharedFileManagement": {
+    "title": "Shared files",
+    "hint": "Withdraw or replace files without closing sharing. Other files and receiving tasks continue.",
+    "search": "Search shared files",
+    "withdraw": "Withdraw file",
+    "replace": "Replace file",
+    "confirmBody": "This stops pending and active downloads of this file only. A replacement receives a new link; old downloads cannot resume into it. Source files are not deleted.",
+    "selectOne": "Choose exactly one replacement file.",
+    "changed": "The share or file changed. Reopen file management and try again.",
+    "applied": "Shared files updated.",
+    "failed": "The update was not confirmed. The previous list is retained; retry or reopen sharing.",
+    "empty": "No matching shared files.",
+    "previous": "Previous page",
+    "next": "Next page"
+  }
+}

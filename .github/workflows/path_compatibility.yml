@@ -1,0 +1,101 @@
+name: Native path compatibility
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/path_compatibility.yml'
+      - 'app/**'
+      - 'packages/**'
+      - 'cli/**'
+      - 'pubspec*'
+      - 'Cargo*'
+      - 'support/scripts/test_android_saf.sh'
+
+jobs:
+  paths:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v6
+      - name: Read Flutter pin
+        id: versions
+        run: python -c "import json,os; open(os.environ['GITHUB_OUTPUT'],'a').write('flutter='+json.load(open('.fvmrc'))['flutter']+'\n')"
+      - uses: flutter-actions/setup-flutter@v4
+        with:
+          version: ${{ steps.versions.outputs.flutter }}
+          channel: stable
+      - name: Resolve app dependencies
+        working-directory: app
+        run: flutter pub get
+      - name: Native paths and isolated receive failures
+        working-directory: app
+        run: flutter test test/unit/util/native/download_directory_test.dart test/unit/workspace/workspace_directory_probe_test.dart test/unit/network/receive_session_isolation_test.dart test/widget/directory_workspaces_test.dart test/widget/receive_directory_failure_test.dart test/widget/receive_directory_picker_test.dart test/unit/util/native/source_cache_guard_test.dart test/widget/api_upload_cache_lease_test.dart test/widget/web_replacement_cache_lease_test.dart test/unit/util/send_retry_test.dart test/unit/provider/send_route_queue_test.dart test/unit/util/send_recovery_store_test.dart test/widget/send_recovery_test.dart test/unit/util/native/send_recovery_init_test.dart test/unit/provider/send_recovery_race_test.dart test/widget/ios_drop_channel_test.dart test/unit/api/host_management_test.dart test/widget/host_api_explorer_test.dart
+      - name: iOS owned drop storage and UIKit contract
+        if: runner.os == 'macOS'
+        run: |
+          xcrun swiftc -typecheck app/ios/Runner/IosDropStore.swift app/ios/Runner/IosDropInteraction.swift -target arm64-apple-ios13.0-simulator -sdk "$(xcrun --sdk iphonesimulator --show-sdk-path)"
+          xcrun swiftc app/ios/Runner/IosDropStore.swift app/ios/Tests/IosDropStoreTests.swift -o "$RUNNER_TEMP/ios-drop-tests"
+          "$RUNNER_TEMP/ios-drop-tests"
+      - name: Set up pinned Rust toolchain
+        run: rustup toolchain install --profile minimal
+      - uses: Swatinem/rust-cache@v2
+      - name: Directory service and original protocol coexistence
+        run: cargo test -p localsend --features full --test directory_workspaces --test directory_events
+      - name: Opt-in directory upload permissions and publication isolation
+        run: cargo test -p localsend --features full --test directory_uploads --test directory_upload_adversarial --test directory_upload_registry_process
+      - name: Owned receive targets and unchanged upload retry contract
+        run: cargo test -p localsend --features full --test owned_upload_target
+      - name: Cached descriptor publication and original upload contract
+        run: cargo test -p localsend --features full --test cached_upload_publication
+      - name: Build native bridge for actual event-stream checks
+        run: cargo build -p rust_lib_localsend_app
+      - name: Actual bridge publication acknowledgement
+        working-directory: packages/localsend_isolates
+        run: flutter test test/task/server/cached_upload_publication_test.dart
+      - name: Receive target lifecycle and SAF bridge contract
+        working-directory: packages/localsend_isolates
+        run: flutter test test/task/server/receive_target_lifecycle_test.dart test/task/server/file_saver_saf_test.dart test/task/server/saf_receive_transaction_test.dart test/task/server/saf_receive_attempt_test.dart
+      - name: Local cache format, locking and crash recovery
+        run: cargo test -p localsend --features full --test download_cache
+      - name: Integration API isolation, budgets and original TLS policy
+        run: cargo test -p localsend --features full --test integration_api --test integration_upload_contract --test integration_management --test integration_api_key_lifecycle --test integration_transfers --test integration_host_management
+      - name: Native API write confirmation and scoped permissions
+        working-directory: app
+        run: flutter test test/unit/api/api_upload_explorer_test.dart test/widget/api_upload_explorer_test.dart test/widget/integration_api_tab_test.dart test/unit/api/workspace_management_test.dart test/unit/api/api_management_explorer_test.dart test/widget/api_management_explorer_test.dart test/unit/api/api_source_explorer_test.dart test/unit/api/workspace_source_management_test.dart test/unit/api/api_history_export_test.dart test/widget/api_history_export_test.dart test/widget/workspace_sources_page_test.dart test/unit/api/transfer_management_test.dart test/unit/api/api_transfer_explorer_test.dart test/widget/api_transfer_explorer_test.dart test/unit/util/native/cache_helper_test.dart
+      - name: Actual API upload bridge and source ownership
+        working-directory: packages/localsend_isolates
+        run: flutter test test/task/server/integration_api_test.dart test/task/server/api_upload_source_test.dart
+
+      - name: Persistent workspace control through native bridge and isolates
+        working-directory: app
+        env:
+          FRB_DART_LOAD_EXTERNAL_LIBRARY_NATIVE_LIB_DIR: ${{ github.workspace }}/target/debug
+        run: flutter test test_native/workspace_management_bridge_test.dart test_native/workspace_management_isolate_test.dart test_native/workspace_source_management_bridge_test.dart test_native/transfer_api_wire_test.dart test_native/duplex_transfer_test.dart test_native/repeated_share_isolate_test.dart test_native/send_recovery_restart_test.dart test_native/host_api_wire_test.dart
+      - name: Typed task error and cancellation subscription cleanup
+        run: dart run packages/typed_isolates/test/isolate_task_helper_test.dart
+
+  android-saf-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+      - name: Use JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android compile API
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36"'
+      - name: Set up pinned Rust for real cache-header fixture
+        run: rustup toolchain install --profile minimal
+      - uses: Swatinem/rust-cache@v2
+      - name: Generate cache using production Rust writer
+        run: cargo run -p localsend --features full --example cache_interop_fixture -- --create-native "$RUNNER_TEMP/saf-native-fixture"
+      - name: Provider traversal contract and Android adapter compilation
+        run: SAF_NATIVE_FIXTURE="$RUNNER_TEMP/saf-native-fixture" support/scripts/test_android_saf.sh

@@ -1,0 +1,11 @@
+# Preserve generated dependency bytes, including whitespace inside JS templates
+# and original license texts. Their content is checked by the SHA-256 manifest.
+packages/core/assets/web/vendor/diagrams/** -whitespace linguist-generated=true
+# Keep upstream license bytes and applyable patch context lines unchanged.
+vendor/reqwest-0.13.4/LICENSE-MIT -whitespace
+docs/evidence/**/*.diff -whitespace
+# Preserve raw execution logs verbatim; source files still use normal whitespace checks.
+docs/evidence/**/*.log -whitespace
+# Pinned Apple dependency snapshots and exact upstream patch context keep their
+# original whitespace; compiler diagnostics remain enabled.
+support/vendor/** -whitespace linguist-vendored=true

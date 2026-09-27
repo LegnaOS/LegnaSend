@@ -1,0 +1,124 @@
+name: LegnaSend release packages
+run-name: LegnaSend packages · ${{ github.ref_name }} · ${{ github.sha }}
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Build selection
+        type: choice
+        default: all
+        options: [all, windows-arm64]
+  push:
+    branches: ['release/ci-packages']
+permissions:
+  contents: read
+concurrency:
+  group: legnasend-packages-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON((inputs.platform == 'windows-arm64' || contains(github.event.head_commit.message, '[arm64-only]')) && '[{"arch":"arm64","runner":"windows-11-vs2026-arm","flutter":"3.47.4"}]' || '[{"arch":"x64","runner":"windows-2022","flutter":"3.41.9"},{"arch":"arm64","runner":"windows-11-vs2026-arm","flutter":"3.47.4"}]') }}
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v6
+      - name: Setup pinned Flutter and FVM
+        shell: pwsh
+        run: |
+          git config --global core.longpaths true
+          git clone --depth 1 --branch '${{ matrix.flutter }}' https://github.com/flutter/flutter.git "$env:RUNNER_TEMP\flutter"
+          "$env:RUNNER_TEMP\flutter\bin" | Out-File -Append $env:GITHUB_PATH
+          & "$env:RUNNER_TEMP\flutter\bin\dart.bat" pub global activate fvm 4.3.1
+          "$env:LOCALAPPDATA\Pub\Cache\bin" | Out-File -Append $env:GITHUB_PATH
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Select SDK and Rust
+        shell: pwsh
+        run: |
+          fvm install '${{ matrix.flutter }}'
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          fvm use '${{ matrix.flutter }}' --force
+          rustup show
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Build portable release
+        shell: pwsh
+        run: support/scripts/ci/build_windows.ps1 -Architecture '${{ matrix.arch }}'
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: LegnaSend-windows-${{ matrix.arch }}-release-unsigned
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30
+  linux:
+    if: ${{ inputs.platform != 'windows-arm64' && !contains(github.event.head_commit.message, '[arm64-only]') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v6
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+      - name: Install native dependencies and FVM
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libayatana-appindicator3-dev libsecret-1-dev
+          dart pub global activate fvm 4.3.1
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+      - name: Build release
+        run: |
+          fvm install
+          rustup show
+          cd app
+          fvm flutter pub get
+          fvm flutter build linux --release --target-platform linux-x64
+          cd ..
+          python3 support/scripts/ci/package_release.py linux x64 app/build/linux/x64/release/bundle
+      - uses: actions/upload-artifact@v6
+        with:
+          name: LegnaSend-linux-x64-release
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30
+  android:
+    if: ${{ inputs.platform != 'windows-arm64' && !contains(github.event.head_commit.message, '[arm64-only]') }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    env:
+      ANDROID_SIGNING_KIND: ${{ vars.ANDROID_SIGNING_KIND }}
+      ANDROID_KEY_STORE: ${{ secrets.ANDROID_KEY_STORE }}
+      ANDROID_KEY_PROPERTIES: ${{ secrets.ANDROID_KEY_PROPERTIES }}
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.9'
+      - name: Setup toolchain and signing
+        run: |
+          dart pub global activate fvm 4.3.1
+          echo "$HOME/.pub-cache/bin" >> "$GITHUB_PATH"
+          python3 support/scripts/ci/android_signing.py
+      - name: Build ARM64 and x86_64 release APKs
+        run: |
+          fvm install
+          rustup show
+          cd app
+          fvm flutter pub get
+          fvm flutter build apk --release --split-per-abi --target-platform android-arm64,android-x64
+          cd ..
+          python3 support/scripts/ci/package_release.py android all app/build/app/outputs/flutter-apk
+      - uses: actions/upload-artifact@v6
+        with:
+          name: LegnaSend-android-release
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 30
+      - name: Remove signing material
+        if: always()
+        run: rm -f app/android/key.properties app/android/ci-release.jks

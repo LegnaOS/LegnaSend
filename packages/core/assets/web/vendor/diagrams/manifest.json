@@ -1,0 +1,834 @@
+{
+  "dependencies": [
+    {
+      "name": "@braintree/sanitize-url",
+      "version": "7.1.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/braintree/sanitize-url.git",
+      "packageSource": "https://registry.npmjs.org/@braintree/sanitize-url/-/sanitize-url-7.1.2.tgz"
+    },
+    {
+      "name": "@chevrotain/cst-dts-gen",
+      "version": "11.1.2",
+      "license": "Apache-2.0",
+      "licenseFiles": [
+        "LICENSE.txt"
+      ],
+      "repository": "git://github.com/Chevrotain/chevrotain.git",
+      "packageSource": "https://registry.npmjs.org/@chevrotain/cst-dts-gen/-/cst-dts-gen-11.1.2.tgz"
+    },
+    {
+      "name": "@chevrotain/gast",
+      "version": "11.1.2",
+      "license": "Apache-2.0",
+      "licenseFiles": [
+        "LICENSE.txt"
+      ],
+      "repository": "git://github.com/Chevrotain/chevrotain.git",
+      "packageSource": "https://registry.npmjs.org/@chevrotain/gast/-/gast-11.1.2.tgz"
+    },
+    {
+      "name": "@chevrotain/regexp-to-ast",
+      "version": "11.1.2",
+      "license": "Apache-2.0",
+      "licenseFiles": [
+        "LICENSE.txt"
+      ],
+      "repository": "git://github.com/Chevrotain/chevrotain.git",
+      "packageSource": "https://registry.npmjs.org/@chevrotain/regexp-to-ast/-/regexp-to-ast-11.1.2.tgz"
+    },
+    {
+      "name": "@chevrotain/utils",
+      "version": "11.1.2",
+      "license": "Apache-2.0",
+      "licenseFiles": [
+        "LICENSE.txt"
+      ],
+      "repository": "git://github.com/Chevrotain/chevrotain.git",
+      "packageSource": "https://registry.npmjs.org/@chevrotain/utils/-/utils-11.1.2.tgz"
+    },
+    {
+      "name": "@iconify/utils",
+      "version": "3.1.7",
+      "license": "MIT",
+      "licenseFiles": [
+        "license.txt"
+      ],
+      "repository": "https://github.com/iconify/iconify.git",
+      "packageSource": "https://registry.npmjs.org/@iconify/utils/-/utils-3.1.7.tgz"
+    },
+    {
+      "name": "@mermaid-js/parser",
+      "version": "2.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/mermaid-js/mermaid.git",
+      "packageSource": "https://registry.npmjs.org/@mermaid-js/parser/-/parser-2.0.0.tgz"
+    },
+    {
+      "name": "@upsetjs/venn.js",
+      "version": "2.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/upsetjs/venn.js.git",
+      "packageSource": "https://registry.npmjs.org/@upsetjs/venn.js/-/venn.js-2.0.0.tgz"
+    },
+    {
+      "name": "@vscode/markdown-it-katex",
+      "version": "1.1.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/microsoft/vscode-markdown-it-katex.git",
+      "packageSource": "https://registry.npmjs.org/@vscode/markdown-it-katex/-/markdown-it-katex-1.1.2.tgz"
+    },
+    {
+      "name": "chevrotain",
+      "version": "11.1.2",
+      "license": "Apache-2.0",
+      "licenseFiles": [
+        "LICENSE.txt"
+      ],
+      "repository": "git://github.com/Chevrotain/chevrotain.git",
+      "packageSource": "https://registry.npmjs.org/chevrotain/-/chevrotain-11.1.2.tgz"
+    },
+    {
+      "name": "cose-base",
+      "version": "1.0.3",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/iVis-at-Bilkent/cose-base.git",
+      "packageSource": "https://registry.npmjs.org/cose-base/-/cose-base-1.0.3.tgz"
+    },
+    {
+      "name": "cytoscape",
+      "version": "3.34.3",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE",
+        "license-update.mjs"
+      ],
+      "repository": "https://github.com/cytoscape/cytoscape.js.git",
+      "packageSource": "https://registry.npmjs.org/cytoscape/-/cytoscape-3.34.3.tgz"
+    },
+    {
+      "name": "cytoscape-cose-bilkent",
+      "version": "4.1.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/cytoscape/cytoscape.js-cose-bilkent.git",
+      "packageSource": "https://registry.npmjs.org/cytoscape-cose-bilkent/-/cytoscape-cose-bilkent-4.1.0.tgz"
+    },
+    {
+      "name": "cytoscape-fcose",
+      "version": "2.2.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/iVis-at-Bilkent/cytoscape.js-fcose.git",
+      "packageSource": "https://registry.npmjs.org/cytoscape-fcose/-/cytoscape-fcose-2.2.0.tgz"
+    },
+    {
+      "name": "d3",
+      "version": "7.9.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3.git",
+      "packageSource": "https://registry.npmjs.org/d3/-/d3-7.9.0.tgz"
+    },
+    {
+      "name": "d3-array",
+      "version": "3.2.4",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-array.git",
+      "packageSource": "https://registry.npmjs.org/d3-array/-/d3-array-3.2.4.tgz"
+    },
+    {
+      "name": "d3-axis",
+      "version": "3.0.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-axis.git",
+      "packageSource": "https://registry.npmjs.org/d3-axis/-/d3-axis-3.0.0.tgz"
+    },
+    {
+      "name": "d3-brush",
+      "version": "3.0.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-brush.git",
+      "packageSource": "https://registry.npmjs.org/d3-brush/-/d3-brush-3.0.0.tgz"
+    },
+    {
+      "name": "d3-chord",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-chord.git",
+      "packageSource": "https://registry.npmjs.org/d3-chord/-/d3-chord-3.0.1.tgz"
+    },
+    {
+      "name": "d3-color",
+      "version": "3.1.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-color.git",
+      "packageSource": "https://registry.npmjs.org/d3-color/-/d3-color-3.1.0.tgz"
+    },
+    {
+      "name": "d3-contour",
+      "version": "4.0.2",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-contour.git",
+      "packageSource": "https://registry.npmjs.org/d3-contour/-/d3-contour-4.0.2.tgz"
+    },
+    {
+      "name": "d3-delaunay",
+      "version": "6.0.4",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-delaunay.git",
+      "packageSource": "https://registry.npmjs.org/d3-delaunay/-/d3-delaunay-6.0.4.tgz"
+    },
+    {
+      "name": "d3-dispatch",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-dispatch.git",
+      "packageSource": "https://registry.npmjs.org/d3-dispatch/-/d3-dispatch-3.0.1.tgz"
+    },
+    {
+      "name": "d3-drag",
+      "version": "3.0.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-drag.git",
+      "packageSource": "https://registry.npmjs.org/d3-drag/-/d3-drag-3.0.0.tgz"
+    },
+    {
+      "name": "d3-dsv",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-dsv.git",
+      "packageSource": "https://registry.npmjs.org/d3-dsv/-/d3-dsv-3.0.1.tgz"
+    },
+    {
+      "name": "d3-ease",
+      "version": "3.0.1",
+      "license": "BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-ease.git",
+      "packageSource": "https://registry.npmjs.org/d3-ease/-/d3-ease-3.0.1.tgz"
+    },
+    {
+      "name": "d3-fetch",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-fetch.git",
+      "packageSource": "https://registry.npmjs.org/d3-fetch/-/d3-fetch-3.0.1.tgz"
+    },
+    {
+      "name": "d3-force",
+      "version": "3.0.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-force.git",
+      "packageSource": "https://registry.npmjs.org/d3-force/-/d3-force-3.0.0.tgz"
+    },
+    {
+      "name": "d3-format",
+      "version": "3.1.2",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-format.git",
+      "packageSource": "https://registry.npmjs.org/d3-format/-/d3-format-3.1.2.tgz"
+    },
+    {
+      "name": "d3-geo",
+      "version": "3.1.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-geo.git",
+      "packageSource": "https://registry.npmjs.org/d3-geo/-/d3-geo-3.1.1.tgz"
+    },
+    {
+      "name": "d3-hierarchy",
+      "version": "3.1.2",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-hierarchy.git",
+      "packageSource": "https://registry.npmjs.org/d3-hierarchy/-/d3-hierarchy-3.1.2.tgz"
+    },
+    {
+      "name": "d3-interpolate",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-interpolate.git",
+      "packageSource": "https://registry.npmjs.org/d3-interpolate/-/d3-interpolate-3.0.1.tgz"
+    },
+    {
+      "name": "d3-path",
+      "version": "3.1.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-path.git",
+      "packageSource": "https://registry.npmjs.org/d3-path/-/d3-path-3.1.0.tgz"
+    },
+    {
+      "name": "d3-polygon",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-polygon.git",
+      "packageSource": "https://registry.npmjs.org/d3-polygon/-/d3-polygon-3.0.1.tgz"
+    },
+    {
+      "name": "d3-quadtree",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-quadtree.git",
+      "packageSource": "https://registry.npmjs.org/d3-quadtree/-/d3-quadtree-3.0.1.tgz"
+    },
+    {
+      "name": "d3-random",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-random.git",
+      "packageSource": "https://registry.npmjs.org/d3-random/-/d3-random-3.0.1.tgz"
+    },
+    {
+      "name": "d3-sankey",
+      "version": "0.12.3",
+      "license": "BSD-3-Clause",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-sankey.git",
+      "packageSource": "https://registry.npmjs.org/d3-sankey/-/d3-sankey-0.12.3.tgz"
+    },
+    {
+      "name": "d3-scale",
+      "version": "4.0.2",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-scale.git",
+      "packageSource": "https://registry.npmjs.org/d3-scale/-/d3-scale-4.0.2.tgz"
+    },
+    {
+      "name": "d3-scale-chromatic",
+      "version": "3.1.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-scale-chromatic.git",
+      "packageSource": "https://registry.npmjs.org/d3-scale-chromatic/-/d3-scale-chromatic-3.1.0.tgz"
+    },
+    {
+      "name": "d3-selection",
+      "version": "3.0.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-selection.git",
+      "packageSource": "https://registry.npmjs.org/d3-selection/-/d3-selection-3.0.0.tgz"
+    },
+    {
+      "name": "d3-shape",
+      "version": "3.2.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-shape.git",
+      "packageSource": "https://registry.npmjs.org/d3-shape/-/d3-shape-3.2.0.tgz"
+    },
+    {
+      "name": "d3-time",
+      "version": "3.1.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-time.git",
+      "packageSource": "https://registry.npmjs.org/d3-time/-/d3-time-3.1.0.tgz"
+    },
+    {
+      "name": "d3-time-format",
+      "version": "4.1.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-time-format.git",
+      "packageSource": "https://registry.npmjs.org/d3-time-format/-/d3-time-format-4.1.0.tgz"
+    },
+    {
+      "name": "d3-timer",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-timer.git",
+      "packageSource": "https://registry.npmjs.org/d3-timer/-/d3-timer-3.0.1.tgz"
+    },
+    {
+      "name": "d3-transition",
+      "version": "3.0.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-transition.git",
+      "packageSource": "https://registry.npmjs.org/d3-transition/-/d3-transition-3.0.1.tgz"
+    },
+    {
+      "name": "d3-zoom",
+      "version": "3.0.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/d3/d3-zoom.git",
+      "packageSource": "https://registry.npmjs.org/d3-zoom/-/d3-zoom-3.0.0.tgz"
+    },
+    {
+      "name": "dagre-d3-es",
+      "version": "7.0.14",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE.md"
+      ],
+      "repository": "git+https://github.com/tbo47/dagre-es.git",
+      "packageSource": "https://registry.npmjs.org/dagre-d3-es/-/dagre-d3-es-7.0.14.tgz"
+    },
+    {
+      "name": "dayjs",
+      "version": "1.11.23",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/iamkun/dayjs.git",
+      "packageSource": "https://registry.npmjs.org/dayjs/-/dayjs-1.11.23.tgz"
+    },
+    {
+      "name": "delaunator",
+      "version": "5.1.0",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/mapbox/delaunator.git",
+      "packageSource": "https://registry.npmjs.org/delaunator/-/delaunator-5.1.0.tgz"
+    },
+    {
+      "name": "dompurify",
+      "version": "3.4.15",
+      "license": "(MPL-2.0 OR Apache-2.0)",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE-MPL"
+      ],
+      "repository": "git://github.com/cure53/DOMPurify.git",
+      "packageSource": "https://registry.npmjs.org/dompurify/-/dompurify-3.4.15.tgz"
+    },
+    {
+      "name": "elkjs",
+      "version": "0.9.3",
+      "license": "EPL-2.0",
+      "licenseFiles": [
+        "LICENSE.md"
+      ],
+      "repository": "https://github.com/kieler/elkjs.git",
+      "packageSource": "https://registry.npmjs.org/elkjs/-/elkjs-0.9.3.tgz"
+    },
+    {
+      "name": "entities",
+      "version": "4.5.0",
+      "license": "BSD-2-Clause",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git://github.com/fb55/entities.git",
+      "packageSource": "https://registry.npmjs.org/entities/-/entities-4.5.0.tgz"
+    },
+    {
+      "name": "es-toolkit",
+      "version": "1.52.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE",
+        "NOTICE"
+      ],
+      "repository": "https://github.com/toss/es-toolkit.git",
+      "packageSource": "https://registry.npmjs.org/es-toolkit/-/es-toolkit-1.52.0.tgz"
+    },
+    {
+      "name": "internmap",
+      "version": "2.0.3",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/mbostock/internmap.git",
+      "packageSource": "https://registry.npmjs.org/internmap/-/internmap-2.0.3.tgz"
+    },
+    {
+      "name": "katex",
+      "version": "0.16.47",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/KaTeX/KaTeX.git",
+      "packageSource": "https://registry.npmjs.org/katex/-/katex-0.16.47.tgz"
+    },
+    {
+      "name": "khroma",
+      "version": "2.1.0",
+      "license": "SEE LICENSE FILE",
+      "licenseFiles": [
+        "license"
+      ],
+      "repository": "github:fabiospampinato/khroma",
+      "packageSource": "https://registry.npmjs.org/khroma/-/khroma-2.1.0.tgz"
+    },
+    {
+      "name": "layout-base",
+      "version": "1.0.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/iVis-at-Bilkent/layout-base.git",
+      "packageSource": "https://registry.npmjs.org/layout-base/-/layout-base-1.0.2.tgz"
+    },
+    {
+      "name": "linkify-it",
+      "version": "5.0.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "markdown-it/linkify-it",
+      "packageSource": "https://registry.npmjs.org/linkify-it/-/linkify-it-5.0.2.tgz"
+    },
+    {
+      "name": "lodash-es",
+      "version": "4.17.23",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "lodash/lodash",
+      "packageSource": "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.23.tgz"
+    },
+    {
+      "name": "markdown-it",
+      "version": "14.3.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "markdown-it/markdown-it",
+      "packageSource": "https://registry.npmjs.org/markdown-it/-/markdown-it-14.3.2.tgz"
+    },
+    {
+      "name": "markdown-it-ins",
+      "version": "4.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "markdown-it/markdown-it-ins",
+      "packageSource": "https://registry.npmjs.org/markdown-it-ins/-/markdown-it-ins-4.0.0.tgz"
+    },
+    {
+      "name": "markdown-it-mark",
+      "version": "4.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "markdown-it/markdown-it-mark",
+      "packageSource": "https://registry.npmjs.org/markdown-it-mark/-/markdown-it-mark-4.0.0.tgz"
+    },
+    {
+      "name": "markdown-it-sub",
+      "version": "2.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "markdown-it/markdown-it-sub",
+      "packageSource": "https://registry.npmjs.org/markdown-it-sub/-/markdown-it-sub-2.0.0.tgz"
+    },
+    {
+      "name": "markdown-it-sup",
+      "version": "2.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "markdown-it/markdown-it-sup",
+      "packageSource": "https://registry.npmjs.org/markdown-it-sup/-/markdown-it-sup-2.0.0.tgz"
+    },
+    {
+      "name": "marked",
+      "version": "16.4.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE.md"
+      ],
+      "repository": "git://github.com/markedjs/marked.git",
+      "packageSource": "https://registry.npmjs.org/marked/-/marked-16.4.2.tgz"
+    },
+    {
+      "name": "markmap-common",
+      "version": "0.18.9",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/markmap/markmap.git",
+      "packageSource": "https://registry.npmjs.org/markmap-common/-/markmap-common-0.18.9.tgz"
+    },
+    {
+      "name": "markmap-html-parser",
+      "version": "0.18.11",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/markmap/markmap.git",
+      "packageSource": "https://registry.npmjs.org/markmap-html-parser/-/markmap-html-parser-0.18.11.tgz"
+    },
+    {
+      "name": "markmap-lib",
+      "version": "0.18.12",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/markmap/markmap.git",
+      "packageSource": "https://registry.npmjs.org/markmap-lib/-/markmap-lib-0.18.12.tgz"
+    },
+    {
+      "name": "markmap-view",
+      "version": "0.18.12",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/markmap/markmap.git",
+      "packageSource": "https://registry.npmjs.org/markmap-view/-/markmap-view-0.18.12.tgz"
+    },
+    {
+      "name": "mdurl",
+      "version": "2.1.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/markdown-it/mdurl.git",
+      "packageSource": "https://registry.npmjs.org/mdurl/-/mdurl-2.1.0.tgz"
+    },
+    {
+      "name": "mermaid",
+      "version": "12.0.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/mermaid-js/mermaid",
+      "packageSource": "https://registry.npmjs.org/mermaid/-/mermaid-12.0.0.tgz"
+    },
+    {
+      "name": "punycode.js",
+      "version": "2.3.1",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE-MIT.txt"
+      ],
+      "repository": "https://github.com/mathiasbynens/punycode.js.git",
+      "packageSource": "https://registry.npmjs.org/punycode.js/-/punycode.js-2.3.1.tgz"
+    },
+    {
+      "name": "robust-predicates",
+      "version": "3.0.3",
+      "license": "Unlicense",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/mourner/robust-predicates.git",
+      "packageSource": "https://registry.npmjs.org/robust-predicates/-/robust-predicates-3.0.3.tgz"
+    },
+    {
+      "name": "roughjs",
+      "version": "4.6.6",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "git+https://github.com/pshihn/rough.git",
+      "packageSource": "https://registry.npmjs.org/roughjs/-/roughjs-4.6.6.tgz"
+    },
+    {
+      "name": "stylis",
+      "version": "4.4.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/thysultan/stylis.js",
+      "packageSource": "https://registry.npmjs.org/stylis/-/stylis-4.4.0.tgz"
+    },
+    {
+      "name": "ts-dedent",
+      "version": "2.3.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "https://github.com/tamino-martinius/node-ts-dedent.git",
+      "packageSource": "https://registry.npmjs.org/ts-dedent/-/ts-dedent-2.3.0.tgz"
+    },
+    {
+      "name": "uc.micro",
+      "version": "2.1.0",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE.txt"
+      ],
+      "repository": "markdown-it/uc.micro",
+      "packageSource": "https://registry.npmjs.org/uc.micro/-/uc.micro-2.1.0.tgz"
+    },
+    {
+      "name": "uuid",
+      "version": "14.0.2",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE.md"
+      ],
+      "repository": "https://github.com/uuidjs/uuid.git",
+      "packageSource": "https://registry.npmjs.org/uuid/-/uuid-14.0.2.tgz"
+    },
+    {
+      "name": "yaml",
+      "version": "2.9.1",
+      "license": "ISC",
+      "licenseFiles": [
+        "LICENSE"
+      ],
+      "repository": "github:eemeli/yaml",
+      "packageSource": "https://registry.npmjs.org/yaml/-/yaml-2.9.1.tgz"
+    }
+  ],
+  "assets": [
+    {
+      "file": "mermaid.js.LEGAL.txt",
+      "bytes": 2140,
+      "sha256": "d47aae37c94d056408d61449cffa2ccbdce1b845c654ee875370f8a46d10895d"
+    },
+    {
+      "file": "mermaid-6181c00f4ae24586.js",
+      "bytes": 5282966,
+      "sha256": "6181c00f4ae24586ef08278b21a668ea6e0eb6c51f099e8ea53dc4616fcffc3b"
+    },
+    {
+      "file": "markmap.js.LEGAL.txt",
+      "bytes": 331,
+      "sha256": "8fc286a1c3948de6f7689fe57036a03f1c0b35a2a85852d63a81e6c5b1654bdc"
+    },
+    {
+      "file": "markmap-a4eb27b3741675d4.js",
+      "bytes": 782469,
+      "sha256": "a4eb27b3741675d4c7b4e7558f7a036f835fc3b2d870b900e6fb5961abd12c9e"
+    },
+    {
+      "file": "cached-svg.js.LEGAL.txt",
+      "bytes": 252,
+      "sha256": "402ce85974579017bd52a4dca8a7c921093027e980d2173330f83a27c7eace1e"
+    },
+    {
+      "file": "cached-svg-ab3f10a46bdb33c3.js",
+      "bytes": 30411,
+      "sha256": "ab3f10a46bdb33c342ed392285687de454e154bb659ea2c0695defea1436682d"
+    },
+    {
+      "file": "LICENSES.txt",
+      "bytes": 180523,
+      "sha256": "58d6a4553507b40d4fe54be3b3a6a878888262e236b1d8df8e241a71b9dc9de9"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+/* Shared semantic palette. Text pairs target >= 4.5:1 in both resolved themes. */
+:root[data-theme] {
+  color-scheme: light;
+  --green:#54b865; --ink:#183126; --muted:#53645a; --line:#c7d4cb;
+  --paper:#ffffff; --surface:#ffffff; --wash:#f4f7f4; --soft:#edf6ee;
+  --tag-bg:#dceee0; --tag-ink:#235b31; --link-ink:#246533;
+  --danger:#a3312c; --error-bg:#fff1eb; --warning-bg:#f6f1e8; --warning-ink:#6e4c17;
+  --match-bg:#fff0ad; --current-match-bg:#c2edc8; --focus:#286c3b;
+  color:var(--ink); background:var(--wash);
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ink:#e3eee6; --muted:#b9c9bc; --line:#52695a;
+  --paper:#18231b; --surface:#18231b; --wash:#101913; --soft:#243e2d;
+  --tag-bg:#264431; --tag-ink:#c6eed0; --link-ink:#a7e7b5;
+  --danger:#ffc2b9; --error-bg:#452d27; --warning-bg:#382f22; --warning-ink:#f0d7ad;
+  --match-bg:#574b18; --current-match-bg:#265232; --focus:#8ae19b;
+}
+:root[data-theme] body { background:var(--wash); color:var(--ink); }
+:root[data-theme] .app-header,:root[data-theme] body>header { background:var(--paper); height:auto; min-height:64px; }
+.header-inner { min-height:64px; }
+.header-tools,.directory-header-tools { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.theme-selector { font:inherit; font-size:12px; min-height:36px; max-width:132px; padding:5px 8px; border:1px solid var(--line); border-radius:7px; color:var(--ink); background:var(--paper); }
+.standalone-theme { display:flex; justify-content:flex-end; padding:12px; }
+:root[data-theme] button,:root[data-theme] input,:root[data-theme] select { color:var(--ink); background:var(--paper); }
+:root[data-theme] input::placeholder { color:var(--muted); opacity:1; }
+:root[data-theme] button:hover:not(:disabled) { color:var(--ink); background:var(--soft); }
+:root[data-theme] button:disabled { opacity:1; color:var(--muted); background:var(--wash); cursor:default; border-style:dashed; }
+:root[data-theme] button.primary,:root[data-theme] .primary-link,:root[data-theme] #auth-submit,:root[data-theme] #preview-download {
+  color:#102d19; background:#54b865; border-color:#54b865;
+}
+:root[data-theme] button.primary:hover,:root[data-theme] .primary-link:hover { color:#102d19; background:#66c176; }
+:root[data-theme] .brand-mark { color:#102d19; background:#54b865; }
+:root[data-theme] .connection-badge,:root[data-theme] .tag { color:var(--tag-ink); background:var(--tag-bg); border-color:var(--line); }
+:root[data-theme] .connection-badge[data-secure="false"] { color:var(--warning-ink); background:var(--warning-bg); border-color:var(--line); }
+:root[data-theme] #workspace-tabs button { background:var(--soft); color:var(--ink); }
+:root[data-theme] #workspace-tabs button[aria-selected="true"] { background:var(--tag-bg); color:var(--tag-ink); box-shadow:inset 0 -2px var(--tag-ink); }
+:root[data-theme] #workspace-state,:root[data-theme] .workspace-message { color:var(--muted); }
+:root[data-theme] .workspace-message { background:var(--soft); }
+:root[data-theme] .upload-drop,:root[data-theme] .search-wrap input,:root[data-theme] .list-caption { background:var(--wash); }
+:root[data-theme] .upload-symbol,:root[data-theme] .pin-symbol { background:var(--tag-bg); color:var(--tag-ink); }
+:root[data-theme] .eyebrow,:root[data-theme] .upload-card a { color:var(--link-ink); }
+:root[data-theme] .file-symbol,:root[data-theme] .file-symbol[data-kind] { background:var(--soft); color:var(--tag-ink); }
+:root[data-theme] .file-row:hover,:root[data-theme] .row:hover { background:var(--soft); }
+:root[data-theme] .file-actions button,:root[data-theme] .file-actions a { color:var(--link-ink); }
+:root[data-theme] .file-actions button:hover { background:var(--soft); color:var(--link-ink); }
+:root[data-theme] .card,:root[data-theme] #viewport,:root[data-theme] .upload-card,:root[data-theme] .pin-card,:root[data-theme] .preview-dialog,:root[data-theme] #auth,:root[data-theme] #directory-preview { background:var(--paper); color:var(--ink); }
+:root[data-theme] #directory-preview { --ink:inherit; --muted:inherit; }
+/* Use inherited global palette rather than resetting the dialog variables. */
+:root[data-theme="light"] #directory-preview { --ink:#183126; --muted:#53645a; }
+:root[data-theme="dark"] #directory-preview { --ink:#e3eee6; --muted:#b9c9bc; }
+:root[data-theme] #path,:root[data-theme] #status,:root[data-theme] .size,:root[data-theme] .card small,:root[data-theme] #auth-http { color:var(--muted); }
+:root[data-theme] header>.brand,:root[data-theme] .row>.icon { color:var(--link-ink); }
+:root[data-theme] #auth-error,:root[data-theme] .download-error,:root[data-theme] .diagram-block[data-state="error"] .diagram-status { color:var(--danger); }
+:root[data-theme] .download-panel,:root[data-theme] .download-confirm { background:var(--paper); color:var(--ink); }
+:root[data-theme] .batch-toolbar button,:root[data-theme] .folder-download,
+:root[data-theme] .download-state,:root[data-theme] .download-actions button,:root[data-theme] .download-panel-top button,
+:root[data-theme] .managed-download,:root[data-theme] .row .preview-button,:root[data-theme] #directory-preview-download,
+:root[data-theme] .image-toolbar button,:root[data-theme] .diagram-toolbar button { color:var(--tag-ink); background:var(--tag-bg); }
+:root[data-theme] .batch-toolbar button:disabled,:root[data-theme] .download-actions button:disabled,:root[data-theme] .image-toolbar button:disabled,:root[data-theme] .diagram-toolbar button:disabled { color:var(--muted); background:var(--wash); opacity:1; }
+:root[data-theme] .download-task[data-state="failed"] .download-state,:root[data-theme] .download-task[data-state="blocked"] .download-state { color:var(--danger); background:var(--error-bg); }
+:root[data-theme] .download-original,:root[data-theme] .download-hint summary { color:var(--link-ink); }
+:root[data-theme] .text-viewport,:root[data-theme] #preview-content .text-viewport { background:var(--paper); color:var(--ink); }
+:root[data-theme] .text-line-number { color:var(--muted); }
+:root[data-theme] .text-row mark { color:var(--ink); background:var(--match-bg); }
+:root[data-theme] .text-row mark.text-match-current { color:var(--ink); background:var(--current-match-bg); }
+:root[data-theme] .markdown-document pre,:root[data-theme] .markdown-document code,:root[data-theme] .markdown-document th,:root[data-theme] .markdown-document blockquote { color:var(--ink); background:var(--soft); }
+:root[data-theme] .markdown-document pre code { background:transparent; }
+:root[data-theme] .markdown-document a { color:var(--link-ink); }
+:root[data-theme] .markdown-navigation { background:var(--paper); }
+:root[data-theme] .image-stage,:root[data-theme] .diagram-stage { background:var(--wash); }
+:root[data-theme] :focus-visible { outline-color:var(--focus); }
+@media(max-width:600px) {
+  .header-inner { flex-wrap:wrap; padding:10px 16px; gap:8px; }
+  .header-tools { margin-left:auto; }
+  .theme-selector { min-height:44px; max-width:108px; font-size:11px; }
+  .directory-header-tools { gap:5px; }
+  body>header { flex-wrap:wrap; gap:8px; padding-top:8px; padding-bottom:8px; }
+}
+/* Do not interpolate only the background across themes: the intermediate color
+   can fail contrast even when both endpoint palettes pass. */
+:root[data-theme] button,:root[data-theme] a,:root[data-theme] input,:root[data-theme] select { transition:none; }
+:root[data-theme] .row .icon { color:var(--link-ink); }

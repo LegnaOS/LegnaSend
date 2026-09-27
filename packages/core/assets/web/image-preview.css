@@ -1,0 +1,18 @@
+/* Shared image controls use filled tags, not a second oversized modal. */
+.image-preview { width:100%; min-width:0; padding-top:10px; }
+.image-toolbar { display:flex; align-items:center; flex-wrap:wrap; justify-content:center; gap:6px; margin:0 0 8px; }
+.image-toolbar button { border:0; border-radius:6px; background:#e6f3e9; color:#286d37; min-width:32px; min-height:32px; padding:5px 9px; font-size:12px; }
+.image-toolbar button:disabled { opacity:.45; cursor:default; }
+.image-scale { color:var(--muted,#607064); min-width:48px; text-align:center; font:12px/1.5 ui-monospace,monospace; }
+.image-stage { position:relative; width:100%; height:160px; overflow:hidden; border-radius:8px; outline-offset:2px; touch-action:none; user-select:none; background:#f4f7f4; }
+.image-stage:focus-visible { outline:2px solid #54b865; }
+.image-stage > img { position:absolute; left:0; top:0; transform-origin:0 0; pointer-events:none; user-select:none; object-fit:fill; }
+.image-stage.image-can-pan { cursor:grab; }
+.image-stage.image-can-pan.image-dragging { cursor:grabbing; }
+.image-hint { margin:8px 0 0; text-align:center; font-size:11px; line-height:1.5; color:var(--muted,#607064); }
+
+:root[data-theme="dark"] .image-toolbar button { background:#234c2b; color:#abe0b3; }
+:root[data-theme="dark"] .image-stage { background:#111c15; }
+@media(max-width:600px) { .image-toolbar button { min-width:44px; min-height:44px; } .image-toolbar { gap:4px; } }
+/* Empty loading announcements should not reserve a blank row in either preview. */
+#preview-status:empty,#directory-preview-status:empty { display:none; }

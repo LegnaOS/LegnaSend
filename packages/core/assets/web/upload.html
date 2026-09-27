@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html><head><script src="/assets/theme.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>LegnaSend</title><link rel="stylesheet" href="/assets/web-ui.css"><link rel="stylesheet" href="/assets/theme.css"></head>
+<body><noscript>LegnaSend requires JavaScript.</noscript>
+<header class="app-header"><div class="header-inner"><div class="brand"><span class="brand-mark" data-icon="send"></span>LegnaSend</div><div class="header-tools"><span data-theme-control></span><span id="connection-badge" class="connection-badge"></span><select id="web-language" aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="zh-HK">繁體中文（香港）</option></select></div></div></header>
+<main class="web-shell">
+<div class="page-heading"><div><div class="eyebrow" data-ui="workspace"></div><h1 id="page-title"></h1><p id="page-subtitle"></p></div></div>
+<section id="content" class="upload-card">
+  <div class="upload-drop"><div class="upload-symbol" data-icon="upload"></div><h2 data-ui="uploadReady"></h2><p id="drop-hint" data-ui="uploadDrop"></p>
+    <div class="upload-buttons"><button id="upload-button" class="primary" type="button" data-ui="selectFiles"></button><button id="folder-button" type="button" data-ui="chooseFolder"></button></div>
+    <input id="file-input" type="file" multiple hidden><input id="folder-input" type="file" multiple webkitdirectory hidden>
+  </div>
+  <p id="status-text" role="status" aria-live="polite"></p><p id="progress-text" hidden></p><div id="transfer-metrics" hidden><progress id="transfer-progress" max="1" value="0"></progress><div class="transfer-metrics-row"><span id="transfer-bytes"></span><span id="transfer-speed"></span></div></div><p class="directory-note" data-ui="directoryHint"></p>
+</section>
+<footer class="page-footer"><span data-ui="footer">LegnaSend · 1.0.0</span><span data-ui="local"></span></footer></main>
+<script src="/assets/web-i18n.js"></script><script src="/assets/web-ui.js"></script><script src="/assets/web-upload.js"></script>
+</body></html>

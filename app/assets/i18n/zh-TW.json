@@ -1,0 +1,874 @@
+{
+  "appName": "LegnaSend",
+  "general": {
+    "accept": "接受",
+    "accepted": "已接受",
+    "add": "新增",
+    "advanced": "進階",
+    "cancel": "取消",
+    "close": "關閉",
+    "confirm": "確認",
+    "continueStr": "繼續",
+    "copy": "複製",
+    "copiedToClipboard": "已複製到剪貼簿",
+    "decline": "拒絕",
+    "done": "完成",
+    "delete": "刪除",
+    "edit": "編輯",
+    "error": "錯誤",
+    "example": "範例",
+    "files": "檔案",
+    "finished": "已完成",
+    "hide": "隱藏",
+    "off": "關閉",
+    "offline": "離線",
+    "on": "開啟",
+    "online": "線上",
+    "open": "開啟",
+    "queue": "佇列",
+    "quickSave": "自動儲存",
+    "quickSaveFromFavorites": "自動儲存來自「最愛」裝置的檔案",
+    "renamed": "已重新命名",
+    "reset": "復原變更",
+    "restart": "重新啟動",
+    "settings": "設定",
+    "skipped": "已跳過",
+    "start": "開始",
+    "stop": "停止",
+    "save": "儲存",
+    "unchanged": "未變更",
+    "unknown": "未知",
+    "noItemInClipboard": "剪貼簿中沒有內容。"
+  },
+  "receiveTab": {
+    "title": "接收",
+    "infoBox": {
+      "ip": "IP：",
+      "port": "通訊埠：",
+      "alias": "裝置名稱："
+    },
+    "quickSave": {
+      "off": "@:general.off",
+      "favorites": "最愛",
+      "on": "@:general.on"
+    },
+    "link": "連結工作區"
+  },
+  "sendTab": {
+    "title": "傳送",
+    "selection": {
+      "title": "選取",
+      "files": "檔案：{files}",
+      "size": "大小：{size}"
+    },
+    "picker": {
+      "file": "檔案",
+      "folder": "資料夾",
+      "media": "媒體",
+      "text": "文字",
+      "app": "應用程式",
+      "clipboard": "貼上"
+    },
+    "shareIntentInfo": "您也可以使用您的行動裝置中的「分享」功能更簡單地選取檔案。",
+    "nearbyDevices": "附近的裝置",
+    "thisDevice": "此裝置",
+    "scan": "尋找裝置",
+    "manualSending": "手動傳送",
+    "sendMode": "傳送模式",
+    "sendModes": {
+      "single": "單一接收者",
+      "multiple": "多重接收者",
+      "link": "透過連結分享"
+    },
+    "sendModeHelp": "說明",
+    "help": "請確認目標裝置也已連線至相同的 Wi‑Fi 網路。",
+    "placeItems": "列出要分享的項目。"
+  },
+  "settingsTab": {
+    "title": "設定",
+    "general": {
+      "title": "一般",
+      "brightness": "主題",
+      "brightnessOptions": {
+        "system": "系統",
+        "dark": "深色",
+        "light": "淺色"
+      },
+      "color": "色彩",
+      "colorOptions": {
+        "system": "系統",
+        "oled": "OLED",
+        "custom": "自訂"
+      },
+      "language": "語言",
+      "languageOptions": {
+        "system": "系統"
+      },
+      "saveWindowPlacement": "退出時儲存視窗位置",
+      "saveWindowPlacementWindows": "離開時儲存視窗位置",
+      "minimizeToTray": "關閉時最小化至系統匣",
+      "launchAtStartup": "登入後自動啟動",
+      "launchMinimized": "自動啟動至系統匣",
+      "showInContextMenu": "在檔案功能表「傳送到」項目中顯示 LocalSend",
+      "animations": "動畫"
+    },
+    "receive": {
+      "title": "接收",
+      "quickSave": "@:general.quickSave",
+      "quickSaveFromFavorites": "@:general.quickSaveFromFavorites",
+      "requirePin": "@:webSharePage.requirePin",
+      "autoFinish": "自動完成傳送任務",
+      "destination": "儲存目錄",
+      "downloads": "(下載)",
+      "saveToGallery": "儲存媒體至相簿",
+      "saveToHistory": "儲存至歷史記錄",
+      "verifyChecksums": "接收檔案時驗證校驗碼"
+    },
+    "send": {
+      "title": "傳送",
+      "shareViaLinkAutoAccept": "透過連結分享：自動同意接收要求",
+      "createChecksums": "傳送檔案時建立校驗碼"
+    },
+    "network": {
+      "title": "網路",
+      "needRestart": "重新啟動伺服器以套用設定！",
+      "server": "伺服器",
+      "alias": "裝置名稱",
+      "deviceType": "裝置類型",
+      "deviceModel": "裝置型號",
+      "port": "通訊埠",
+      "network": "網路",
+      "networkOptions": {
+        "all": "全部",
+        "filtered": "已篩選"
+      },
+      "discoveryTimeout": "探索裝置逾時",
+      "useSystemName": "使用系統名稱",
+      "generateRandomAlias": "隨機產生別名",
+      "portWarning": "您使用了自訂通訊埠，因此其他裝置可能無法偵測到您。（預設值：{defaultPort}）",
+      "encryption": "加密",
+      "multicastGroup": "多點傳送位址",
+      "multicastGroupWarning": "您使用了自訂多點傳送位址，因此其他裝置可能無法偵測到您。（預設值：{defaultMulticast}）"
+    },
+    "other": {
+      "title": "其他",
+      "support": "支持 LocalSend",
+      "donate": "贊助",
+      "privacyPolicy": "隱私權政策",
+      "termsOfUse": "使用條款"
+    },
+    "advancedSettings": "進階設定"
+  },
+  "troubleshootPage": {
+    "title": "疑難排解",
+    "subTitle": "這個應用程式並未如預期運作？在這裡您可以找到常見的解決方案。",
+    "solution": "解決方案：",
+    "fixButton": "自動修正",
+    "firewall": {
+      "symptom": "此應用程式可以向其他裝置傳送檔案，但其他裝置無法向此裝置傳送檔案。",
+      "solution": "這很可能是防火牆問題。您可以透過允許通訊埠 {port} 上的連入連線 (UDP 和 TCP) 以解決此問題。",
+      "openFirewall": "開啟防火牆"
+    },
+    "noDiscovery": {
+      "symptom": "本裝置無法探索其他裝置。",
+      "solution": "請確保所有裝置都在同一個 Wi‑Fi 網路上並共用相同的設定 (通訊埠、多點傳送位址、加密選項)。您可以嘗試手動輸入目標裝置的 IP 位址。如果這樣可以運作，考慮將此裝置新增至最愛，以便未來可以自動偵測到。"
+    },
+    "noConnection": {
+      "symptom": "兩部裝置無法探索彼此，也無法分享檔案。",
+      "solution": "兩部裝置都有這個問題嗎？若是，請確認兩部裝置已連線至相同的 Wi‑Fi 網路，且使用相同的設定（通訊埠、多點傳送位址、加密選項）。Wi‑Fi 網路可能因為啟用了「無線存取點（AP）隔離」而不允許裝置彼此通訊。請在路由器上停用此選項。"
+    }
+  },
+  "networkInterfacesPage": {
+    "title": "網路介面",
+    "info": "LocalSend 預設使用所有可用的網路介面，您可於此處排除不想使用的網路。您需要重新啟動伺服器以套用變更。",
+    "preview": "預覽",
+    "whitelist": "允許清單",
+    "blacklist": "禁止清單"
+  },
+  "receiveHistoryPage": {
+    "title": "歷史記錄",
+    "openFolder": "開啟資料夾",
+    "deleteHistory": "刪除歷史記錄",
+    "empty": "沒有歷史記錄。",
+    "entryActions": {
+      "open": "開啟檔案",
+      "showInFolder": "在資料夾中顯示",
+      "info": "資訊",
+      "deleteFromHistory": "從歷史記錄刪除"
+    }
+  },
+  "apkPickerPage": {
+    "title": "應用程式 (APK)",
+    "excludeSystemApps": "排除系統應用程式",
+    "excludeAppsWithoutLaunchIntent": "排除不可啟動的應用程式",
+    "apps": "{n} 個應用程式"
+  },
+  "selectedFilesPage": {
+    "deleteAll": "全部刪除"
+  },
+  "deviceDetailsPage": {
+    "title": "裝置詳情",
+    "favorite": "最愛",
+    "verify": "驗證",
+    "info": {
+      "name": "名稱",
+      "address": "位址",
+      "version": "版本",
+      "protocol": "協定 v{version}"
+    },
+    "logs": {
+      "title": "記錄",
+      "empty": "沒有可用的記錄。",
+      "discovered": "透過 {protocol} 發現 ({host})",
+      "updated": "透過 {protocol} 更新 ({host})"
+    }
+  },
+  "verifyPage": {
+    "title": "驗證",
+    "icons": "圖示",
+    "text": "文字",
+    "question": "在另一台裝置上顯示的內容相同嗎？"
+  },
+  "receivePage": {
+    "verifyingReceivedData": "正在驗證接收資料",
+    "idleExpired": "接收工作階段已閒置10分鐘且沒有正在上傳的檔案，因此已過期。請讓傳送端重新發起傳輸；已完成的檔案會保留。",
+    "subTitle": {
+      "one": "要傳送一個檔案給您",
+      "other": "要傳送 {n} 個檔案給您"
+    },
+    "subTitleMessage": "已傳送一則訊息給您：",
+    "subTitleLink": "已傳送一個連結給您：",
+    "canceled": "傳送者已取消要求。",
+    "destinationUnavailable": "下載目錄暫不可用，請檢查儲存權限、可用空間和儲存位置後重試。"
+  },
+  "receiveOptionsPage": {
+    "title": "選項",
+    "destination": "@:settingsTab.receive.destination",
+    "appDirectory": "(LocalSend 資料夾)",
+    "saveToGallery": "@:settingsTab.receive.saveToGallery",
+    "saveToGalleryOff": "因內容存在資料夾而自動關閉。"
+  },
+  "sendPage": {
+    "verifyingSourceData": "正在驗證來源檔案",
+    "calculatingChecksum": "正在計算核對和（{curr} / {n}）",
+    "waiting": "正在等候回應…",
+    "rejected": "接收者拒絕了要求。",
+    "tooManyAttempts": "@:web.tooManyAttempts",
+    "busy": "接收者正忙於處理另一個要求。"
+  },
+  "progressPage": {
+    "titleSending": "正在傳送檔案",
+    "titleReceiving": "正在接收檔案",
+    "savedToGallery": "已儲存至相簿",
+    "total": {
+      "title": {
+        "sending": "整體進度 ({time})",
+        "finishedError": "已完成，但發生錯誤",
+        "canceledSender": "傳送者已取消",
+        "canceledReceiver": "接收者已取消"
+      },
+      "count": "檔案：{curr} / {n}",
+      "size": "大小：{curr} / {n}",
+      "speed": "速度：{speed}/s"
+    },
+    "remainingTime": {
+      "minutesUnit(plural, param=m)": {
+        "other": "{m}分鐘"
+      },
+      "hoursUnit(plural, param=h)": {
+        "other": "{h}小時"
+      },
+      "minutes": "{m}:{ss}",
+      "hours": "@:.hoursUnit @:.minutesUnit"
+    }
+  },
+  "webSharePage": {
+    "title": "透過連結分享",
+    "loading": "正在啟動伺服器…",
+    "stopping": "正在關閉伺服器…",
+    "error": "啟動伺服器時發生錯誤。",
+    "openLink": {
+      "one": "在瀏覽器開啟此連結：",
+      "other": "在瀏覽器中開啟其中一個連結："
+    },
+    "requests": "要求",
+    "noRequests": "目前沒有任何要求。",
+    "encryption": "@:settingsTab.network.encryption",
+    "autoAccept": "自動接受請求",
+    "requirePin": "需要 PIN 碼",
+    "pinHint": "PIN 碼是「{pin}」",
+    "encryptionHint": "LocalSend 使用自簽署憑證。您需要在瀏覽器中接受它。",
+    "pendingRequests": "待處理的要求：{n}"
+  },
+  "webReceivePage": {
+    "title": "透過連結接收"
+  },
+  "aboutPage": {
+    "title": "關於 LegnaSend",
+    "description": [
+      "LegnaSend 是開源檔案分享工具，提供多網卡連結、裝置網路標籤和連續傳送佇列。"
+    ],
+    "author": "作者",
+    "contributors": "貢獻者",
+    "packagers": "封裝人員",
+    "translators": "翻譯人員",
+    "upstreamCredits": "開源致謝",
+    "version": "版本 {version}",
+    "licenseNotices": "授權聲明",
+    "debugging": "診斷"
+  },
+  "donationPage": {
+    "title": "贊助",
+    "info": "LocalSend 是免費、開源且沒有任何廣告的。如果您喜歡此應用程式，可以透過捐贈來支持開發。",
+    "donate": "贊助 {amount}",
+    "thanks": "非常感謝您！",
+    "restore": "復原購買"
+  },
+  "directoryWorkspaces": {
+    "title": "工作區",
+    "create": "建立工作區",
+    "name": "名稱",
+    "slug": "訪問路徑",
+    "root": "本地目錄",
+    "choose": "選擇目錄",
+    "visible": "索引可見",
+    "hidden": "索引隱藏",
+    "hide": "隱藏",
+    "show": "顯示",
+    "closed": "已關閉",
+    "serving": "正在共享",
+    "previousServing": "舊配置仍在共享",
+    "invalid": "來源失效",
+    "syncing": "正在應用配置",
+    "serverOff": "服務已停止",
+    "readOnly": "只讀目錄",
+    "readOnlyHint": "工作區預設唯讀。可分別開啟網頁上傳，既有檔案不會被覆蓋。",
+    "empty": "從本地目錄建立工作區，檔案保留在原位置。",
+    "failed": "操作失敗，請檢查名稱、唯一訪問路徑、目錄許可權和服務狀態。",
+    "syncFailed": "服務端尚未確認變更，原先發布的路徑可能仍在提供服務。請重試同步。",
+    "retry": "重試同步",
+    "enable": "開啟",
+    "close": "關閉",
+    "destroy": "銷燬工作區",
+    "validate": "檢查目錄",
+    "stopHint": "停止本工作區的訪問請求，其他工作區和原生收發繼續執行。不會刪除原始檔。",
+    "hiddenHint": "隱藏的工作區不顯示在索引中，知道連結仍可訪問。隱藏不等於密碼保護。",
+    "closeToEdit": "修改訪問路徑或源目錄前，請先關閉工作區。",
+    "invalidInput": "請填寫名稱、workspace1 形式的小寫訪問路徑和本地目錄。",
+    "reasons(map)": {
+      "missing": "目錄不存在",
+      "notDirectory": "不是本地目錄",
+      "permissionDenied": "目錄許可權不足",
+      "grantUnavailable": "目錄授權不可用，請重新選擇資料夾",
+      "ioError": "目錄讀取失敗",
+      "timeout": "目錄檢查超時"
+    },
+    "access": "存取保護",
+    "protected": "密碼保護",
+    "openAccess": "開放存取",
+    "password": "新密碼或 PIN",
+    "confirmPassword": "確認密碼",
+    "keepPassword": "留空保留現有密碼。",
+    "passwordInvalid": "請輸入 4–128 個字元，兩次輸入應一致。",
+    "passwordHint": "儲存新的密碼或存取方式會撤銷舊授權，並停止本工作區正在進行的下載。HTTPS 保護傳輸，密碼控制存取權限。",
+    "accessPending": "存取策略待服務確認",
+    "uploadPermission": "上傳權限",
+    "allowUpload": "允許網頁上傳",
+    "uploadHint": "開啟後，能存取此工作區的瀏覽器可直接將檔案和資料夾上傳至該目錄，不覆蓋既有檔案。關閉會停止未完成上傳，已儲存檔案保留。有密碼的工作區仍需先解鎖。",
+    "uploadPending": "上傳權限待同步",
+    "permissionHint": "每個工作區獨立控制上傳"
+  },
+  "changelogPage": {
+    "title": "變更記錄",
+    "language": "更新記錄語言",
+    "followApp": "跟隨應用程式語言",
+    "fallback": "目前語言的譯文尚未提供，現顯示 {language}。",
+    "loadError": "更新記錄載入失敗。",
+    "retry": "重試"
+  },
+  "whatsNewPage": {
+    "title": "{version} 有什麼新功能",
+    "changes(interface=WhatsNewStrings)": {
+      "v1_0_0": {
+        "changes": [
+          "1.0.0 目前為開發版本，尚未正式發佈。",
+          "檔案和資料夾可排隊傳送，失敗檔案單獨重試；統一面板管理收發，離開頁面不停止傳輸。",
+          "相容的裝置和儲存位置支援大檔案續傳。重新啟動後重用進度需要重新批准接收，其他目的地保留整個檔案重試。",
+          "iOS 可從「檔案」選擇接收目錄，Android 可選擇系統文件目錄；權限失效時明確提示，不擅自切換儲存位置。",
+          "核對中斷儲存，自動清理核驗通過的暫存副本；成品、活動傳輸和歸屬不明的殘留繼續保留。",
+          "瀏覽器分享檔案和目錄工作區，支援密碼、批准上傳、批次 ZIP 下載及可選的授權目錄下載管理。",
+          "預覽圖片、影音、文字和 Markdown，搜尋內文，檔案重新整理後保留閱讀位置。",
+          "按傳送任務選擇網路連線、查看連線資訊，並使用可選整合 API 和應用程式內說明。",
+          "iOS 重新啟動後還原待傳送分享但不自動傳送；改善小螢幕、大字體體驗，隱私政策可離線查看。",
+          "修復 macOS 沙盒啟動時誤報復原記錄儲存失敗。"
+        ]
+      }
+    }
+  },
+  "aliasGenerator(ignoreMissing, ignoreGpt)": {
+    "@info": "Inherits from the English version"
+  },
+  "dialogs": {
+    "addFile": {
+      "title": "新增檔案",
+      "content": "您想要新增什麼檔案？"
+    },
+    "openFile": {
+      "title": "開啟檔案",
+      "content": "您想開啟接收到的檔案嗎？"
+    },
+    "addressInput": {
+      "title": "輸入位址",
+      "hashtag": "雜湊標記",
+      "ip": "IP 位址",
+      "recentlyUsed": "最近使用： "
+    },
+    "cancelSession": {
+      "title": "取消檔案傳輸",
+      "content": "您確定要取消檔案傳輸嗎？"
+    },
+    "cannotOpenFile": {
+      "title": "無法開啟檔案",
+      "content": "無法開啟「{file}」，這個檔案已被移動、重新命名或刪除了嗎？"
+    },
+    "encryptionDisabledNotice": {
+      "title": "加密已停用",
+      "content": "目前的通訊透過未經加密的 HTTP 通訊協定執行。若要使用 HTTPS，請再次啟用加密。"
+    },
+    "errorDialog": {
+      "title": "@:general.error"
+    },
+    "favoriteDialog": {
+      "title": "最愛",
+      "noFavorites": "還沒有最愛的裝置。",
+      "addFavorite": "新增"
+    },
+    "favoriteDeleteDialog": {
+      "title": "從最愛中刪除",
+      "content": "您確定要從最愛中刪除「{name}」嗎？"
+    },
+    "favoriteEditDialog": {
+      "titleAdd": "新增至最愛",
+      "titleEdit": "設定",
+      "name": "裝置名稱",
+      "auto": "(自動)",
+      "ip": "IP 位址",
+      "port": "連接埠"
+    },
+    "fileInfo": {
+      "title": "檔案資訊",
+      "fileName": "檔案名稱：",
+      "path": "路徑：",
+      "size": "大小：",
+      "sender": "傳送者：",
+      "time": "時間："
+    },
+    "fileNameInput": {
+      "title": "輸入檔案名稱",
+      "original": "原始檔案名稱：{original}"
+    },
+    "historyClearDialog": {
+      "title": "清除歷史記錄",
+      "content": "您真的要刪除整個歷史記錄嗎?"
+    },
+    "localNetworkUnauthorized": {
+      "title": "@:dialogs.noPermission.title",
+      "description": "在未取得掃描區域網路權限的狀況下 LocalSend 無法找到其他裝置，請在設定中授予此權限。",
+      "gotoSettings": "設定"
+    },
+    "messageInput": {
+      "title": "輸入訊息",
+      "multiline": "多行"
+    },
+    "noFiles": {
+      "title": "未選取檔案",
+      "content": "請至少選取一個檔案。"
+    },
+    "noPermission": {
+      "title": "沒有權限",
+      "content": "您尚未授予必要的權限。請在設定中授予權限。"
+    },
+    "notAvailableOnPlatform": {
+      "title": "無法使用",
+      "content": "此功能僅適用於："
+    },
+    "qr": {
+      "title": "QR 圖碼"
+    },
+    "quickActions": {
+      "title": "快速動作",
+      "counter": "計數器",
+      "prefix": "前置詞",
+      "padZero": "字元零填補",
+      "sortBeforeCount": "事先依字母排序",
+      "random": "隨機"
+    },
+    "quickSaveNotice": {
+      "title": "@:general.quickSave",
+      "content": "自動接受所有檔案要求。請注意，區域網路中的所有人都可以傳送檔案給您。"
+    },
+    "quickSaveFromFavoritesNotice": {
+      "title": "@:general.quickSaveFromFavorites",
+      "content": [
+        "自動接受來自您最愛清單中裝置傳送的檔案。"
+      ]
+    },
+    "pin": {
+      "title": "@:web.enterPin"
+    },
+    "sendModeHelp": {
+      "title": "傳送模式",
+      "single": "加入裝置傳送佇列，完成後保留檔案選擇，方便再次傳送。",
+      "multiple": "傳送檔案給多位接收者；檔案傳輸完成後，系統不會清除選取項目。",
+      "link": "未安裝 LocalSend 的接收者可以在瀏覽器中開啟連結，以下載選取的檔案。"
+    },
+    "zoom": {
+      "title": "網址"
+    }
+  },
+  "sanitization": {
+    "empty": "檔案名稱不能為空",
+    "invalid": "檔案名稱包含無效字元"
+  },
+  "tray": {
+    "@info": "Apple Guidelines are very strict about the 'close' wording.",
+    "open": "@:general.open",
+    "close": "退出 LocalSend",
+    "closeWindows": "離開"
+  },
+  "web": {
+    "waiting": "@:sendPage.waiting",
+    "enterPin": "輸入 PIN 碼",
+    "invalidPin": "PIN 碼無效",
+    "tooManyAttempts": "嘗試次數過多，請稍後再試",
+    "rejected": "遭到拒絕",
+    "files": "檔案",
+    "fileName": "檔案名稱",
+    "size": "大小"
+  },
+  "assetPicker": {
+    "@info": "Translations for the Media selection tool for Android and Iphone",
+    "confirm": "確認",
+    "cancel": "取消",
+    "edit": "編輯",
+    "gifIndicator": "GIF",
+    "loadFailed": "載入失敗",
+    "original": "原始檔案",
+    "preview": "預覽",
+    "select": "選取",
+    "emptyList": "空白清單",
+    "unSupportedAssetType": "不支援的檔案類型。",
+    "unableToAccessAll": "無法存取此裝置上的所有檔案",
+    "viewingLimitedAssetsTip": "僅檢視此應用程式可存取的檔案和相簿。",
+    "changeAccessibleLimitedAssets": "按一下以更新可存取的檔案",
+    "accessAllTip": "應用程式僅可存取此裝置的部分檔案，前往系統設定並允許應用程式存取此裝置上的所有媒體。",
+    "goToSystemSettings": "前往系統設定",
+    "accessLimitedAssets": "以受限制的存取繼續",
+    "accessiblePathName": "可存取的檔案",
+    "sTypeAudioLabel": "音樂",
+    "sTypeImageLabel": "圖片",
+    "sTypeVideoLabel": "影片",
+    "sTypeOtherLabel": "其他媒體",
+    "sActionPlayHint": "播放",
+    "sActionPreviewHint": "預覽",
+    "sActionSelectHint": "選取",
+    "sActionSwitchPathLabel": "變更路徑",
+    "sActionUseCameraHint": "使用相機",
+    "sNameDurationLabel": "持續時間",
+    "sUnitAssetCountLabel": "計數"
+  },
+  "networkLabels": {
+    "refresh": "重新整理網路",
+    "noAddress": "尚無可用 IPv4 位址，請連線後重新整理。",
+    "unknownSubnet": "網段未知",
+    "networkMatch": "符合的本機網路（實際路由由作業系統選擇）",
+    "routedOrUnknown": "跨路由 / 網路未知",
+    "overlappingNetworks": "多張網卡符合 · 路由未確認"
+  },
+  "sendQueue": {
+    "singleFileRetryNewTask": "將此檔案作為新傳輸工作重試",
+    "singleFileRetryStarted": "已建立新的傳輸工作，已完成檔案保持不變。",
+    "title": "傳送佇列",
+    "queued": "排隊中",
+    "running": "傳送中",
+    "succeeded": "已完成",
+    "failed": "傳送失敗",
+    "canceled": "已取消",
+    "retry": "重試未完成檔案",
+    "files": "{n} 個檔案",
+    "drop": "放開以傳送給 {device}",
+    "added": "已加入佇列：{device}，{n} 個檔案"
+  },
+  "transferActivity": {
+    "title": "傳輸任務",
+    "send": "傳送",
+    "receive": "接收",
+    "empty": "此方向暫無任務",
+    "preparing": "準備／驗證中",
+    "waiting": "等待確認",
+    "transferring": "傳輸中",
+    "acknowledge": "收起已結束任務提示",
+    "details": "任務詳情",
+    "back": "返回任務清單",
+    "ended": "此任務已結束或已移除。",
+    "files": "檔案清單",
+    "accept": "接收所選檔案",
+    "decline": "拒絕接收",
+    "failed": "失敗",
+    "succeeded": "已完成",
+    "recoveryWaiting": "等待重試",
+    "recoveryRetryable": "可以重試",
+    "recoveryAuthorization": "需要重新授權",
+    "recoverySourceChanged": "來源已變更 · 請新建傳送",
+    "recoveryInvalidResponse": "還原回應未通過驗證",
+    "recoveryRetained": "已保留部分資料",
+    "recoveryRetentionUnknown": "保留狀態未確認",
+    "recoveryNotRetained": "沒有可重用的檢查點"
+  },
+  "webPreview": {
+    "preview": "預覽",
+    "closePreview": "關閉預覽",
+    "downloadOriginal": "下載原始檔案",
+    "previewLoading": "正在載入預覽…",
+    "previewError": "預覽失敗，請下載原始檔案後開啟。",
+    "previewUnsupported": "目前瀏覽器或檔案格式不支援預覽。",
+    "imageZoomIn": "放大",
+    "imageZoomOut": "縮小",
+    "imageFit": "適應視窗",
+    "imageActual": "實際尺寸",
+    "imageView": "圖片預覽",
+    "imageScale": "縮放比例",
+    "imageHint": "拖動平移，雙指或 Ctrl/⌘ + 滾輪縮放。鍵盤：加減、方向鍵，0 適應視窗，1 實際尺寸。"
+  },
+  "webTextPreview": {
+    "encoding": "編碼",
+    "auto": "自動（BOM / UTF-8）",
+    "previous": "上一節",
+    "next": "下一節",
+    "more": "載入更多",
+    "retry": "重新載入預覽",
+    "indexed": "已索引",
+    "lines": "行數",
+    "section": "節",
+    "complete": "檔案結尾",
+    "loading": "正在載入文字…",
+    "view": "文字預覽",
+    "range": "此資料來源不支援按範圍讀取文字，請下載原始檔案。",
+    "changed": "分享檔案已變更，請重新開啟分享後預覽。",
+    "decode": "文字編碼不符，請選擇其他編碼或下載原始檔案。",
+    "failed": "文字載入失敗，請檢查連線後重新載入預覽。",
+    "unsupported": "此瀏覽器不支援串流文字預覽。",
+    "hint": "僅渲染可見行與少量緩衝行，自動換行讓長文字自然適應頁面寬度。",
+    "wrap": "自動換行",
+    "numbers": "顯示行號",
+    "search": "搜尋內文",
+    "searchScope": "搜尋範圍",
+    "loaded": "已索引內容",
+    "full": "整個檔案",
+    "find": "尋找",
+    "stop": "停止搜尋",
+    "caseSensitive": "區分大小寫",
+    "previousMatch": "上一個符合項目",
+    "nextMatch": "下一個符合項目",
+    "matches": "符合項目",
+    "scanned": "已掃描",
+    "searching": "正在搜尋…",
+    "searchDone": "搜尋完成",
+    "searchStopped": "搜尋已停止",
+    "noMatches": "已掃描內容中沒有符合項目",
+    "searchLimit": "已顯示前 1,000 個符合項目，請縮小關鍵字範圍繼續搜尋。",
+    "clearSearch": "清除搜尋",
+    "rendered": "閱讀檢視",
+    "source": "原始文字",
+    "markdownHint": "Markdown 搜尋涵蓋原始文字內文，結果定位到準確的原始文字位置。",
+    "markdownLimit": "按小節延遲載入完整語法區塊；參照連結隨定義被索引而更新。",
+    "markdownFailed": "此文件暫未完成排版，可繼續使用原始文字閱讀器。",
+    "diagramQueued": "圖表 · 接近視口時載入",
+    "diagramLoading": "正在繪製圖表…",
+    "diagramReady": "圖表",
+    "diagramFailed": "此圖表暫未繪製成功，可查看原始碼或重試。",
+    "diagramLimit": "此圖表超出預覽限制，仍可查看原始碼。",
+    "diagramSource": "原始碼",
+    "diagramRender": "圖表",
+    "diagramRetry": "重試",
+    "diagramFit": "適應",
+    "diagramZoomIn": "放大",
+    "diagramZoomOut": "縮小",
+    "diagramExpand": "全部展開",
+    "diagramCollapse": "摺疊分支",
+    "diagramHint": "拖動平移；使用按鈕或 Ctrl/⌘ + 滾輪縮放。",
+    "diagramUnavailable": "目前瀏覽器未啟用圖表繪製，已保留原始碼。",
+    "markdownStreaming": "按小節延遲載入完整語法區塊；參照連結隨定義被索引而更新。",
+    "markdownParagraphSource": "超大段落 · 以閱讀視窗展示完整原始文字，跨視窗行內語法保持原文。",
+    "markdownBlockLimit": "目前語法區塊超出閱讀預算，請切換原始文字繼續查看完整內容。",
+    "markdownScan": "索引參照定義",
+    "markdownStop": "停止索引",
+    "markdownSourceWindow": "超大語法區塊 · 以閱讀視窗展示完整原始文字，跨視窗的格式保持原文。"
+  },
+  "transportSecurity": {
+    "title": "HTTPS 傳輸（TLS）",
+    "description": "保護裝置間傳輸連線上的資料，不會加密儲存的檔案，也不會設定檔案密碼。",
+    "certificate": "LegnaSend 使用本機產生的自簽署 TLS 憑證，瀏覽器可能顯示此裝置的憑證信任提示。",
+    "httpTitle": "正在使用 HTTP 傳輸",
+    "httpDescription": "HTTPS 傳輸已關閉，目前使用 HTTP，傳輸連線不受 TLS 保護。啟用「HTTPS 傳輸（TLS）」可保護連線，不會變更儲存的檔案。",
+    "discoveryHint": "請檢查網路是否可達、探索連接埠與多播設定，以及 HTTP/HTTPS 組態。探索失敗時可嘗試目標裝置的 IP 和實際服務連接埠。",
+    "connectionHint": "請檢查目標 IP 和實際服務連接埠是否可達，以及 HTTP/HTTPS 組態是否相容。Wi-Fi 存取點隔離或防火牆可能阻止裝置間通訊。",
+    "updateFailed": "傳輸協定切換失敗，請檢查實際服務狀態後重試。",
+    "peerProtocol": "對端 · {protocol}"
+  },
+  "transferSpeed": {
+    "current": "目前速度：{speed}",
+    "average": "平均速度：{speed}",
+    "measuring": "正在測速…"
+  },
+  "transferNavigation": {
+    "hide": "收起面板",
+    "keepRunning": "返回和收起不會停止傳輸。",
+    "sharing": "連結分享中",
+    "keepSharing": "返回只隱藏頁面，分享繼續執行；可從分享標記重新開啟。",
+    "stopSharing": "停止連結分享",
+    "stopTitle": "停止連結分享？",
+    "stopBody": "僅結束臨時連結的下載工作階段並停止新的網頁上傳；目錄工作區、監聽服務、API 和已核准的原生傳輸繼續運作。",
+    "restartTitle": "重新啟動分享服務？",
+    "restartBody": "切換 HTTP／HTTPS 會重新啟動共用監聽器，中斷其活動連線；工作區定義和臨時檔案選擇會保留。",
+    "unknown": "目前沒有分享",
+    "replaceTitle": "更新臨時共享存取？",
+    "replaceBody": "僅結束本臨時共享的下載工作階段，目錄工作區和原生傳輸繼續運作。"
+  },
+  "networkEnvironment": {
+    "vpn": "系統 VPN",
+    "tunnel": "VPN／隧道介面",
+    "local": "本機介面",
+    "proxy": "系統代理",
+    "title": "網路路徑",
+    "unknown": "狀態未知",
+    "detected": "已偵測到",
+    "notDetected": "未偵測到",
+    "routeHint": "本機位址與 VPN／隧道位址分別標記；實際可達性取決於兩端系統路由及 VPN 規則。原生裝置請求忽略應用層 HTTP 代理，但不繞過系統 VPN 路由。網卡名稱僅為介面線索，尚未驗證強制直連。"
+  },
+  "linkWorkspace": {
+    "title": "連結工作區",
+    "sharedCount": "已分享檔案：{n}",
+    "allowUpload": "允許網頁上傳",
+    "allowUploadHint": "僅控制新的網頁請求，已批准的傳輸繼續；新請求仍遵循用戶端的接收確認設定。",
+    "autoReceive": "自動接收網頁上傳",
+    "autoDownload": "自動批准網頁下載",
+    "appendHint": "加入的檔案保留在目前工作區，原有檔案連結及已批准的工作階段繼續有效。"
+  },
+  "integrationApi": {
+    "title": "API",
+    "subtitle": "本機程式整合，沿用目前分享連接埠。",
+    "enable": "啟用 API",
+    "requireKey": "要求 API 金鑰",
+    "isolation": "API 開關不會停止原生傳送或網頁工作區。",
+    "live": "已生效",
+    "off": "已停用",
+    "waiting": "已儲存 · 等待服務",
+    "syncing": "正在套用策略…",
+    "previous": "舊策略可能仍在生效",
+    "failed": "儲存或套用失敗，請在下方重試。",
+    "corrupt": "API 設定需要復原。原資料已保留，可重試讀取或明確重設。",
+    "reset": "重設 API 設定",
+    "resetHint": "刪除全部 API 金鑰並恢復預設停用狀態，保留原生傳送及工作區檔案。",
+    "refresh": "重新整理狀態",
+    "startService": "啟動接收服務",
+    "addresses": "服務位址",
+    "addressHint": "使用實際位址；HTTPS 需信任裝置憑證。網路標籤描述介面，不代表已驗證繞過 VPN。",
+    "policy": "存取與配額",
+    "editPolicy": "編輯策略",
+    "fixedWindow": "秒與分鐘固定視窗同時約束；並行是活動回應數，不是連線數或下載頻寬。0 僅取消該項限額，伺服器資源上限仍生效。",
+    "global": "全域",
+    "perKey": "每個金鑰",
+    "anonymous": "匿名來源",
+    "second": "請求／秒",
+    "minute": "請求／分鐘",
+    "concurrent": "活動回應",
+    "origins": "允許的跨域來源",
+    "originsHint": "每行一個標準 http(s) 來源，不含路徑；同源呼叫仍允許。",
+    "anonymousHint": "不帶金鑰時僅可讀取匿名範圍內可見、未保護的工作區。隱藏／密碼工作區及請求歷史不開放，錯誤金鑰不會降級匿名。",
+    "allowAnonymous": "允許匿名存取？",
+    "disableHint": "只停止整合 API 回應；其他分享及原 LocalSend 傳送繼續。",
+    "keys": "API 金鑰",
+    "createKey": "產生金鑰",
+    "keyName": "金鑰名稱",
+    "empty": "尚未有 API 金鑰。",
+    "once": "現在儲存此金鑰",
+    "onceHint": "明文僅在此顯示，不儲存；可重複呼叫，直到撤銷或到期。關閉不會自動複製。",
+    "revoke": "撤銷金鑰",
+    "revokeHint": "撤銷此金鑰並結束其活動 API 回應；其他金鑰及原生傳送繼續。",
+    "pendingKey": "已儲存 · 尚未確認生效",
+    "removedLive": "已移除的金鑰可能仍生效，需重試套用待處理策略。",
+    "permissions": "動作權限",
+    "scopeService": "服務狀態與契約",
+    "scopeWorkspaces": "工作區描述",
+    "scopeFiles": "檔案清單與下載",
+    "scopeRequests": "全域脫敏請求歷史",
+    "allWorkspaces": "全部現有及未來工作區",
+    "selectWorkspaces": "工作區範圍",
+    "grantHint": "僅授予所需動作及工作區。上傳與工作區管理是獨立明確授權；既有及預設密鑰維持唯讀。",
+    "expiry": "到期時間",
+    "days30": "30 天",
+    "days90": "90 天",
+    "never": "不過期",
+    "expired": "已到期",
+    "invalid": "請檢查名稱、配額、來源及所選權限／工作區。",
+    "copy": "複製",
+    "copied": "已複製",
+    "close": "完成",
+    "more": "下一頁金鑰",
+    "previousPage": "上一頁金鑰",
+    "readOnly": "讀取與明確授權寫入",
+    "nextStage": "明確授權的金鑰可上傳、管理本機核准來源的工作區，以及探索裝置和控制自身 API 建立的傳送工作；通用快取／設定介面及無關原生工作控制仍待開發。",
+    "copyFailed": "複製失敗，可選取文字手動複製。",
+    "updated": "更新於",
+    "unconfirmed": "等待服務確認",
+    "fallback": "API text is shown in English.",
+    "documentation": "開發文件",
+    "directoryContract": "目錄介面契約",
+    "documentationHint": "離線查閱：設定、權限、各介面、參數、錯誤、重試，以及 cURL／JavaScript／Python 範例。",
+    "scopeUpload": "上傳檔案（明確寫入權限）",
+    "scopeManage": "管理工作區資訊與分享狀態"
+  },
+  "apiExplorer": {
+    "title": "API 介面瀏覽與測試",
+    "search": "搜尋介面或說明",
+    "execute": "執行請求",
+    "hint": "請求使用實際本機監聽及其鑑權／配額：讀取最多 12 秒，工作區管理 35 秒，上傳依檔案大小設定預算。請求及憑據不儲存。",
+    "all": "全部",
+    "service": "服務",
+    "workspaces": "工作區",
+    "files": "檔案",
+    "history": "請求記錄",
+    "noResults": "沒有符合的介面",
+    "readOnly": "唯讀測試",
+    "token": "API 金鑰（可留空）",
+    "tokenHint": "貼上已產生金鑰，或留空測試匿名存取。僅在此頁面開啟時保留，不寫入呼叫範例。",
+    "clear": "清除憑據",
+    "running": "請求中…",
+    "reset": "重設參數",
+    "invalid": "請檢查必填欄位和參數範圍。",
+    "failed": "請求失敗或服務已變更，請對目前監聽器重試。",
+    "headers": "回應標頭",
+    "response": "回應內容",
+    "truncated": "回應最多顯示 256 KiB，二進位樣本最多 4 KiB；這不是完整下載。",
+    "binary": "十六進位檔案樣本，不會儲存檔案；預設 Range 為 bytes=0-4095。",
+    "examples": "呼叫範例",
+    "responses": "回應契約",
+    "schemas": "資料模型"
+  },
+  "sharedFileManagement": {
+    "title": "分享檔案",
+    "hint": "撤下或替換檔案，不關閉分享；其他檔案與接收工作繼續。",
+    "search": "搜尋分享檔案",
+    "withdraw": "撤下檔案",
+    "replace": "替換檔案",
+    "confirmBody": "僅停止此檔案的待處理與活動下載。替換檔案會產生新連結，舊下載不會續傳到新內容；不會刪除來源檔案。",
+    "selectOne": "請選擇一個替換檔案。",
+    "changed": "分享或檔案已變更，請重新開啟檔案管理後再試。",
+    "applied": "分享檔案已更新。",
+    "failed": "更新未確認，保留原清單；請重試或重新開啟分享。",
+    "empty": "沒有符合的分享檔案。",
+    "previous": "上一頁",
+    "next": "下一頁"
+  }
+}

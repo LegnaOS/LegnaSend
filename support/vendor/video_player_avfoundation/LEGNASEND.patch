@@ -1,0 +1,35 @@
+--- a/darwin/video_player_avfoundation/Sources/video_player_avfoundation/NativeVideoViewFactory.swift
++++ b/darwin/video_player_avfoundation/Sources/video_player_avfoundation/NativeVideoViewFactory.swift
+@@ -50,9 +50,15 @@
+     }
+   #endif
+ 
+-  func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
+-    return VideoPlayerPluginMessagesPigeonCodec.shared
+-  }
++  #if os(macOS)
++    func createArgsCodec() -> (FlutterMessageCodec & NSObjectProtocol)? {
++      return VideoPlayerPluginMessagesPigeonCodec.shared
++    }
++  #else
++    func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
++      return VideoPlayerPluginMessagesPigeonCodec.shared
++    }
++  #endif
+ 
+   /// Creates a native video view for the given arguments.
+   private func createNativeVideoView(
+--- a/darwin/video_player_avfoundation/Sources/video_player_avfoundation_objc/include/video_player_avfoundation_objc/FVPAVFactory.h
++++ b/darwin/video_player_avfoundation/Sources/video_player_avfoundation_objc/include/video_player_avfoundation_objc/FVPAVFactory.h
+@@ -36,7 +36,10 @@
+ 
+ /// Wraps the underlying asset's statusOfValueForKey:error: method.
+ - (AVKeyValueStatus)statusOfValueForKey:(NSString *)key
+-                                  error:(NSError *_Nullable *_Nullable)outError;
++                                  error:(NSError *_Nullable *_Nullable)outError
++    // Match AVFoundation's Swift-only availability; Objective-C still uses this API.
++    AVF_DEPRECATED_FOR_SWIFT_ONLY("Use AVAsset async property loading from Swift", macos(10.7, 13.0),
++                                 ios(4.0, 16.0), tvos(9.0, 16.0), watchos(1.0, 9.0), visionos(1.0, 1.0));
+ 
+ /// Wraps the underlying asset's loadValuesAsynchronouslyForKeys:completionHandler: method.
+ - (void)loadValuesAsynchronouslyForKeys:(NSArray<NSString *> *)keys

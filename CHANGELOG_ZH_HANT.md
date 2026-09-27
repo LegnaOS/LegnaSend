@@ -1,0 +1,1 @@
+app/assets/CHANGELOG_ZH_HANT.md

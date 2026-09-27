@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head><script src="/assets/theme.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegnaSend</title>
+    <link rel="stylesheet" href="/assets/web-ui.css">
+    <link rel="stylesheet" href="/assets/persistent-downloads.css">
+<link rel="stylesheet" href="/assets/media-preview.css"><link rel="stylesheet" href="/assets/diagram-preview.css"><link rel="stylesheet" href="/assets/image-preview.css"><link rel="stylesheet" href="/assets/theme.css"></head>
+<body>
+<noscript>
+    LegnaSend requires JavaScript, which is currently disabled. Please enable it and try again.
+</noscript>
+
+<header class="app-header"><div class="header-inner"><div class="brand"><span class="brand-mark" data-icon="send"></span>LegnaSend</div><div class="header-tools"><span data-theme-control></span><span id="connection-badge" class="connection-badge"></span><select id="web-language" aria-label="Language"><option value="en">English</option><option value="zh-CN">简体中文</option><option value="zh-TW">繁體中文</option><option value="zh-HK">繁體中文（香港）</option></select></div></div></header>
+<main class="web-shell">
+  <div class="page-heading"><div><div class="eyebrow" data-ui="workspace"></div><h1 id="page-title"></h1><p id="page-subtitle"></p></div></div>
+  <div class="status-line"><span class="busy-dot"></span><p id="status-text" role="status" aria-live="polite"></p><button id="request-retry" type="button" hidden data-ui="retry"></button></div>
+  <button id="workspace-refresh" type="button" aria-live="polite" hidden></button><div id="file-list"></div>
+  <section id="download-tasks" hidden></section>
+<footer class="page-footer"><span data-ui="footer">LegnaSend · 1.0.0</span><span data-ui="local"></span></footer></main>
+<div id="preview-overlay">
+    <section class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="preview-title" tabindex="-1">
+        <div class="preview-header"><h2 id="preview-title"></h2><button id="preview-close" type="button"></button></div>
+        <p id="preview-status" role="status" aria-live="polite"></p>
+        <div id="preview-support" class="preview-support"></div>
+        <div id="preview-content"></div>
+        <div class="preview-footer"><button id="preview-retry" type="button" hidden></button><a id="preview-download"></a></div>
+    </section>
+</div>
+
+<script src="/assets/web-i18n.js"></script>
+<script src="/assets/web-ui.js"></script>
+<script src="/assets/sha256.js"></script>
+<script src="/assets/ls-cache.js"></script>
+<script src="/assets/download-registry.js"></script>
+<script src="/assets/persistent-downloads.js"></script>
+<script src="/assets/batch-downloads.js"></script><script src="/assets/persistent-download-ui.js"></script>
+<script src="/assets/preview-support.js"></script><script src="/assets/media-preview.js"></script>
+<script src="/assets/text-search.js"></script>
+<script src="/assets/diagram-preview.js"></script><script src="/assets/image-source.js"></script><script src="/assets/image-preview.js"></script>
+<script src="/assets/markdown-preview.js"></script><script src="/assets/markdown-stream.js"></script>
+<script src="/assets/text-preview.js"></script>
+<script>
+    // Download links remain the fallback; media previews progressively enhance modern browsers.
+
+    var BASE_URL = '/api/localsend/v2';
+
+    var i18n = {};
+    var serverI18n = {};
+    var uiLabels = {};
+    var activePin = null;
+    var activeFileList = null;
+    var activeDownloads = null;
+    var restorePreviewBackground = null;
+    var activeFileVersion = null;
+    var sessionId = sessionStorage.getItem('sessionId');
+    var queryParams = location.search.slice(1).split('&');
+    var queryPin = null;
+
+    // Parse query parameters manually for IE
+    for (var i = 0; i < queryParams.length; i++) {
+      var pair = queryParams[i].split('=');
+      if (pair[0] === 'pin') {
+        queryPin = decodeURIComponent(pair[1]);
+        break;
+      }
+    }
+
+    function firstRequestFiles() {
+      document.getElementById('status-text').innerText = i18n.waiting || '…';
+      document.getElementById('request-retry').hidden = true;
+      var initialUrl = BASE_URL + '/prepare-download';
+
+      if (sessionId) {
+        initialUrl += '?sessionId=' + encodeURIComponent(sessionId);
+        if (queryPin) {
+          initialUrl += '&pin=' + encodeURIComponent(queryPin);
+        }
+      } else if (queryPin) {
+        initialUrl += '?pin=' + encodeURIComponent(queryPin);
+      }
+
+      makeRequest(initialUrl, 'POST', function (response) {
+        if (response.status === 401) {
+          pinRequestFiles(true);
+          return;
+        }
+
+        if (response.status === 403) {
+          showRequestError(i18n.rejected);
+          return;
+        }
+
+        if (response.status === 429) {
+          showRequestError(i18n.tooManyAttempts);
+          return;
+        }
+
+        if (response.status !== 200) {
+          showRequestError(uiLabels.error + ' (' + response.status + ')');
+          return;
+        }
+
+        handleSuccess(response);
+      });
+    }
+
+    function showRequestError(text) {
+      document.getElementById('status-text').textContent = text;
+      document.getElementById('request-retry').hidden = false;
+    }
+    function pinRequestFiles(firstAttempt) {
+      if (activePin) activePin.close();
+      activePin = window.LegnaWebUI.pin({
+        labels: uiLabels, error: firstAttempt ? '' : i18n.invalidPin,
+        verify: async function (pin, signal) {
+          var response = await fetch(BASE_URL + '/prepare-download?pin=' + encodeURIComponent(pin), { method: 'POST', signal: signal, cache: 'no-store' });
+          if (response.status === 401) return { ok: false, error: i18n.invalidPin };
+          if (response.status === 429) return { ok: false, error: i18n.tooManyAttempts, blocked: true };
+          return { ok: true, response: { status: response.status, responseText: await response.text(), fileVersion: response.headers.get('x-legnasend-file-version') } };
+        },
+        onSuccess: function (result) {
+          activePin = null;
+          if (result.response.status === 200) handleSuccess(result.response);
+          else showRequestError(result.response.status === 403 ? i18n.rejected : uiLabels.error + ' (' + result.response.status + ')');
+        },
+        onCancel: function () { activePin = null; showRequestError(uiLabels.cancelled); }
+      });
+    }
+
+    function makeRequest(url, method, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open(method, url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          callback(xhr);
+        }
+      };
+      xhr.send();
+    }
+
+    function fetchI18n(then) {
+      makeRequest('/i18n.json', 'GET', function (response) {
+        if (response.status === 200) {
+          try { serverI18n = JSON.parse(response.responseText); } catch (_) { serverI18n = {}; }
+        }
+        i18n = window.LegnaWebUI.localize(serverI18n);
+        uiLabels = window.LegnaWebUI.apply('download', i18n.webUi);
+        then();
+      });
+    }
+
+    function init() {
+      document.getElementById('request-retry').onclick = firstRequestFiles;
+      window.LegnaWebUI.onLanguageChange = function () {
+        var previous = Object.assign({}, i18n, uiLabels);
+        i18n = window.LegnaWebUI.localize(serverI18n); uiLabels = window.LegnaWebUI.apply('download', i18n.webUi);
+        window.LegnaWebUI.translateStatus(document.getElementById('status-text'), previous, Object.assign({}, i18n, uiLabels));
+        if (activeDownloads) activeDownloads.setLabels(uiLabels);
+        document.getElementById('workspace-refresh').textContent = uiLabels.refreshSharedFiles;
+        if (activeFileList) handleFilesDisplay(previewFiles, sessionId, activeFileList.state());
+      };
+      var refresh = document.getElementById('workspace-refresh');
+      refresh.onclick = function () { refresh.hidden = true; firstRequestFiles(); };
+      window.addEventListener('message', function (event) {
+        if (event.origin !== location.origin || event.source !== window.parent || !event.data) return;
+        if (event.data.type === 'legna-workspace' && event.data.status && activeFileList && (event.data.status.fileCount !== Object.keys(previewFiles).length || activeFileVersion && event.data.status.fileVersion && event.data.status.fileVersion !== activeFileVersion)) {
+          refresh.hidden = false; refresh.textContent = uiLabels.refreshSharedFiles;
+        }
+      });
+      fetchI18n(firstRequestFiles);
+    }
+
+    function handleSuccess(response) {
+      var data = JSON.parse(response.responseText);
+      var files = data.files;
+      activeFileVersion = response.fileVersion || (response.getResponseHeader && response.getResponseHeader('x-legnasend-file-version')) || null;
+      sessionId = data.sessionId;
+      sessionStorage.setItem('sessionId', sessionId);
+
+      document.getElementById('status-text').textContent = '';
+      document.getElementById('request-retry').hidden = true;
+
+      // Handling file display
+      document.getElementById('workspace-refresh').hidden = true;
+      handleFilesDisplay(files, sessionId, activeFileList && activeFileList.state());
+    }
+
+    function handleFilesDisplay(files, sessionId, listState) {
+      closePreview();
+      if (activeFileList) activeFileList.close();
+      previewFiles = files;
+      if (!activeDownloads && window.LegnaPersistentDownloadUI) activeDownloads = window.LegnaPersistentDownloadUI.mount({ container: document.getElementById('download-tasks'), labels: uiLabels, onDestinationChange:function(value){if(activeFileList)activeFileList.setDestination(value);} });
+      if (activeDownloads) activeDownloads.attachSession(sessionId, files);
+      activeFileList = window.LegnaWebUI.mountFiles({ container: document.getElementById('file-list'), files: files,
+        labels: uiLabels, directoryMode:activeDownloads&&activeDownloads.usesDirectory(), state: listState, previewKind: previewKind, downloadUrl: downloadUrl, onPreview: showPreview,
+        onDownload: function(id){return activeDownloads ? activeDownloads.downloadSource({kind:'web',fileId:id,name:files[id].fileName,size:files[id].size,sha256:files[id].sha256||null}) : false;},
+        onBatch: activeDownloads ? function(ids){var fields=[['sessionId',sessionId]];if(ids)ids.forEach(function(id){fields.push(['fileId',id]);});activeDownloads.downloadBatch({kind:'web',ids:ids||Object.keys(files),name:'LegnaSend'},'/api/legnasend/v1/web/archive',fields);} : null });
+    }
+
+    var previewFiles = {};
+    var activeMedia = null;
+    var previewRequest = null;
+    var activeMediaController = null;
+    var activeImageView = null;
+    var activeText = null;
+    var previewGeneration = 0;
+    var previousFocus = null;
+    var previousOverflow = '';
+    var previewLabels = {
+      preview: 'Preview', closePreview: 'Close preview', downloadOriginal: 'Download original',
+      previewLoading: 'Loading preview…', previewError: 'Preview failed. Download the original file to open it.',
+      previewUnsupported: 'This browser or file format does not support preview.'
+    };
+    function label(key) { return i18n[key] || previewLabels[key]; }
+    function downloadUrl(id) { return BASE_URL + '/download?sessionId=' + encodeURIComponent(sessionId) + '&fileId=' + encodeURIComponent(id); }
+    function previewKind(mime, name) {
+      var textMime = String(mime || '').split(';')[0].trim().toLowerCase();
+      if (textMime === 'text/markdown' || textMime === 'text/x-markdown' || /\.(md|markdown)$/i.test(name || '') && (textMime === 'text/plain' || textMime === 'application/octet-stream')) return 'markdown';
+      if (textMime === 'text/plain' || textMime === 'application/octet-stream' && /\.(txt|log)$/i.test(name || '')) return 'text';
+      if (/^image\/(png|jpeg|gif|webp|avif|bmp)$/.test(mime)) return 'img';
+      if (/^video\/(mp4|webm|ogg|quicktime)$/.test(mime)) return 'video';
+      if (/^audio\/(mpeg|mp4|wav|x-wav|ogg|webm|flac|aac)$/.test(mime)) return 'audio';
+      return null;
+    }
+    function closePreview() {
+      previewGeneration++;
+      if (previewRequest) { previewRequest.abort(); previewRequest = null; }
+      document.getElementById('preview-retry').hidden = true;
+      if (restorePreviewBackground) { restorePreviewBackground(); restorePreviewBackground = null; }
+      if (activeImageView) { activeImageView.close(); activeImageView = null; }
+      if (activeText) { activeText.close(); activeText = null; }
+      if (activeMediaController) { activeMediaController.close(); activeMediaController = null; activeMedia = null; }
+      if (activeMedia) {
+        activeMedia.onload = activeMedia.onloadedmetadata = activeMedia.onerror = null;
+        if (activeMedia.pause) activeMedia.pause();
+        activeMedia.removeAttribute('src');
+        if (activeMedia.load) activeMedia.load();
+        activeMedia = null;
+      }
+      document.getElementById('preview-content').innerHTML = '';
+      var overlay = document.getElementById('preview-overlay');
+      if (overlay.className === 'is-open') {
+        overlay.className = '';
+        document.body.style.overflow = previousOverflow;
+        if (previousFocus && previousFocus.focus) previousFocus.focus();
+      }
+      previousFocus = null;
+    }
+    async function showPreview(id, trigger) {
+      closePreview();
+      var file = previewFiles[id];
+      if (!file) return;
+      var kind = previewKind(file.fileType, file.fileName);
+      var generation = previewGeneration;
+      previousFocus = trigger || document.activeElement;
+      previousOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      if (window.LegnaWebUI) restorePreviewBackground = window.LegnaWebUI.backgroundInert(true);
+      document.getElementById('preview-title').textContent = file.fileName;
+      document.getElementById('preview-close').textContent = label('closePreview');
+      var download = document.getElementById('preview-download');
+      download.textContent = label('downloadOriginal');
+      download.href = downloadUrl(id);
+      download.onclick = function(event){if(activeDownloads && !event.ctrlKey && !event.metaKey && activeDownloads.downloadSource({kind:'web',fileId:id,name:file.fileName,size:file.size,sha256:file.sha256||null}))event.preventDefault();};
+      if (window.LegnaPreviewSupport) window.LegnaPreviewSupport.mount(document.getElementById('preview-support'), uiLabels);
+      var status = document.getElementById('preview-status');
+      status.textContent = label('previewLoading');
+      document.getElementById('preview-overlay').className = 'is-open';
+      document.getElementById('preview-close').focus();
+      if (!kind) { status.textContent = label('previewUnsupported'); return; }
+      if (kind === 'text' || kind === 'markdown') {
+        if (!window.LegnaTextPreview) { status.textContent = label('previewUnsupported'); return; }
+        activeText = window.LegnaTextPreview.mount({ container: document.getElementById('preview-content'), status: status,
+          url: downloadUrl(id) + '&preview=1', size: file.size, markdown: kind === 'markdown', labels: Object.assign({}, uiLabels, i18n.textPreview) });
+        return;
+      }
+      var retry = document.getElementById('preview-retry');
+      retry.textContent = uiLabels.mediaRetry || uiLabels.retry || 'Retry preview';
+      retry.onclick = function () { return showPreview(id, trigger); };
+      var source = downloadUrl(id) + '&preview=1';
+      var abort = previewRequest = new AbortController();
+      var deadline = setTimeout(function () { abort.abort(); }, 8000);
+      try {
+        if (kind === 'img') {
+          if (!window.LegnaImageSource) throw new Error('image-inspect');
+          source = (await window.LegnaImageSource.inspect(source, {size: file.size, signal: abort.signal})).url;
+        } else {
+          var check = await fetch(source, {method: 'HEAD', credentials: 'same-origin', cache: 'no-store', redirect: 'error', signal: abort.signal});
+          if (!check.ok || Number(check.headers.get('Content-Length')) !== file.size) { var changed = new Error('changed'); changed.status = check.status; throw changed; }
+          var tag = check.headers.get('ETag');
+          if (!/^"[a-f0-9]{64}"$/i.test(tag || '')) throw new Error('changed');
+          var pinned = new URL(source, location.href); pinned.searchParams.set('version', tag); source = pinned.pathname + pinned.search;
+        }
+      } catch (issue) {
+        if (generation !== previewGeneration) return;
+        var code = issue.code || issue.message;
+        status.textContent = code === 'image-budget' ? uiLabels.imageBudgetExceeded : code === 'image-inspect' ? uiLabels.imageInspectUnsupported :
+          [401,404,409,410,412].indexOf(issue.status) >= 0 || code === 'changed' ? uiLabels.previewSourceChanged : label('previewError');
+        if (!status.textContent) status.textContent = label('previewError');
+        retry.hidden = false; return;
+      } finally { clearTimeout(deadline); if (previewRequest === abort) previewRequest = null; }
+      if (generation !== previewGeneration) return;
+      var media = document.createElement(kind);
+      activeMedia = media;
+      if (kind !== 'img') {
+        if (!media.canPlayType || !media.canPlayType(file.fileType)) { status.textContent = label('previewUnsupported'); return; }
+        media.controls = true;
+        media.preload = 'metadata';
+        media.playsInline = true;
+        media.setAttribute('playsinline', '');
+      } else { media.alt = file.fileName; }
+      function failedMedia() {
+        if (generation !== previewGeneration) return;
+        retry.hidden = false;
+        status.textContent = label('previewError');
+        if (activeMediaController) { activeMediaController.close(); activeMediaController = null; }
+        media.onload = media.onloadedmetadata = media.onerror = null;
+        if (activeImageView) { activeImageView.close(); activeImageView = null; }
+        if (media.pause) media.pause();
+        media.removeAttribute('src');
+        if (media.load) media.load();
+        activeMedia = null;
+        document.getElementById('preview-content').innerHTML = '';
+      }
+      function ready() {
+        if (generation !== previewGeneration || activeMedia !== media) return;
+        if (activeImageView) activeImageView.ready.then(function () { if (generation === previewGeneration && activeMedia === media) status.textContent = ''; }, failedMedia);
+        else status.textContent = '';
+      }
+      media.onload = media.onloadedmetadata = ready;
+      media.onerror = failedMedia;
+      if (kind === 'img' && window.LegnaImagePreview) activeImageView = window.LegnaImagePreview.mount({container: document.getElementById('preview-content'), image: media, labels: i18n});
+      else if (kind !== 'img' && window.LegnaMediaPreview) {
+        activeMediaController = window.LegnaMediaPreview.mount({container: document.getElementById('preview-content'), media: media, url: source, labels: uiLabels,
+          onElement: function (next) { if (generation === previewGeneration) activeMedia = next; },
+          onReady: function () { if (generation === previewGeneration) status.textContent = ''; }, onError: failedMedia});
+        return;
+      } else document.getElementById('preview-content').appendChild(media);
+      media.src = source;
+    }
+    document.getElementById('preview-close').onclick = closePreview;
+    document.getElementById('preview-overlay').onclick = function (event) {
+      if ((event || window.event).target === this) closePreview();
+    };
+    document.getElementById('preview-overlay').onkeydown = function (event) {
+      if (!event.defaultPrevented && activeText && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'f') {
+        var query = document.querySelector('#preview-content .text-query');
+        if (query && !query.disabled) { event.preventDefault(); query.focus(); query.select(); }
+      }
+      if (event.key === 'Escape' || event.keyCode === 27) { event.preventDefault(); closePreview(); }
+      if (event.key === 'Tab' || event.keyCode === 9) {
+        var first = document.getElementById('preview-close');
+        var last = document.getElementById('preview-download');
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    };
+    if (window.addEventListener) window.addEventListener('pagehide', function (event) {
+      closePreview(); if (activePin) activePin.close(); if (activeFileList) activeFileList.close(); if (activeDownloads) { if (event && event.persisted) activeDownloads.pauseAll(); else activeDownloads.close(); }
+    });
+
+    if (document.addEventListener) document.addEventListener('visibilitychange', function () { if (document.hidden) closePreview(); });
+
+    if (window.addEventListener) window.addEventListener('pageshow', function (event) {
+      if (event.persisted && activeFileList) handleFilesDisplay(previewFiles, sessionId, activeFileList.state());
+    });
+
+    function escapeHtml(text) {
+      if (text === null || text === undefined) {
+        return '';
+      }
+      var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return String(text).replace(/[&<>"']/g, function (m) { return map[m]; });
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024) {
+        return bytes + ' B';
+      } else if (bytes < 1024 * 1024) {
+        return (bytes / 1024).toFixed(1) + ' KB';
+      } else if (bytes < 1024 * 1024 * 1024) {
+        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+      } else {
+        return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+      }
+    }
+
+    function getKeys(obj) {
+      var keys = [];
+      for (var key in obj) {
+        keys.push(key);
+      }
+      return keys;
+    }
+
+    init();
+</script>
+</body>
+</html>

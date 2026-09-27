@@ -1,0 +1,16 @@
+.diagram-block{margin:16px 0;border:1px solid var(--line,#dfe7e1);border-radius:10px;overflow:hidden;background:var(--paper,#fff)}
+.diagram-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line,#dfe7e1)}
+.diagram-name{font-size:12px;margin-right:auto;color:var(--muted,#65776d)}
+.diagram-toolbar button{border:0;border-radius:6px;background:#eaf5ed;color:#286a39;font-size:11px;min-height:30px;padding:4px 7px;cursor:pointer}
+.diagram-toolbar button:disabled{opacity:.4;cursor:default}.diagram-toolbar button:focus-visible{outline:2px solid #54b865;outline-offset:2px}
+.markdown-document .diagram-status,.markdown-document .diagram-hint{padding:0 10px;margin:6px 0;font-size:11px;line-height:1.5;color:var(--muted,#65776d)}
+.diagram-stage{width:100%;background:#f8fbf8;display:flex;align-items:center;justify-content:center;overflow:hidden}.diagram-stage iframe{display:block;width:100%;height:100%;border:0}
+.markdown-document .diagram-source{margin:0;padding:12px;border-radius:0;max-height:300px;overflow:auto;font-size:12px;text-align:left;white-space:pre-wrap}
+.diagram-block[data-state=error] .diagram-status{color:#9b542d}.diagram-block [hidden]{display:none!important}
+@media(max-width:600px){.diagram-toolbar{padding:6px;gap:3px}.diagram-toolbar button{min-height:44px}.diagram-name{flex-basis:100%;margin:0}.diagram-block{margin:12px 0}}
+
+:root[data-theme="dark"] .diagram-block {--paper:#18231b;--line:#354b3b;--muted:#adc0af}
+:root[data-theme="dark"] .diagram-stage {background:#17271d}
+:root[data-theme="dark"] .diagram-toolbar button {background:#234c2b;color:#abe0b3}
+:root[data-theme="dark"] .markdown-document .diagram-source {background:#1d3023}
+:root[data-theme="dark"] .diagram-block[data-state=error] .diagram-status {color:#f0bc95}

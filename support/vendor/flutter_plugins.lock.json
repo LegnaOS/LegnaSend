@@ -1,0 +1,59 @@
+{
+  "verified_date": "2026-09-27",
+  "packages": {
+    "open_file_mac": {
+      "version": "1.1.0",
+      "archive_url": "https://pub.dev/api/archives/open_file_mac-1.1.0.tar.gz",
+      "archive_sha256": "1abe00e65f792b9baa1e15fdf4d44af5e813b1696ac307d71535543122a01e30",
+      "modified_files": [
+        "macos/open_file_mac/Sources/open_file_mac/OpenFilePlugin.swift"
+      ],
+      "license_sha256": "b17467b5e5edee681fba61bf14e5fdd4d6256ef6bc5d5b04bb36e7688896e6d8",
+      "patched_file_sha256": {
+        "macos/open_file_mac/Sources/open_file_mac/OpenFilePlugin.swift": "99c670fbcf702968441cf76633243574e3705db941a5e86eddff915f495d2946"
+      }
+    },
+    "photo_manager": {
+      "version": "3.12.0",
+      "archive_url": "https://pub.dev/api/archives/photo_manager-3.12.0.tar.gz",
+      "archive_sha256": "2d00a785b501bf1e5f6180bbef772846e767be11d45d11112b63092ef54a419e",
+      "modified_files": [
+        "darwin/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h",
+        "darwin/photo_manager/Sources/photo_manager/core/PMManager.m",
+        "darwin/photo_manager.podspec",
+        "ios/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h",
+        "ios/photo_manager/Sources/photo_manager/core/PMManager.m",
+        "ios/photo_manager.podspec",
+        "macos/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h",
+        "macos/photo_manager/Sources/photo_manager/core/PMManager.m",
+        "macos/photo_manager.podspec"
+      ],
+      "license_sha256": "6fab37be1239ec9db5222ed9c63e0e360e187fcffb4fbef5e73f63da4991fc30",
+      "patched_file_sha256": {
+        "darwin/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h": "9e8ba6b4aea4def380c07815ff351d62e89a209d6b184539811b31b537537517",
+        "darwin/photo_manager/Sources/photo_manager/core/PMManager.m": "f263a8add121c3b6b9c381f9b9605c8f9a705d80d7b50e24f41d4f864f407bf2",
+        "darwin/photo_manager.podspec": "84c579edde011af1a9d1425262cd4dacc0ccd49e969b4bf78fd1e15831bcd594",
+        "ios/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h": "9e8ba6b4aea4def380c07815ff351d62e89a209d6b184539811b31b537537517",
+        "ios/photo_manager/Sources/photo_manager/core/PMManager.m": "f263a8add121c3b6b9c381f9b9605c8f9a705d80d7b50e24f41d4f864f407bf2",
+        "ios/photo_manager.podspec": "84c579edde011af1a9d1425262cd4dacc0ccd49e969b4bf78fd1e15831bcd594",
+        "macos/photo_manager/Sources/photo_manager/core/PMAssetPathEntity.h": "9e8ba6b4aea4def380c07815ff351d62e89a209d6b184539811b31b537537517",
+        "macos/photo_manager/Sources/photo_manager/core/PMManager.m": "f263a8add121c3b6b9c381f9b9605c8f9a705d80d7b50e24f41d4f864f407bf2",
+        "macos/photo_manager.podspec": "84c579edde011af1a9d1425262cd4dacc0ccd49e969b4bf78fd1e15831bcd594"
+      }
+    },
+    "video_player_avfoundation": {
+      "version": "2.11.0",
+      "archive_url": "https://pub.dev/api/archives/video_player_avfoundation-2.11.0.tar.gz",
+      "archive_sha256": "c238f5f0a26845cd0bcc2956049b63065a4d3c40ddfc22c3414cd170bef7fff9",
+      "modified_files": [
+        "darwin/video_player_avfoundation/Sources/video_player_avfoundation/NativeVideoViewFactory.swift",
+        "darwin/video_player_avfoundation/Sources/video_player_avfoundation_objc/include/video_player_avfoundation_objc/FVPAVFactory.h"
+      ],
+      "license_sha256": "420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d",
+      "patched_file_sha256": {
+        "darwin/video_player_avfoundation/Sources/video_player_avfoundation/NativeVideoViewFactory.swift": "8a2b99e4c989e88b758325caf817ca1c4e7a645224b0400f3767ec20755b9846",
+        "darwin/video_player_avfoundation/Sources/video_player_avfoundation_objc/include/video_player_avfoundation_objc/FVPAVFactory.h": "0cf5616092783a06b10e51af719dbe2fdb9c65b451150808076ccbc0c1878832"
+      }
+    }
+  }
+}
