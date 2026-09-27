@@ -16,7 +16,7 @@
 #define MyAppPublisher "Legna"
 #define MyAppURL "https://x.legna.cn/ls"
 #define MyAppSupportURL "https://github.com/LegnaOS/LegnaSend/issues"
-#define MyAppExeName "localsend_app.exe"
+#define MyAppExeName "LegnaSend.exe"
 #define MyAppMsixHelper "localsend_msix_helper.msix"
 
 [Setup]
@@ -36,7 +36,7 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir={#ResultDir}
-OutputBaseFilename=localsend
+OutputBaseFilename=LegnaSend
 SetupIconFile={#PayloadDir}\logo.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma

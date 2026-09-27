@@ -40,11 +40,11 @@
     <rescap:Capability Name="runFullTrust" />
   </Capabilities>
   <Applications>
-    <Application Id="localsendapp" Executable="localsend_app.exe" EntryPoint="Windows.FullTrustApplication">
+    <Application Id="localsendapp" Executable="LegnaSend.exe" EntryPoint="Windows.FullTrustApplication">
       <uap:VisualElements AppListEntry="none" BackgroundColor="transparent"
-        DisplayName="LocalSend" Square150x150Logo="Images\Square150x150Logo.png"
+        DisplayName="LegnaSend" Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png" Description="An open source cross-platform alternative to AirDrop">
-        <uap:DefaultTile ShortName="LocalSend" Square310x310Logo="Images\LargeTile.png"
+        <uap:DefaultTile ShortName="LegnaSend" Square310x310Logo="Images\LargeTile.png"
           Square71x71Logo="Images\SmallTile.png" Wide310x150Logo="Images\Wide310x150Logo.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo"/>
@@ -56,11 +56,11 @@
         <uap:LockScreen BadgeLogo="Images\BadgeLogo.png" Notification="badge"/>
       </uap:VisualElements>
       <Extensions>
-        <desktop:Extension Category="windows.startupTask" Executable="localsend_app.exe" EntryPoint="Windows.FullTrustApplication" uap10:Parameters="autostart">
-          <desktop:StartupTask TaskId="localsend" Enabled="false" DisplayName="LocalSend"/>
+        <desktop:Extension Category="windows.startupTask" Executable="LegnaSend.exe" EntryPoint="Windows.FullTrustApplication" uap10:Parameters="autostart">
+          <desktop:StartupTask TaskId="localsend" Enabled="false" DisplayName="LegnaSend"/>
         </desktop:Extension>
         <uap:Extension Category="windows.shareTarget">
-          <uap:ShareTarget Description="Send to Localsend">
+          <uap:ShareTarget Description="Send to LegnaSend">
             <uap:SupportedFileTypes>
               <uap:SupportsAnyFileType />
             </uap:SupportedFileTypes>

@@ -24,6 +24,17 @@ try {
   fvm flutter build windows --release; CheckExit
 } finally { Pop-Location }
 $bundle = "app/build/windows/$Architecture/runner/Release"
+# Inspect the built PE version resource, not only the ZIP filename.
+$executable = Join-Path $bundle 'LegnaSend.exe'
+if (!(Test-Path $executable)) { throw 'LegnaSend.exe is missing' }
+if (Test-Path (Join-Path $bundle 'localsend_app.exe')) { throw 'Stale upstream executable in release bundle' }
+$versionInfo = (Get-Item $executable).VersionInfo
+foreach ($field in @('FileDescription','ProductName','InternalName')) {
+  if ($versionInfo.$field -ne 'LegnaSend') { throw "Unexpected $field in PE resource: $($versionInfo.$field)" }
+}
+if ($versionInfo.OriginalFilename -ne 'LegnaSend.exe' -or $versionInfo.CompanyName -ne 'Legna') {
+  throw 'Unexpected executable filename or publisher in PE resource'
+}
 # Keep Microsoft's existing CRT signatures; do not borrow upstream signing identities.
 $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 $vs = & $vswhere -latest -products '*' -property installationPath
@@ -52,7 +63,7 @@ foreach ($dll in Get-ChildItem "$($crt.FullName)/*.dll") {
   Copy-Item $dll.FullName $bundle
 }
 ConvertTo-Json -InputObject $runtimeProof | Set-Content "$bundle/ci-runtime-provenance.json" -Encoding utf8
-foreach ($file in @('localsend_msix_helper.msix','install_msix_helper.ps1','localsend_app.exe.manifest')) {
+foreach ($file in @('localsend_msix_helper.msix','install_msix_helper.ps1','LegnaSend.exe.manifest')) {
   Remove-Item "$bundle/$file" -ErrorAction SilentlyContinue
 }
 python support/scripts/ci/package_release.py windows $Architecture $bundle

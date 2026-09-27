@@ -25,6 +25,8 @@ Version **1.0.0**. Windows, macOS, Linux, Android and iOS source targets are inc
 
 [GitHub Actions](https://github.com/LegnaOS/LegnaSend/actions/workflows/legnasend_packages.yml) builds Windows x64/ARM64, Linux x64, and Android ARM64/x86_64. Windows bundles are unsigned; Android uses Release compilation with a stable debug signing key for direct installation, not Google Play distribution. Apple packages are managed separately. See the [build guide](docs/BUILD.md) for artifact status and reproduction.
 
+Windows packages launch through `LegnaSend.exe`.
+
 ## Documentation
 
 - [Release notes](app/assets/CHANGELOG.md)

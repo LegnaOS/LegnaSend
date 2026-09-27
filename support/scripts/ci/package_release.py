@@ -35,6 +35,14 @@ def pe_imports(data):
         names.append(data[n:end].decode('ascii').lower())
     raise ValueError('Unterminated import table')
 
+def windows_executable(source):
+    executable = source / 'LegnaSend.exe'
+    if not executable.is_file():
+        raise ValueError('LegnaSend.exe is missing')
+    if (source / 'localsend_app.exe').exists():
+        raise ValueError('Stale upstream executable in release bundle')
+    return executable
+
 def main():
     platform,arch,source=sys.argv[1:];source=Path(source)
     version=re.search(r'^version: (\S+)',Path('app/pubspec.yaml').read_text(),re.M).group(1).split('+')[0]
@@ -43,7 +51,7 @@ def main():
     signing='unsigned'
     if platform in ('windows','linux'):
         if not (source/'data/flutter_assets').is_dir():raise ValueError('Flutter asset bundle missing')
-        bins=list(source.rglob('*.dll'))+[source/'localsend_app.exe'] if platform=='windows' else list(source.rglob('*.so'))+[source/'localsend_app']
+        bins=list(source.rglob('*.dll'))+[windows_executable(source)] if platform=='windows' else list(source.rglob('*.so'))+[source/'localsend_app']
         expected=({'x64':0x8664,'arm64':0xaa64}[arch] if platform=='windows' else 62)
         proofs=json.loads((source/'ci-runtime-provenance.json').read_text(encoding='utf-8-sig')) if platform=='windows' else {}
         for p in bins:

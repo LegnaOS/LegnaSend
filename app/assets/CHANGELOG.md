@@ -5,6 +5,7 @@ Author: Legna
 
 ## Unreleased — 2026-09-28
 
+- Correct the Windows executable name to `LegnaSend.exe`, including file properties, installer launch targets and helper display names.
 - Prefill workspace names and custom paths; selecting a folder supplies its name. Keep edited names unchanged and give form labels enough vertical space.
 - Show complete workspace URLs with explicit Copy buttons. Start a stopped sharing service from the workspace page.
 - Remember macOS workspace folder authorization across app restarts. Older path-only entries can restore access by selecting their folder again.

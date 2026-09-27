@@ -1,10 +1,43 @@
 import importlib.util
 import struct
+import tempfile
 import unittest
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('package_release',Path(__file__).with_name('package_release.py'))
 m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class ArchitectureTests(unittest.TestCase):
+    def test_windows_executable_rejects_stale_upstream_name(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with self.assertRaises(ValueError): m.windows_executable(root)
+            (root / 'LegnaSend.exe').write_bytes(b'fixture')
+            self.assertEqual(m.windows_executable(root), root / 'LegnaSend.exe')
+            (root / 'localsend_app.exe').write_bytes(b'stale')
+            with self.assertRaises(ValueError): m.windows_executable(root)
+
+    def test_windows_branding_contract(self):
+        root = Path(__file__).resolve().parents[3]
+        self.assertIn('set(BINARY_NAME "LegnaSend")', (root / 'app/windows/CMakeLists.txt').read_text())
+        rc = (root / 'app/windows/runner/Runner.rc').read_text()
+        for field in ('InternalName', 'ProductName', 'FileDescription'):
+            self.assertIn(f'"{field}", "LegnaSend"', rc)
+        self.assertIn('"OriginalFilename", "LegnaSend.exe"', rc)
+        self.assertIn('"CompanyName", "Legna"', rc)
+        self.assertIn('Tien Do Nam', rc)  # Preserve legal attribution.
+        self.assertTrue((root / 'app/windows/LegnaSend.exe.manifest').is_file())
+        self.assertFalse((root / 'app/windows/localsend_app.exe.manifest').exists())
+        self.assertIn('publisher="CN=LegnaSend"', (root / 'app/windows/LegnaSend.exe.manifest').read_text())
+        inno = (root / 'support/scripts/compile_windows_exe-inno.iss').read_text()
+        self.assertIn('#define MyAppExeName "LegnaSend.exe"', inno)
+        self.assertIn('OutputBaseFilename=LegnaSend', inno)
+        manifest = (root / 'support/build/msix/content/AppxManifest.xml').read_text()
+        self.assertEqual(manifest.count('Executable="LegnaSend.exe"'), 2)
+        self.assertNotIn('DisplayName="LocalSend"', manifest)
+        self.assertIn('Identity Name="LocalSend.App"', manifest)  # Stable package identity.
+        ci = (root / 'support/scripts/ci/build_windows.ps1').read_text()
+        self.assertIn('$versionInfo = (Get-Item $executable).VersionInfo', ci)
+        self.assertIn('$versionInfo.OriginalFilename', ci)
+
     def test_pe(self):
         for code in [0x8664,0xaa64]:
             b=bytearray(128);b[:2]=b'MZ';struct.pack_into('<I',b,0x3c,64);b[64:68]=b'PE\0\0';struct.pack_into('<H',b,68,code)
