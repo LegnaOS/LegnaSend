@@ -7,13 +7,16 @@ import 'package:localsend_app/util/native/receive_cache_maintenance.dart';
 import 'package:localsend_isolates/rust/api/receive_cache.dart' as native;
 import 'package:refena_flutter/refena_flutter.dart' hide ChangeNotifier;
 
-const receiveCacheRetentionChoices = [0, -1, 1, 7, 30];
-bool validReceiveCacheRetentionDays(int days) => days == -1 || (days >= 0 && days <= 3650);
+// Compatibility encoding: -2 means exactly one hour, not negative days.
+const receiveCacheRetentionOneHour = -2;
+const receiveCacheRetentionChoices = [receiveCacheRetentionOneHour, 0, -1, 1, 7, 30];
+bool validReceiveCacheRetentionDays(int days) => days == receiveCacheRetentionOneHour || days == -1 || (days >= 0 && days <= 3650);
 int parseReceiveCacheRetentionPolicy(String raw) {
   final value = jsonDecode(raw);
   if (value is! Map || value.length != 2) throw const FormatException('Invalid retention policy');
   return switch ((value['mode'], value['days'])) {
     ('immediate', null) => 0,
+    ('hour', null) => receiveCacheRetentionOneHour,
     ('manual', null) => -1,
     ('days', final int days) when days >= 1 && days <= 3650 => days,
     _ => throw const FormatException('Invalid retention policy'),
@@ -32,7 +35,9 @@ class ReceiveCacheRetentionOwner extends Notifier<ReceiveCacheRetentionControlle
     save: (days) => ref.notifier(settingsProvider).setReceiveCacheRetentionDays(days),
     configure: (days) async => parseReceiveCacheRetentionPolicy(
       await native.configureReceiveCacheRetentionPolicy(
-        mode: days == -1
+        mode: days == receiveCacheRetentionOneHour
+            ? 'hour'
+            : days == -1
             ? 'manual'
             : days == 0
             ? 'immediate'
@@ -58,7 +63,7 @@ class ReceiveCacheRetentionController extends ChangeNotifier {
   final Future<int> Function(int) configure;
   final Future<int> Function() readActual;
   final void Function(bool) allowAutomatic;
-  int days = 0;
+  int days = receiveCacheRetentionOneHour;
   bool ready = false, busy = false;
   bool automaticCleanupAllowed = false;
   String? error;

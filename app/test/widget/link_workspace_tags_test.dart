@@ -125,6 +125,9 @@ void main() {
           expect(server.state!.session!.sessionId, 'parallel');
           expect(find.text(t.transferNavigation.restartTitle), findsNothing);
           expect(find.byType(OutlinedButton), findsNothing);
+          await tester.ensureVisible(find.byKey(const ValueKey('share-more-addresses')));
+          await tester.tap(find.byKey(const ValueKey('share-more-addresses')));
+          await tester.pumpAndSettle();
           for (final label in ['Wi-Fi', 'en0', 'en16', 'utun4', '192.168.9.0/24', 'http://192.168.9.4:53318/share']) {
             expect(find.text(label), findsOneWidget);
           }

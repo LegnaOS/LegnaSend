@@ -25,6 +25,31 @@
     for(var i=0;i<ids.length;i++){length+=bytes(JSON.stringify(ids[i]))+(i?1:0);if(length>MAX_BYTES)throw failure('selection-limit');}
     return JSON.stringify({path:path,ids:ids});
   }
+  // Stage a complete current-directory selection before replacing the UI choice.
+  // No file bodies or pages are retained; all limits fail atomically.
+  async function collectAll(options){
+    var selected=options.createSelection(),cursor=null,seen=new Set(),stamp=null,pages=0,scanned=0,
+      now=options.now||Date.now,deadline=now()+(options.timeout||60000);
+    function check(){if(options.signal&&options.signal.aborted)throw failure('selection-cancelled');if(now()>deadline)throw failure('selection-timeout');}
+    do{
+      check();if(++pages>1000)throw failure('selection-limit');
+      var page=await options.page(cursor);check();
+      if(!page||page.generation!==options.generation||page.path!==options.path||(page.filter||'')!==''||typeof page.stamp!=='string'||!page.stamp||
+        !Array.isArray(page.entries)||page.entries.length>1000||stamp!==null&&page.stamp!==stamp)throw failure('selection-changed');
+      stamp=page.stamp;
+      for(var item of page.entries){
+        if(++scanned>MAX_ITEMS)throw failure('selection-limit');
+        if(!item||!validId(item.id)||typeof item.name!=='string'||typeof item.directory!=='boolean')throw failure('selection-changed');
+        if(item.downloadable===false&&!item.directory||options.documents&&!item.directory&&item.downloadable!==true)continue;
+        if(!selected.toggle(item,true,options.validate))throw failure('selection-limit');
+      }
+      cursor=page.cursor;
+      if(cursor!==null&&(typeof cursor!=='string'||!cursor.length||cursor.length>8192||seen.has(cursor)))throw failure('selection-changed');
+      if(cursor)seen.add(cursor);
+      if(options.progress)options.progress(selected.items.size,pages);
+    }while(cursor);
+    check();return selected;
+  }
   async function boundedJson(response){
     if(!response.ok){if(response.body)response.body.cancel().catch(function(){});throw failure('prepare-failed',response.status);}
     var reader=response.body&&response.body.getReader?response.body.getReader():null;if(!reader)throw failure('invalid-receipt');
@@ -46,7 +71,7 @@
     // Admission expiry is not download completion. Keep handed-off cancellation
     // handles until explicit cancellation or a successful replacement handoff.
   };
-  Controller.prototype.snapshot=function(){this.prune();return {preparing:!!this.pending,tickets:Array.from(this.tickets.values()).map(function(t){return {selection:t.selection,selectedEntries:t.selectedEntries,expiresAt:t.expiresAt,handedOff:t.handedOff};})};};
+  Controller.prototype.snapshot=function(){this.prune();return {preparing:!!this.pending,tickets:Array.from(this.tickets.values()).map(function(t){return {startedAt:t.startedAt,selection:t.selection,selectedEntries:t.selectedEntries,expiresAt:t.expiresAt,handedOff:t.handedOff};})};};
   Controller.prototype.notify=function(){if(this.options.onChange)this.options.onChange(this.snapshot());};
   Controller.prototype.revoke=function(selection,bestEffort){
     var self=this,pending=this.revoking.get(selection);
@@ -93,7 +118,7 @@
           url.searchParams.getAll('generation').length!==1||url.searchParams.get('generation')!==String(self.generation)||
           url.searchParams.getAll('selection').length!==1||url.searchParams.get('selection')!==selection||Array.from(url.searchParams.keys()).some(function(k){return k!=='generation'&&k!=='selection';})||
           !Number.isSafeInteger(value.expiresIn)||value.expiresIn<1||value.expiresIn>120||!Number.isSafeInteger(value.selectedEntries)||value.selectedEntries!==op.count)throw failure('invalid-receipt');
-        var ticket={selection:selection,selectedEntries:value.selectedEntries,expiresAt:op.started+value.expiresIn*1000,handedOff:false,url:url.pathname+url.search};
+        var ticket={startedAt:op.started,selection:selection,selectedEntries:value.selectedEntries,expiresAt:op.started+value.expiresIn*1000,handedOff:false,url:url.pathname+url.search};
         if(ticket.expiresAt<=self.now())throw failure('expired');
         // The handoff callback must synchronously click an ordinary download link.
         // It must not fetch or buffer the ZIP and must not claim download success.
@@ -104,6 +129,6 @@
     })();
     op.promise=Promise.race([work,deadline]);this.notify();return op.promise;
   };
-  var api={Selection:Selection,Controller:Controller,body:body,limits:{items:MAX_ITEMS,bytes:MAX_BYTES,tickets:MAX_TICKETS,ttl:120}};
+  var api={collectAll:collectAll,Selection:Selection,Controller:Controller,body:body,limits:{items:MAX_ITEMS,bytes:MAX_BYTES,tickets:MAX_TICKETS,ttl:120}};
   if(typeof module==='object')module.exports=api;root.LegnaDirectoryArchiveSelection=api;
 })(typeof window==='object'?window:globalThis);

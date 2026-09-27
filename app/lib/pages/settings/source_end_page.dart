@@ -30,17 +30,16 @@ class _SourceEndPageState extends State<SourceEndPage> {
               const SizedBox(height: 8),
               Text(labels.state(row['state']! as String)),
               const SizedBox(height: 16),
-              if (cleanup == null)
-                Text(labels.noReceipt)
-              else ...[
+              if (cleanup == null && row['state'] != 'publishedPreserved') Text(labels.noReceipt),
+              if (cleanup != null) ...[
                 Text(labels.removedFiles(cleanup['removedFiles']! as int)),
                 const SizedBox(height: 8),
                 Text(labels.logicalBytes(cleanup['unlinkedBytes']! as int, (cleanup['unlinkedBytes']! as int).asReadableFileSize)),
                 const SizedBox(height: 12),
-                Text(labels.logicalBytesDetail),
-                const SizedBox(height: 16),
-                Text(labels.receiptId, style: Theme.of(context).textTheme.labelMedium),
-                SelectableText(cleanup['receiptId']! as String),
+                ExpansionTile(
+                  title: Text(labels.help),
+                  children: [Text(labels.logicalBytesDetail), SelectableText(cleanup['receiptId']! as String)],
+                ),
               ],
             ],
           ),

@@ -1,17 +1,18 @@
 //! Test-only blocking syscall-completion gates, keyed by unique fixture paths.
 use super::*;
 use crate::http::server::{
-    ServerConfigV2, ServerHandle, start_with_port,
+    start_with_port,
     v2::{PrepareUploadDecisionV2, ServerEventV2},
     web::WebConfig,
+    ServerConfigV2, ServerHandle,
 };
 use crate::http::state::ClientInfo;
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use std::{
     collections::HashMap,
     sync::{
-        Arc, Condvar, Mutex, OnceLock, Weak,
         atomic::{AtomicBool, Ordering},
+        Arc, Condvar, Mutex, OnceLock, Weak,
     },
     time::Duration,
 };
@@ -540,11 +541,9 @@ async fn descriptor_cancel_returns_before_blocked_io_and_releases_only_after_rea
         assert!(!is_original(cache_fd, &cache_identity));
         assert!(!is_original(stage_fd, &stage_identity));
         assert!(hold.seen().contains(&Point::WorkerReleased));
-        assert!(
-            !std::fs::read_dir(&f.dir)
-                .unwrap()
-                .any(|e| e.unwrap().file_name() == "old.bin")
-        );
+        assert!(!std::fs::read_dir(&f.dir)
+            .unwrap()
+            .any(|e| e.unwrap().file_name() == "old.bin"));
         // Provider documents remain its journal's responsibility; core closes
         // handles but never guesses which provider entries to delete.
         assert!(f.dir.join("provider-cache.ls").exists());

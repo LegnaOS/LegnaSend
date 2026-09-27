@@ -9,6 +9,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test('strict native policy parser and supported presets', () {
     expect(parseReceiveCacheRetentionPolicy('{"mode":"immediate","days":null}'), 0);
+    expect(parseReceiveCacheRetentionPolicy('{"mode":"hour","days":null}'), -2);
     expect(parseReceiveCacheRetentionPolicy('{"mode":"manual","days":null}'), -1);
     for (final days in [1, 7, 30, 3650]) {
       expect(parseReceiveCacheRetentionPolicy('{"mode":"days","days":$days}'), days);
@@ -20,12 +21,12 @@ void main() {
   test('preferences default safely and persist all presets', () async {
     SharedPreferences.setMockInitialValues({'ls_security_context': '{}', 'ls_version': 999});
     final service = await PersistenceService.initialize(supportsDynamicColors: false);
-    expect(service.getReceiveCacheRetentionDays(), 0);
+    expect(service.getReceiveCacheRetentionDays(), -2);
     for (final days in receiveCacheRetentionChoices) {
       await service.setReceiveCacheRetentionDays(days);
       expect(service.getReceiveCacheRetentionDays(), days);
     }
-    expect(() => service.setReceiveCacheRetentionDays(-2), throwsArgumentError);
+    expect(() => service.setReceiveCacheRetentionDays(-3), throwsArgumentError);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('legnasend_receive_cache_retention_days', 'invalid');
     expect(service.getReceiveCacheRetentionDays(), -1);
@@ -33,6 +34,18 @@ void main() {
     for (final corrupt in [-3, 3651]) {
       await prefs.setInt('legnasend_receive_cache_retention_days', corrupt);
       expect(service.getReceiveCacheRetentionDays(), -1);
+    }
+  });
+  test('only an unset preference migrates to one hour; explicit old policies stay exact', () async {
+    for (final policy in <int?>[null, -1, 0, 1, 7, 30]) {
+      SharedPreferences.setMockInitialValues({
+        'ls_security_context': '{}',
+        'ls_version': 999,
+        'legnasend_receive_cache_retention_days': ?policy,
+      });
+      final service = await PersistenceService.initialize(supportsDynamicColors: false);
+      expect(service.getReceiveCacheRetentionDays(), policy ?? -2);
+      expect(service.hasInvalidReceiveCacheRetentionDays(), false);
     }
   });
   test('damaged saved policy retains files until explicit repair', () async {

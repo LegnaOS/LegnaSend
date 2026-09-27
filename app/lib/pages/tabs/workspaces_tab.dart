@@ -11,6 +11,7 @@ import 'package:localsend_app/provider/network/server/server_provider.dart';
 import 'package:localsend_app/provider/workspace_catalog_provider.dart';
 import 'package:localsend_app/util/api/api_source_strings.dart';
 import 'package:localsend_app/util/native/ios_workspace_grants.dart';
+import 'package:localsend_app/util/native/open_share_link.dart';
 import 'package:localsend_app/util/native/pick_directory_path.dart';
 import 'package:localsend_app/util/ui/snackbar.dart';
 import 'package:localsend_app/util/workspace/workspace_batch_strings.dart';
@@ -19,6 +20,7 @@ import 'package:localsend_app/util/workspace/workspace_catalog_codec.dart';
 import 'package:localsend_app/util/workspace/workspace_draft_defaults.dart';
 import 'package:localsend_app/widget/dialogs/workspace_password_dialog.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
+import 'package:localsend_app/widget/share_address_list.dart';
 import 'package:localsend_app/widget/status_tag.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
@@ -93,6 +95,44 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
     final enabled = await context.ref.notifier(workspaceCatalogProvider).catalog.enable(entry.id);
     if (enabled.enabled) await _startServiceIfNeeded();
   });
+
+  Future<void> _restoreAccess(DirectoryWorkspace entry) async {
+    if (_busy) return;
+    final grants = context.ref.read(iosWorkspaceGrantsProvider);
+    WorkspaceSource? picked;
+    bool saved = false;
+    await _run(() async {
+      if (grants.supported) {
+        picked = await grants.pick();
+      } else {
+        final path = await pickDirectoryPath(requireWrite: entry.allowUpload);
+        if (path != null) {
+          picked = WorkspaceSource(
+            kind: path.startsWith('content://') ? WorkspaceSourceKind.androidTree : WorkspaceSourceKind.directory,
+            locator: path,
+          );
+        }
+      }
+      if (picked == null) return;
+      if (!mounted) {
+        if (picked!.grantId != null) await grants.discard(picked!.grantId!);
+        return;
+      }
+      final catalog = context.ref.notifier(workspaceCatalogProvider).catalog;
+      try {
+        await catalog.update(entry.id, source: picked);
+        saved = true;
+        if (picked!.grantId != null) await grants.adopt(picked!.grantId!);
+        // Android source replacement intentionally resets writes. Restore only
+        // the owner's existing upload intent after verifying the new write grant.
+        if (entry.allowUpload) await catalog.setAllowUpload(entry.id, true);
+        final enabled = await catalog.enable(entry.id);
+        if (enabled.enabled) await _startServiceIfNeeded();
+      } finally {
+        if (!saved && picked!.grantId != null) await grants.discard(picked!.grantId!);
+      }
+    });
+  }
 
   Future<void> _protection(DirectoryWorkspace entry) async {
     final result = await showDialog<WorkspacePasswordResult>(
@@ -442,8 +482,10 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
                     ),
                     if (server != null && publication.published[entry.id] == entry.generation && entry.enabled) ...[
                       const SizedBox(height: 10),
-                      for (final address in network.addresses.where((address) => !address.isIpv6 || !address.address.startsWith('fe80:')))
-                        Padding(
+                      ShareAddressList(
+                        addresses: network.addresses,
+                        moreLabel: text.moreAddresses,
+                        itemBuilder: (address) => Padding(
                           padding: const EdgeInsets.only(bottom: 6),
                           child: Wrap(
                             spacing: 6,
@@ -454,34 +496,49 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
                               if (address.cidr != null) StatusTag(label: address.cidr!),
                               SizedBox(
                                 width: double.infinity,
-                                child: Row(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: SelectableText(
-                                        Uri(
-                                          scheme: server.https ? 'https' : 'http',
-                                          host: address.address,
-                                          port: server.port,
-                                          path: '/${entry.slug}/',
-                                        ).toString(),
-                                        style: Theme.of(context).textTheme.bodyMedium,
-                                      ),
+                                    SelectableText(
+                                      Uri(
+                                        scheme: server.https ? 'https' : 'http',
+                                        host: address.address,
+                                        port: server.port,
+                                        path: '/${entry.slug}/',
+                                      ).toString(),
+                                      style: Theme.of(context).textTheme.bodyMedium,
                                     ),
-                                    const SizedBox(width: 8),
-                                    TextButton.icon(
-                                      key: ValueKey('workspace-copy-${entry.id}-${address.address}'),
-                                      onPressed: () async {
-                                        final link = Uri(
-                                          scheme: server.https ? 'https' : 'http',
-                                          host: address.address,
-                                          port: server.port,
-                                          path: '/${entry.slug}/',
-                                        );
-                                        await Clipboard.setData(ClipboardData(text: link.toString()));
-                                        if (context.mounted) context.showSnackBar(t.general.copiedToClipboard);
-                                      },
-                                      icon: const Icon(Icons.copy_outlined, size: 18),
-                                      label: Text(t.general.copy),
+                                    Wrap(
+                                      children: [
+                                        TextButton.icon(
+                                          key: ValueKey('workspace-copy-${entry.id}-${address.address}'),
+                                          onPressed: () async {
+                                            final link = Uri(
+                                              scheme: server.https ? 'https' : 'http',
+                                              host: address.address,
+                                              port: server.port,
+                                              path: '/${entry.slug}/',
+                                            );
+                                            await Clipboard.setData(ClipboardData(text: link.toString()));
+                                            if (context.mounted) context.showSnackBar(t.general.copiedToClipboard);
+                                          },
+                                          icon: const Icon(Icons.copy_outlined, size: 18),
+                                          label: Text(t.general.copy),
+                                        ),
+                                        TextButton.icon(
+                                          onPressed: () => openShareLink(
+                                            context,
+                                            Uri(
+                                              scheme: server.https ? 'https' : 'http',
+                                              host: address.address,
+                                              port: server.port,
+                                              path: '/${entry.slug}/',
+                                            ).toString(),
+                                          ),
+                                          icon: const Icon(Icons.open_in_browser, size: 18),
+                                          label: Text(t.general.open),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -489,12 +546,20 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
                             ],
                           ),
                         ),
+                      ),
                     ],
                     const SizedBox(height: 8),
                     Wrap(
                       spacing: 8,
                       runSpacing: 4,
                       children: [
+                        if (!entry.enabled && entry.invalidReason != null)
+                          FilledButton.tonalIcon(
+                            key: ValueKey('workspace-restore-${entry.id}'),
+                            onPressed: pending ? null : () => _restoreAccess(entry),
+                            icon: const Icon(Icons.folder_open, size: 18),
+                            label: Text(text.restoreAccess),
+                          ),
                         TextButton.icon(
                           onPressed: pending ? null : () => _uploadPermission(entry),
                           icon: const Icon(Icons.upload_file_outlined, size: 18),

@@ -377,7 +377,10 @@
     "uploadHint": "訪客可直接上傳，無需逐次確認。已有檔案不會被覆寫。",
     "uploadPending": "上傳權限待同步",
     "permissionHint": "上傳權限",
-    "startService": "啟動服務"
+    "startService": "啟動服務",
+    "moreAddresses": "其他位址",
+    "restoreAccess": "重新授權目錄",
+    "openFailed": "瀏覽器開啟失敗，請複製連結開啟。"
   },
   "changelogPage": {
     "title": "變更記錄",

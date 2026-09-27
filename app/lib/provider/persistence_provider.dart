@@ -668,17 +668,17 @@ class PersistenceService {
 
   int getReceiveCacheRetentionDays() {
     final value = _prefs.get(_receiveCacheRetentionDays);
-    if (!_prefs.containsKey(_receiveCacheRetentionDays)) return 0;
-    return value is int && value >= -1 && value <= 3650 ? value : -1;
+    if (!_prefs.containsKey(_receiveCacheRetentionDays)) return -2; // Unset only: one hour.
+    return value is int && value >= -2 && value <= 3650 ? value : -1;
   }
 
   bool hasInvalidReceiveCacheRetentionDays() {
     final value = _prefs.get(_receiveCacheRetentionDays);
-    return _prefs.containsKey(_receiveCacheRetentionDays) && !(value is int && value >= -1 && value <= 3650);
+    return _prefs.containsKey(_receiveCacheRetentionDays) && !(value is int && value >= -2 && value <= 3650);
   }
 
   Future<void> setReceiveCacheRetentionDays(int days) async {
-    if (days < -1 || days > 3650) throw ArgumentError.value(days);
+    if (days < -2 || days > 3650) throw ArgumentError.value(days);
     if (!await _prefs.setInt(_receiveCacheRetentionDays, days)) throw StateError('Retention preference was not saved');
   }
 

@@ -1,5 +1,6 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:localsend_isolates/util/sleep.dart';
 
 class RotatingWidget extends StatefulWidget {
   final Duration duration;
@@ -19,50 +20,64 @@ class RotatingWidget extends StatefulWidget {
   State<RotatingWidget> createState() => RotatingWidgetState();
 }
 
-class RotatingWidgetState extends State<RotatingWidget> {
-  static const _fps = 30;
-  static const _tickDuration = 1000 ~/ _fps; // in milliseconds
-  static const _maxRadians = 6.28; // 360 degrees in radians
-  double _angle = 0; // in radians
-  double _anglePerTick = 0;
+class RotatingWidgetState extends State<RotatingWidget> with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+  late final AnimationController _controller;
+  bool _foreground = true;
+  bool _visible = true;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updateAnglePerTick();
-      _loop();
-    });
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+    WidgetsBinding.instance.addObserver(this);
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    _foreground = lifecycle == null || lifecycle == AppLifecycleState.resumed;
   }
 
-  void _updateAnglePerTick() {
-    _anglePerTick = _maxRadians / (widget.duration.inMilliseconds / _tickDuration);
-    if (widget.reverse) {
-      _anglePerTick = -_anglePerTick;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _visible = TickerMode.valuesOf(context).enabled && !MediaQuery.disableAnimationsOf(context) && (ModalRoute.isCurrentOf(context) ?? true);
+    _synchronize();
+  }
+
+  @override
+  void didUpdateWidget(covariant RotatingWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.duration != widget.duration) {
+      _controller.stop();
+      _controller.duration = widget.duration;
     }
+    _synchronize();
   }
 
-  /// This loop has a much greater performance than using [AnimationController].
-  void _loop() async {
-    while (true) {
-      await sleepAsync(_tickDuration);
-      if (!mounted) {
-        return;
-      }
-      if (!widget.spinning) {
-        continue;
-      }
-      setState(() {
-        _angle = (_angle + _anglePerTick) % _maxRadians;
-      });
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _foreground = state == AppLifecycleState.resumed;
+    _synchronize();
+  }
+
+  void _synchronize() {
+    if (widget.spinning && _visible && _foreground) {
+      if (!_controller.isAnimating) unawaited(_controller.repeat());
+    } else {
+      // Stop the ticker, not just painting; resuming continues from this angle.
+      _controller.stop();
     }
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Transform.rotate(
-      angle: _angle,
-      child: widget.child,
+    return RotationTransition(
+      turns: widget.reverse ? ReverseAnimation(_controller) : _controller,
+      child: RepaintBoundary(child: widget.child),
     );
   }
 }

@@ -175,7 +175,7 @@ class SettingsStateMapper extends ClassMapperBase<SettingsState> {
     'receiveCacheRetentionDays',
     _$receiveCacheRetentionDays,
     opt: true,
-    def: 0,
+    def: -2,
   );
 
   @override

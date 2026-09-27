@@ -22,9 +22,10 @@ Future<String> inspectReceiveCacheRegistry({required int limit}) =>
     RustLib.instance.api.crateApiReceiveCacheInspectReceiveCacheRegistry(limit: limit);
 
 /// Configure local native-receive crash-residue retention. Modes: immediate,
-/// days (1..3650), manual; days must be absent for the other modes. The app
+/// hour (the default, exactly 3600 seconds), days (1..3650), manual;
+/// days must be absent for the other modes. The app
 /// persists this preference. Invalid input leaves the current policy unchanged.
-/// Returns {"mode":"immediate"|"days"|"manual","days":null|number}.
+/// Returns {"mode":"immediate"|"hour"|"days"|"manual","days":null|number}.
 Future<String> configureReceiveCacheRetentionPolicy({required String mode, int? days}) =>
     RustLib.instance.api.crateApiReceiveCacheConfigureReceiveCacheRetentionPolicy(mode: mode, days: days);
 

@@ -70,7 +70,7 @@
     details.append(summary, copy);
     container.appendChild(details);
     var retention = el('div', 'download-retention'), retentionLabel = el('label'), retentionSelect = el('select'), retentionStatus = el('span');
-    var retentionOptions = [0,1,7,30].map(function(days) { var option=el('option'); option.value=String(days); retentionSelect.appendChild(option); return option; });
+    var retentionOptions = [-2,0,1,7,30].map(function(days) { var option=el('option'); option.value=String(days); retentionSelect.appendChild(option); return option; });
     retentionLabel.appendChild(retentionSelect);
     retention.append(retentionLabel, retentionStatus);
     retentionStatus.setAttribute('role','status'); retentionStatus.setAttribute('aria-live','polite');
@@ -86,9 +86,9 @@
     };
     function retentionText() {
       var language=(doc.documentElement&&doc.documentElement.lang||root.navigator&&root.navigator.language||'en').toLowerCase();
-      if(language==='zh-tw'||language==='zh-hk'||language.startsWith('zh-hant'))return ['未完成下載保留','保留，手動移除','1 天後清理','7 天後清理','30 天後清理','已清理','保留／待重試','清理已授權目錄中未完成的單檔與批次快取；保留完整檔案及目錄。'];
-      if(language.startsWith('zh'))return ['未完成下载保留','保留，手动移除','1 天后清理','7 天后清理','30 天后清理','已清理','保留／待重试','清理已授权目录中未完成的单文件与批次缓存；保留完整文件及目录。'];
-      return ['Keep unfinished downloads','Keep until removed','Clean after 1 day','Clean after 7 days','Clean after 30 days','Removed','Retained / retry needed','Clean unfinished individual and batch caches in authorized folders; preserve complete files and directories.'];
+      if(language==='zh-tw'||language==='zh-hk'||language.startsWith('zh-hant'))return ['未完成下載保留','1 小時（預設）','保留，手動移除','1 天後清理','7 天後清理','30 天後清理','已清理','保留／待重試','清理已授權目錄中未完成的單檔與批次快取；保留完整檔案及目錄。'];
+      if(language.startsWith('zh'))return ['未完成下载保留','1 小时（默认）','保留，手动移除','1 天后清理','7 天后清理','30 天后清理','已清理','保留／待重试','清理已授权目录中未完成的单文件与批次缓存；保留完整文件及目录。'];
+      return ['Keep unfinished downloads','1 hour (default)','Keep until removed','Clean after 1 day','Clean after 7 days','Clean after 30 days','Removed','Retained / retry needed','Clean unfinished individual and batch caches in authorized folders; preserve complete files and directories.'];
     }
     var scheduling = el('details', 'download-hint'), scheduleTitle = el('summary'), scheduleFields = el('div', 'download-actions download-transfer-settings');
     var fileLabel = el('label'), fileCount = el('select'), rangeLabel = el('label'), rangeCount = el('select');
@@ -259,11 +259,11 @@
       var retentionCopy=retentionText();
       retention.hidden=!manager||!manager.setRetention;
       retentionLabel.setAttribute('aria-label',retentionCopy[0]); retentionSelect.setAttribute('aria-label',retentionCopy[0]);
-      retention.title=retentionCopy[7];
+      retention.title=retentionCopy[8];
       retentionOptions.forEach(function(option,index){option.textContent=retentionCopy[index+1];});
       retentionSelect.value=String(manager&&manager.retentionDays||0); retentionSelect.disabled=!ready||retentionBusy;
       var cleanup=manager&&manager.cleanupReport;
-      retentionStatus.textContent=cleanup?retentionCopy[5]+': '+cleanup.removed+' · '+retentionCopy[6]+': '+(cleanup.retained+cleanup.failed):retentionCopy[0];
+      retentionStatus.textContent=cleanup?retentionCopy[6]+': '+cleanup.removed+' · '+retentionCopy[7]+': '+(cleanup.retained+cleanup.failed):retentionCopy[0];
       scheduling.hidden=!manager||!manager.configureTransfers;
       scheduleTitle.textContent=labels.downloadTransferSettings;
       fileLabel.setAttribute('aria-label',labels.downloadParallelFiles);fileCount.setAttribute('aria-label',labels.downloadParallelFiles);fileLabel.title=labels.downloadParallelFiles;

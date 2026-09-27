@@ -20,6 +20,7 @@ import 'package:localsend_app/widget/dialogs/zoom_dialog.dart';
 import 'package:localsend_app/widget/network_address_tags.dart';
 import 'package:localsend_app/widget/network_environment_badge.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
+import 'package:localsend_app/widget/share_address_list.dart';
 import 'package:localsend_app/widget/share_link_actions.dart';
 import 'package:localsend_app/widget/status_tag.dart';
 import 'package:localsend_app/widget/transport_security_toggle.dart';
@@ -314,59 +315,68 @@ class _WebSharePageState extends State<WebSharePage> with Refena {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (networkState.localIps.isEmpty) Text(t.networkLabels.noAddress),
-                        ...networkState.addresses.where((a) => !a.isIpv6).map((address) {
-                          final ip = address.address;
-                          final url = '${serverState.https ? 'https' : 'http'}://$ip:${serverState.port}/share';
-                          final urlWithPin = switch (pin) {
-                            String() => '$url?pin=${Uri.encodeQueryComponent(pin)}',
-                            null => url,
-                          };
-                          return Padding(
-                            padding: const EdgeInsets.all(5),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                NetworkAddressTags(address: address),
-                                const SizedBox(height: 4),
-                                Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  children: [
-                                    StatusTag(child: SelectableText(url, style: Theme.of(context).textTheme.labelMedium)),
-                                    const SizedBox(width: 5),
-                                    ShareLinkActions(
-                                      url: url,
-                                      onCopy: () async {
-                                        await Clipboard.setData(ClipboardData(text: url));
-                                        if (context.mounted && checkPlatformIsDesktop()) context.showSnackBar(t.general.copiedToClipboard);
-                                      },
-                                      onQr: () async {
-                                        await showDialog<void>(
-                                          context: context,
-                                          builder: (_) => QrDialog(
-                                            data: urlWithPin,
-                                            label: url,
-                                            listenIncomingWebDownloadRequests: _sendMode,
-                                            pin: pin,
-                                          ),
-                                        );
-                                      },
-                                      onZoom: () async {
-                                        await showDialog<void>(
-                                          context: context,
-                                          builder: (_) => ZoomDialog(
-                                            label: url,
-                                            listenIncomingWebDownloadRequests: _sendMode,
-                                            pin: pin,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
+                        ShareAddressList(
+                          addresses: networkState.addresses,
+                          moreLabel: t.directoryWorkspaces.moreAddresses,
+                          itemBuilder: (address) {
+                            final ip = address.address;
+                            final url = Uri(
+                              scheme: serverState.https ? 'https' : 'http',
+                              host: ip,
+                              port: serverState.port,
+                              path: '/share',
+                            ).toString();
+                            final urlWithPin = switch (pin) {
+                              String() => '$url?pin=${Uri.encodeQueryComponent(pin)}',
+                              null => url,
+                            };
+                            return Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  NetworkAddressTags(address: address),
+                                  const SizedBox(height: 4),
+                                  Wrap(
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    children: [
+                                      StatusTag(child: SelectableText(url, style: Theme.of(context).textTheme.labelMedium)),
+                                      const SizedBox(width: 5),
+                                      ShareLinkActions(
+                                        url: url,
+                                        onCopy: () async {
+                                          await Clipboard.setData(ClipboardData(text: url));
+                                          if (context.mounted && checkPlatformIsDesktop()) context.showSnackBar(t.general.copiedToClipboard);
+                                        },
+                                        onQr: () async {
+                                          await showDialog<void>(
+                                            context: context,
+                                            builder: (_) => QrDialog(
+                                              data: urlWithPin,
+                                              label: url,
+                                              listenIncomingWebDownloadRequests: _sendMode,
+                                              pin: pin,
+                                            ),
+                                          );
+                                        },
+                                        onZoom: () async {
+                                          await showDialog<void>(
+                                            context: context,
+                                            builder: (_) => ZoomDialog(
+                                              label: url,
+                                              listenIncomingWebDownloadRequests: _sendMode,
+                                              pin: pin,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   ),

@@ -377,7 +377,10 @@
     "uploadHint": "Visitors can upload without asking again. Existing files are kept.",
     "uploadPending": "Upload permission pending",
     "permissionHint": "Upload permissions",
-    "startService": "Start service"
+    "startService": "Start service",
+    "moreAddresses": "More addresses",
+    "restoreAccess": "Select folder again",
+    "openFailed": "Could not open the browser. Copy the link instead."
   },
   "changelogPage": {
     "title": "Changelog",

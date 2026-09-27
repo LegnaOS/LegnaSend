@@ -9,6 +9,21 @@ import java.util.UUID;
 
 /** Durable SAF receive ownership and publication state machine. Original wire bytes stay unchanged. */
 public final class SafReceiveTransaction {
+    public static final long DEFAULT_RECOVERY_RETENTION_MS = 3600000L;
+    public static final long LEGACY_RECOVERY_RETENTION_MS = 86400000L;
+    /** Absent old journal fields retain their promised lifetime. Never coerce strings/fractions. */
+    public static long recoveryRetentionMillis(Object stored) throws IOException {
+        if (stored == null) return LEGACY_RECOVERY_RETENTION_MS;
+        if (stored instanceof Long || stored instanceof Integer) {
+            long value = ((Number) stored).longValue();
+            if (value == DEFAULT_RECOVERY_RETENTION_MS || value == LEGACY_RECOVERY_RETENTION_MS) return value;
+        }
+        throw new Failure("INVALID_ARGUMENT", "Invalid recovery retention; journal retained");
+    }
+    private static boolean withinRecoveryRetention(Record record, CacheIdentity identity, long now) throws IOException {
+        long duration = recoveryRetentionMillis(record.recoveryRetentionMs);
+        return now >= identity.createdUnixMs && now - identity.createdUnixMs < duration;
+    }
     public enum State { PREPARING, READY, LEASED, RECEIVING, VERIFIED, PUBLISHING, PUBLICATION_FAILED, PUBLISHED, ABORT_PENDING, ABORTED }
     public static final class Failure extends IOException {
         private static final long serialVersionUID = 1L;
@@ -36,6 +51,7 @@ public final class SafReceiveTransaction {
         public String recoverySourceId, recoveryClaimId, recoverySupersededBy;
         public boolean recoveryCompleted, recoveryRejected;
         public long recoveryLength = -1;
+        public long recoveryRetentionMs = DEFAULT_RECOVERY_RETENTION_MS;
         public String recoverySha256;
         public boolean receiveReleased, stagingCleanupPending;
         public String lease;
@@ -46,7 +62,7 @@ public final class SafReceiveTransaction {
         public Record copy() {
             Record copy = new Record(id, tree, parent, desiredName, sessionId, fileId, attemptId);
             copy.state = state; copy.cache = cache; copy.staging = staging; copy.lease = lease;
-            copy.recoveryIdentity = recoveryIdentity;
+            copy.recoveryIdentity = recoveryIdentity; copy.recoveryRetentionMs = recoveryRetentionMs;
             copy.recoverySourceId = recoverySourceId; copy.recoveryClaimId = recoveryClaimId;
             copy.recoverySupersededBy = recoverySupersededBy; copy.recoveryCompleted = recoveryCompleted; copy.recoveryRejected = recoveryRejected;
             copy.recoveryLength = recoveryLength; copy.recoverySha256 = recoverySha256;
@@ -253,7 +269,7 @@ public final class SafReceiveTransaction {
         CacheIdentity newIdentity = backend.parseCacheIdentity(target.recoveryIdentity);
         oldIdentity.validate(source.id); newIdentity.validate(target.id);
         if (source.size != oldIdentity.size || !Objects.equals(source.sha256, oldIdentity.sha256)
-                || now < oldIdentity.createdUnixMs || now - oldIdentity.createdUnixMs >= 86400000L
+                || !withinRecoveryRetention(source, oldIdentity, now)
                 || !oldIdentity.sourceId.equals(newIdentity.sourceId) || !oldIdentity.resourceId.equals(newIdentity.resourceId)
                 || !oldIdentity.version.equals(newIdentity.version) || oldIdentity.size != newIdentity.size
                 || !oldIdentity.sha256.equals(newIdentity.sha256) || oldIdentity.chunkSize != newIdentity.chunkSize) return false;
@@ -276,7 +292,7 @@ public final class SafReceiveTransaction {
                 || (source.output == null && source.state != State.PUBLISHING)) return false;
         CacheIdentity oldIdentity = backend.parseCacheIdentity(source.recoveryIdentity), current = backend.parseCacheIdentity(target.recoveryIdentity);
         oldIdentity.validate(source.id); current.validate(target.id);
-        return now >= oldIdentity.createdUnixMs && now - oldIdentity.createdUnixMs < 86400000L
+        return withinRecoveryRetention(source, oldIdentity, now)
             && oldIdentity.sourceId.equals(current.sourceId) && oldIdentity.resourceId.equals(current.resourceId)
             && oldIdentity.version.equals(current.version) && oldIdentity.sha256.equals(current.sha256) && oldIdentity.size == current.size;
     }

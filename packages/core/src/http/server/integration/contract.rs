@@ -441,13 +441,13 @@ pub(crate) fn document(language: &str) -> Value {
     let zh = language.starts_with("zh");
     let hant = matches!(language, "zh-TW" | "zh-HK");
     let retention_days_description = if hant {
-        "原生接收崩潰殘留保留期：-1 等待本機手動清理，0 在下次維護時不延遲清理，1–3650 為天數；變更策略本身不會執行清理。只處理已登記且非活動的原生殘留；不授予立即清理覆寫、不影響一般取消，也不代表可斷點續傳。"
+        "原生接收崩潰殘留保留期：-2 為 1 小時（預設），-1 等待本機手動清理，0 在下次維護時不延遲清理，1–3650 為天數；變更策略本身不會執行清理。只處理已登記且非活動的原生殘留；不授予立即清理覆寫、不影響一般取消，也不代表可斷點續傳。"
     } else if zh {
-        "原生接收崩溃残留保留期：-1 等待本地手动清理，0 在下次维护时不延迟清理，1–3650 为天数；更改策略本身不会执行清理。只处理已登记且非活动的原生残留；不授予立即清理覆盖、不影响正常取消，也不代表可断点续传。"
+        "原生接收崩溃残留保留期：-2 为 1 小时（默认），-1 等待本地手动清理，0 在下次维护时不延迟清理，1–3650 为天数；更改策略本身不会执行清理。只处理已登记且非活动的原生残留；不授予立即清理覆盖、不影响正常取消，也不代表可断点续传。"
     } else {
-        "Native receive crash-residue retention: -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support."
+        "Native receive crash-residue retention: -2 is exactly one hour (default), -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support."
     };
-    let retention_days_schema = json!({"type":"integer","minimum":-1,"maximum":3650,"description":retention_days_description});
+    let retention_days_schema = json!({"type":"integer","minimum":-2,"maximum":3650,"description":retention_days_description});
     let descriptions = if hant {
         [
             "服務狀態與非敏感配額",
@@ -1163,7 +1163,7 @@ pub(crate) fn document(language: &str) -> Value {
             json!({"type":"integer","minimum":if field=="generation"{1}else{0}});
     }
     schemas.insert("ReceiveCacheRetention".into(), json!({"type":"object","additionalProperties":false,"required":["effectiveDays","automaticCleanupPaused","busy","error"],"properties":{
-        "effectiveDays":{"type":["integer","null"],"minimum":-1,"maximum":3650,"description":if hant {"原生目前生效的天數編碼；null 表示尚未確認，不應以保存值猜測。"} else if zh {"原生当前生效的天数编码；null 表示尚未确认，不应以保存值猜测。"} else {"Currently effective native day encoding; null means unconfirmed, never inferred from the saved preference."}},
+        "effectiveDays":{"type":["integer","null"],"minimum":-2,"maximum":3650,"description":if hant {"原生目前生效的保留期編碼（-2 為 1 小時）；null 表示尚未確認，不應以保存值猜測。"} else if zh {"原生当前生效的保留期编码（-2 为 1 小时）；null 表示尚未确认，不应以保存值猜测。"} else {"Currently effective native retention encoding (-2 means one hour); null means unconfirmed, never inferred from the saved preference."}},
         "automaticCleanupPaused":{"type":"boolean","description":if hant {"僅表示原生策略同步保護是否暫停自動清理。手動保留模式可為 false，但核心仍保留檔案；Android 提供者清理另行管理。"} else if zh {"仅表示原生策略同步保护是否暂停自动清理。手动保留模式可为 false，但核心仍保留文件；Android 提供者清理独立管理。"} else {"Native-policy synchronization guard only. Manual retention may report false while core still retains files; Android provider cleanup is independent."}},
         "busy":{"type":"boolean","description":if hant {"本機保留期變更正在處理；API 不覆寫進行中的變更。"} else if zh {"本地保留期变更正在处理；API 不覆盖进行中的变更。"} else {"A local retention update is in progress; API writes do not overwrite an in-flight change."}},
         "error":{"type":["string","null"],"enum":[null,"invalid","save","apply","restore"],"description":if hant {"穩定且不含路徑的狀態原因：invalid 表示已保存的偏好損壞，而非 API 輸入校驗失敗；save、apply、restore 分別表示保存、套用、還原失敗；null 表示無錯誤。"} else if zh {"稳定且不含路径的状态原因：invalid 表示已保存的偏好损坏，而非 API 输入校验失败；save、apply、restore 分别表示保存、应用、恢复失败；null 表示无错误。"} else {"Stable path-free state reason: invalid means a damaged saved preference, not invalid API input; save, apply and restore mean persistence, native apply and restoration failures; null means no error."}}

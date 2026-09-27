@@ -1,14 +1,14 @@
 //! Native path receive transaction. Cache and export staging live beside the
 //! destination; only verified original bytes are published, without overwrite.
 use super::save::{FileTimestamps, SaveResult};
-use crate::download_cache::{CacheError, CacheIdentity, DownloadCache, MAX_CHUNK_SIZE, MAX_CHUNKS};
+use crate::download_cache::{CacheError, CacheIdentity, DownloadCache, MAX_CHUNKS, MAX_CHUNK_SIZE};
 use bytes::Bytes;
 use cap_fs_ext::{FollowSymlinks, OpenOptionsFollowExt};
 use cap_std::fs::{Dir, OpenOptions};
 use http_body_util::BodyExt;
-use hyper::{Request, body::Incoming};
+use hyper::{body::Incoming, Request};
 use std::{ffi::OsString, fs::File, io, path::PathBuf};
-use tokio::sync::{Semaphore, mpsc, oneshot};
+use tokio::sync::{mpsc, oneshot, Semaphore};
 use tokio_util::sync::CancellationToken;
 
 const FRAME_BYTES: usize = 64 * 1024;
@@ -250,7 +250,7 @@ impl Transaction {
             target_os = "ios"
         ))]
         {
-            use rustix::fs::{RenameFlags, renameat_with};
+            use rustix::fs::{renameat_with, RenameFlags};
             use rustix::io::Errno;
             match renameat_with(
                 &self.dir,
@@ -714,6 +714,7 @@ impl DurableReceive {
             bytes,
         )?;
         let offset = cache.committed_bytes();
+        self.lease.as_mut().unwrap().checkpoint_activity(false)?;
         if let Some(tx) = &self.progress {
             let _ = tx.try_send(offset.min(cache.identity().size.saturating_sub(1)));
         }
@@ -873,11 +874,9 @@ mod tests {
             events.push(n);
         }
         assert_eq!(events.last(), Some(&(data.len() as u64)));
-        assert!(
-            events[..events.len() - 1]
-                .iter()
-                .all(|n| *n < data.len() as u64)
-        );
+        assert!(events[..events.len() - 1]
+            .iter()
+            .all(|n| *n < data.len() as u64));
     }
     #[test]
     fn checksum_failure_cleans_only_owned_cache_and_retry_reuses_destination() {
@@ -921,17 +920,15 @@ mod tests {
         ] {
             let root = Root::new();
             let path = root.0.join("out");
-            assert!(
-                receive(
-                    path.clone(),
-                    identity(&path, size, None, &context()),
-                    FileTimestamps::default(),
-                    messages(data, finish),
-                    CancellationToken::new(),
-                    None
-                )
-                .is_err()
-            );
+            assert!(receive(
+                path.clone(),
+                identity(&path, size, None, &context()),
+                FileTimestamps::default(),
+                messages(data, finish),
+                CancellationToken::new(),
+                None
+            )
+            .is_err());
             assert!(root.names().is_empty());
         }
     }
@@ -950,17 +947,15 @@ mod tests {
         .unwrap();
         assert_eq!(std::fs::metadata(&path).unwrap().len(), 0);
         std::fs::write(&path, b"user content").unwrap();
-        assert!(
-            receive(
-                path.clone(),
-                identity(&path, 3, None, &context()),
-                FileTimestamps::default(),
-                messages(b"new", true),
-                CancellationToken::new(),
-                None
-            )
-            .is_err()
-        );
+        assert!(receive(
+            path.clone(),
+            identity(&path, 3, None, &context()),
+            FileTimestamps::default(),
+            messages(b"new", true),
+            CancellationToken::new(),
+            None
+        )
+        .is_err());
         assert_eq!(std::fs::read(&path).unwrap(), b"user content");
         assert_eq!(root.names(), vec![OsString::from("out")]);
     }
@@ -1038,14 +1033,13 @@ mod tests {
         drop(file);
         std::fs::rename(root.0.join("owned.ls"), root.0.join("moved.ls")).unwrap();
         std::fs::write(root.0.join("owned.ls"), b"external").unwrap();
-        assert!(
-            txn.publish(
+        assert!(txn
+            .publish(
                 std::ffi::OsStr::new("owned.ls"),
                 std::ffi::OsStr::new("out"),
                 &CancellationToken::new()
             )
-            .is_err()
-        );
+            .is_err());
         drop(txn);
         assert_eq!(std::fs::read(root.0.join("owned.ls")).unwrap(), b"external");
         assert!(root.0.join("moved.ls").exists());
@@ -1068,23 +1062,19 @@ mod tests {
         std::fs::write(root.0.join("keep"), b"external").unwrap();
         std::os::unix::fs::symlink("keep", root.0.join("owned.ls")).unwrap();
         drop(txn);
-        assert!(
-            std::fs::symlink_metadata(root.0.join("owned.ls"))
-                .unwrap()
-                .is_symlink()
-        );
+        assert!(std::fs::symlink_metadata(root.0.join("owned.ls"))
+            .unwrap()
+            .is_symlink());
         let path = root.0.join("owned.ls");
-        assert!(
-            receive(
-                path.clone(),
-                identity(&path, 0, None, &context()),
-                FileTimestamps::default(),
-                messages(b"", true),
-                CancellationToken::new(),
-                None
-            )
-            .is_err()
-        );
+        assert!(receive(
+            path.clone(),
+            identity(&path, 0, None, &context()),
+            FileTimestamps::default(),
+            messages(b"", true),
+            CancellationToken::new(),
+            None
+        )
+        .is_err());
         assert_eq!(std::fs::read(root.0.join("keep")).unwrap(), b"external");
     }
     #[test]

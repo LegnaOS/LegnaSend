@@ -10,7 +10,7 @@ void main() {
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
-      var saved = 0, actual = 0, fail = false;
+      var saved = -2, actual = -2, fail = false;
       final controller = ReceiveCacheRetentionController(
         readSaved: () => saved,
         save: (d) async => saved = d,
@@ -36,13 +36,13 @@ void main() {
           ),
         ),
       );
-      expect(find.text(strings.actual(0)), findsOneWidget);
+      expect(find.text(strings.actual(-2)), findsNothing);
       await tester.tap(find.byType(DropdownButtonFormField<int>));
       await tester.pumpAndSettle();
       await tester.tap(find.text(strings.policy(-1)).last);
       await tester.pumpAndSettle();
       expect(saved, -1);
-      expect(find.text(strings.actual(-1)), findsOneWidget);
+      expect(find.text(strings.actual(-1)), findsNothing);
       fail = true;
       await controller.change(7);
       await tester.pumpAndSettle();

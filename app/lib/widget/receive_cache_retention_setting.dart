@@ -13,11 +13,12 @@ class ReceiveCacheRetentionStrings {
       : zh;
   String get title => _s('Interrupted receive cache retention', '中断接收缓存保留期', '中斷接收快取保留期');
   String get description => _s(
-    'Applies only to registered native receive leftovers after an unexpected exit. Normal cancellation and failed transfers are cleaned immediately. Retention does not enable partial resume or affect workspace uploads and Android provider documents.',
-    '仅作用于意外退出后已登记的原生接收残留；正常取消和失败仍立即清理。保留缓存不代表支持断点续传，也不影响工作区上传或 Android 提供器文档。',
-    '僅作用於意外退出後已登記的原生接收殘留；正常取消及失敗仍立即清理。保留快取不代表支援斷點續傳，也不影響工作區上傳或 Android 提供者文件。',
+    'Only unfinished transfer files are cleaned. Saved files stay untouched.',
+    '仅清理未完成传输的临时文件，已保存文件不受影响。',
+    '僅清理未完成傳輸的暫存檔案，已儲存檔案不受影響。',
   );
   String policy(int days) => switch (days) {
+    receiveCacheRetentionOneHour => _s('Keep for 1 hour (default)', '保留 1 小时（默认）', '保留 1 小時（預設）'),
     0 => _s('Clean automatically', '立即自动清理', '立即自動清理'),
     -1 => _s('Keep until manually cleaned', '保留至手动清理', '保留至手動清理'),
     _ => _s('Keep for $days days', '保留 $days 天', '保留 $days 天'),
@@ -80,8 +81,10 @@ class ReceiveCacheRetentionSetting extends StatelessWidget {
                 Text(strings.failure(state.error!), style: TextStyle(color: colors.error)),
                 TextButton(onPressed: state.busy ? null : state.initialize, child: Text(strings.retry)),
               ],
-              const SizedBox(height: 6),
-              Text(state.ready ? strings.actual(state.days) : strings.unknown, style: Theme.of(context).textTheme.bodySmall),
+              if (!state.ready || state.error != null) ...[
+                const SizedBox(height: 6),
+                Text(state.ready ? strings.actual(state.days) : strings.unknown, style: Theme.of(context).textTheme.bodySmall),
+              ],
             ],
           ),
         );

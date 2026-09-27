@@ -830,6 +830,15 @@ class Translations$directoryWorkspaces$en {
 
   /// en: 'Start service'
   String get startService => 'Start service';
+
+  /// en: 'More addresses'
+  String get moreAddresses => 'More addresses';
+
+  /// en: 'Select folder again'
+  String get restoreAccess => 'Select folder again';
+
+  /// en: 'Could not open the browser. Copy the link instead.'
+  String get openFailed => 'Could not open the browser. Copy the link instead.';
 }
 
 // Path: changelogPage

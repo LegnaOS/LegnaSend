@@ -5,6 +5,14 @@
   var ls = root.LegnaLsCache || (typeof require === 'function' ? require('./ls-cache.js') : null);
   if (!ls || (!root.LegnaDownloadRegistry && typeof module !== 'object')) return;
   var fail = ls.fail;
+  // The legacy setting is retained: -2 is an explicit one-hour code, 0 is
+  // manual retention, and positive values keep their original day semantics.
+  function retentionPolicy(value) {
+    return value === undefined ? -2 : [-2, 0, 1, 7, 30].includes(value) ? value : 0;
+  }
+  function retentionMilliseconds(value) {
+    return value === -2 ? 3600000 : value * 86400000;
+  }
   var CHUNK = 1048576,
     MAX_TASKS = 20;
   function aborted(signal) {
@@ -162,7 +170,7 @@
       };
     this.timeout = options.timeout || 30000;
     this.wallNow = options.wallNow || Date.now;
-    this.retentionDays = 0;
+    this.retentionDays = -2;
     this.retentionTimer = null;
     this.cleanupReport = null;
     this.pool = new Pool(8);
@@ -229,8 +237,8 @@
         self.tasks.push(restoreTask(record));
       } catch (_) {}
     });
-    var policy = this.registry.retention ? await this.registry.retention() : 0;
-    this.retentionDays = [0, 1, 7, 30].includes(policy) ? policy : 0;
+    var policy = this.registry.retention ? await this.registry.retention() : undefined;
+    this.retentionDays = retentionPolicy(policy);
     if (this.registry.transferSettings) {
       var settings = await this.registry.transferSettings();
       if (settings) {
@@ -288,7 +296,7 @@
     if (this.retentionTimer.unref) this.retentionTimer.unref();
   };
   Manager.prototype.setRetention = async function (days) {
-    if (![0, 1, 7, 30].includes(days) || !this.registry.retention) throw fail('storage');
+    if (![-2, 0, 1, 7, 30].includes(days) || !this.registry.retention) throw fail('storage');
     await this.registry.retention(days);
     this.retentionDays = days;
     this.scheduleRetention();
@@ -301,14 +309,14 @@
     var operation = Promise.resolve().then(async function () {
       var report = {removed: 0, retained: 0, failed: 0, skipped: 0};
       if (self.registry.retention) {
-        try { var latestPolicy=await self.registry.retention(); self.retentionDays=[0,1,7,30].includes(latestPolicy)?latestPolicy:0; }
+        try { var latestPolicy=await self.registry.retention(); self.retentionDays=retentionPolicy(latestPolicy); }
         catch (_) { report.failed++; self.cleanupReport=report; self.emit(); return report; }
       }
       if (!self.retentionDays || self.closed) {
         if(!self.closed){self.cleanupReport=null;self.scheduleRetention();self.emit();}
         return report;
       }
-      var before = self.wallNow() - self.retentionDays * 86400000;
+      var before = self.wallNow() - retentionMilliseconds(self.retentionDays);
       function eligible(record) {
         var age = record.updatedUnixMs || record.identity && record.identity.createdUnixMs;
         return !record.batchId && !['complete','cancelled','blocked'].includes(record.state) && Number.isSafeInteger(age) && age > 0 && age <= before;
@@ -327,7 +335,7 @@
               var current = (await self.registry.all()).find(function (record) { return record.id === original.id; });
               if (!current || !eligible(current)) { report.skipped++; return; }
               var latestPolicy=self.registry.retention?await self.registry.retention():self.retentionDays;
-              if(latestPolicy!==self.retentionDays){report.retained++;return;}
+              if(retentionPolicy(latestPolicy)!==self.retentionDays){report.retained++;return;}
               var task = restoreTask(current);
               if (!current.directory.queryPermission || await current.directory.queryPermission({mode:'readwrite'}) !== 'granted') {
                 report.retained++; return; // Never prompt for authorization during automatic cleanup.
@@ -1003,6 +1011,8 @@
   };
   var api = {
     Manager: Manager,
+    retentionPolicy: retentionPolicy,
+    retentionMilliseconds: retentionMilliseconds,
     Pool: Pool,
     supported: supported,
     sourceUrl: sourceUrl,

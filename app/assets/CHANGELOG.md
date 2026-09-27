@@ -5,6 +5,12 @@ Author: Legna
 
 ## Unreleased — 2026-09-28
 
+- Restore an existing workspace's folder access without recreating its name, path or password.
+- Prefer IPv4 and collapse alternate network addresses. Add Open beside Copy to launch the system browser.
+- Default unfinished-transfer caches to one hour, preserving explicit retention settings and active or completed files.
+- Use the website's green L mark across native app icons; animate the receive-page logo while active and respect reduced motion.
+- Select every entry in the current web folder across unloaded pages. Show explicit ZIP cancellation targets and distinguish original-file downloads from ZIP archives.
+- Replace technical cleanup wording with short results and remove the API roadmap notice from the interface.
 - Correct the Windows executable name to `LegnaSend.exe`, including file properties, installer launch targets and helper display names.
 - Prefill workspace names and custom paths; selecting a folder supplies its name. Keep edited names unchanged and give form labels enough vertical space.
 - Show complete workspace URLs with explicit Copy buttons. Start a stopped sharing service from the workspace page.

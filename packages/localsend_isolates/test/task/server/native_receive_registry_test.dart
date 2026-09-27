@@ -34,7 +34,9 @@ void main() {
     final root = await Directory.systemTemp.createTemp('legnasend-receive-registry-');
     final destination = await Directory(p.join(root.path, 'Downloads 中文 %')).create();
     final registry = Directory(p.join(root.path, 'registry'));
-    expect(jsonDecode(await getReceiveCacheRetentionPolicy()), {'mode': 'immediate', 'days': null});
+    expect(jsonDecode(await getReceiveCacheRetentionPolicy()), {'mode': 'hour', 'days': null});
+    expect(jsonDecode(await configureReceiveCacheRetentionPolicy(mode: 'hour')), {'mode': 'hour', 'days': null});
+    await expectLater(configureReceiveCacheRetentionPolicy(mode: 'hour', days: 1), throwsA(anything));
     expect(jsonDecode(await configureReceiveCacheRetentionPolicy(mode: 'days', days: 7)), {'mode': 'days', 'days': 7});
     await expectLater(configureReceiveCacheRetentionPolicy(mode: 'days', days: 0), throwsA(anything));
     expect(jsonDecode(await getReceiveCacheRetentionPolicy()), {'mode': 'days', 'days': 7});

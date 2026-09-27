@@ -25,9 +25,10 @@ pub async fn inspect_receive_cache_registry(limit: u32) -> anyhow::Result<String
 }
 
 /// Configure local native-receive crash-residue retention. Modes: immediate,
-/// days (1..3650), manual; days must be absent for the other modes. The app
+/// hour (the default, exactly 3600 seconds), days (1..3650), manual;
+/// days must be absent for the other modes. The app
 /// persists this preference. Invalid input leaves the current policy unchanged.
-/// Returns {"mode":"immediate"|"days"|"manual","days":null|number}.
+/// Returns {"mode":"immediate"|"hour"|"days"|"manual","days":null|number}.
 pub async fn configure_receive_cache_retention_policy(
     mode: String,
     days: Option<u32>,

@@ -343,7 +343,7 @@ class ApiOperation {
       if (['enableAnimations', 'autoFinish', 'createChecksums', 'verifyChecksums'].contains(field)) return ['true', 'false'].contains(value);
       if (field == 'receiveCacheRetentionDays') {
         final days = int.tryParse(value);
-        return RegExp(r'^-?(0|[1-9][0-9]*)$').hasMatch(value) && days != null && days >= -1 && days <= 3650;
+        return RegExp(r'^-?(0|[1-9][0-9]*)$').hasMatch(value) && days != null && days >= -2 && days <= 3650;
       }
       if (field == 'theme') return ['system', 'light', 'dark'].contains(value);
       if (field == 'locale') return RegExp(r'^[A-Za-z0-9-]{1,32}$').hasMatch(value);

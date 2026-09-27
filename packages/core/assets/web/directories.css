@@ -27,3 +27,6 @@
 @media(max-width:540px){.selection-actions button{font-size:.82rem;padding:.4rem .55rem}.directory-selection{padding:.55rem}}
 
 .directory-selection small[hidden]{display:none}
+
+#selection-details{font-size:.82rem;margin-top:.5rem;color:var(--muted)}#selection-details summary{cursor:pointer}#selection-details p{line-height:1.5;max-width:64ch}#archive-target{max-width:min(100%,32rem);min-width:0;text-overflow:ellipsis}
+#selection-status{overflow-wrap:anywhere}

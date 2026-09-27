@@ -117,3 +117,36 @@ test('real server rounded remaining admission TTL of 119 seconds is accepted wit
  const ticket=await controller.download(ids);assert.equal(ticket.expiresAt,120000);assert.equal(handed.length,1);
  for(const expiresIn of[0,-1,1.5,121,'119']){const invalid=create(async(url)=>response(url.includes('prepare-')?{...receipt(),expiresIn}:{})).controller;await assert.rejects(invalid.download(ids),{code:'invalid-receipt'});}
 });
+
+test('select all walks every page without retaining pages or altering the previous choice',async()=>{
+ const {collectAll}=require('../../assets/web/directory-archive-selection.js');
+ const previous=new Selection('folder');previous.toggle({id:'old',directory:false},true);
+ const calls=[],progress=[];
+ const result=await collectAll({generation:7,path:'folder',createSelection:()=>new Selection('folder'),progress:n=>progress.push(n),page:async cursor=>{
+  calls.push(cursor);const index=cursor===null?0:Number(cursor);
+  return {generation:7,path:'folder',stamp:'stable',cursor:index<2?String(index+1):null,entries:Array.from({length:100},(_,n)=>({id:String(index*100+n),name:n+'.txt',directory:false}))};
+ }});
+ assert.equal(result.items.size,300);assert.deepEqual(calls,[null,'1','2']);assert.deepEqual(progress,[100,200,300]);assert.deepEqual([...previous.items.keys()],['old']);
+});
+test('select all cancellation, page failure, stale scope and over-budget enumeration never yield partial selection',async()=>{
+ const {collectAll}=require('../../assets/web/directory-archive-selection.js');
+ const row={id:'first',name:'first',directory:false};
+ const page={generation:7,path:'folder',stamp:'s',cursor:'next',entries:[row]};
+ const base={generation:7,path:'folder',createSelection:()=>new Selection('folder')};
+ const cancel=new AbortController();
+ await assert.rejects(collectAll({...base,signal:cancel.signal,page:async()=>{cancel.abort();return page;}}),{code:'selection-cancelled'});
+ let calls=0;await assert.rejects(collectAll({...base,page:async()=>{if(calls++)throw Error('offline');return page;}}),/offline/);
+ calls=0;await assert.rejects(collectAll({...base,page:async()=>({...page,stamp:calls++?'changed':'s'})}),{code:'selection-changed'});
+ await assert.rejects(collectAll({...base,page:async()=>({...page,generation:8})}),{code:'selection-changed'});
+ await assert.rejects(collectAll({...base,page:async()=>({...page,filter:'limited'})}),{code:'selection-changed'});
+ await assert.rejects(collectAll({...base,page:async()=>page}),{code:'selection-changed'});
+ calls=0;await assert.rejects(collectAll({...base,page:async()=>({generation:7,path:'folder',stamp:'s',cursor:String(++calls),entries:Array.from({length:1000},(_,n)=>({id:calls+'-'+n,name:'x',directory:false}))})}),{code:'selection-limit'});
+ let now=0;await assert.rejects(collectAll({...base,now:()=>now,timeout:10,page:async()=>{now=11;return page;}}),{code:'selection-timeout'});
+});
+test('select all respects unavailable document entries and the old host 128-item limit atomically',async()=>{
+ const {collectAll}=require('../../assets/web/directory-archive-selection.js');
+ const {Selection:Legacy,archiveSelectionUrl}=require('../../assets/web/directories.js');
+ const base={generation:7,path:'',page:async()=>({generation:7,path:'',stamp:'s',cursor:null,entries:[{id:'a',name:'a',directory:false,downloadable:false},{id:'b',name:'b',directory:false,downloadable:true},{id:'c',name:'c',directory:true}]})};
+ const selected=await collectAll({...base,documents:true,createSelection:()=>new Selection('')});assert.deepEqual([...selected.items.keys()],['b','c']);
+ await assert.rejects(collectAll({...base,createSelection:()=>new Legacy(),validate:ids=>archiveSelectionUrl('/route',7,'',ids),page:async()=>({generation:7,path:'',stamp:'s',cursor:null,entries:Array.from({length:129},(_,n)=>({id:String(n),name:'x',directory:false}))})}),{code:'selection-limit'});
+});

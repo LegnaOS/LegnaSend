@@ -63,3 +63,42 @@ test('failed registry save does not enable a destructive policy',async()=>{
   f.registry.retention=async()=>{throw Error('storage offline');};
   await assert.rejects(m.setRetention(1));assert.equal(m.retentionDays,0);assert.equal(f.records.size,1);m.close();
 });
+
+test('unset web policy defaults to exactly one hour, keeping the boundary-minus-one cache', async () => {
+  for (const age of [3599999, 3600000]) {
+    const f = await fixture({ age });
+    f.registry.retention = async () => undefined;
+    const m = f.start(); await m.ready;
+    assert.equal(m.retentionDays, -2);
+    assert.equal(f.records.size, age < 3600000 ? 1 : 0);
+    assert.equal(f.entries.has(f.handleFile.name), age < 3600000);
+    m.close();
+  }
+});
+
+test('explicit manual and day policies survive the new default while invalid policy stays conservative', async () => {
+  for (const policy of [0, 1, 7, 30, null, 'hour', -3]) {
+    const f = await fixture({ age: 3600000 });
+    f.registry.retention = async () => policy;
+    const m = f.start(); await m.ready;
+    assert.equal(m.retentionDays, [0, 1, 7, 30].includes(policy) ? policy : 0);
+    assert.equal(f.records.size, 1);
+    m.close();
+  }
+});
+
+test('hour policy setter persists its explicit code and keeps active, finished and unknown files', async () => {
+  const f = await fixture({ days: 0, age: 7200000 });
+  const user = f.handle('user.ls'); user.bytes = Buffer.from('user-owned');
+  const m = f.start(); await m.ready;
+  f.held.add('legnasend-download:' + f.id);
+  await m.setRetention(-2);
+  assert.equal(await f.registry.retention(), -2);
+  assert.equal(f.records.size, 1);
+  f.held.delete('legnasend-download:' + f.id);
+  f.records.get(f.id).state = 'complete';
+  await m.cleanupExpired();
+  assert.equal(f.records.size, 1);
+  assert.deepEqual(user.bytes, Buffer.from('user-owned'));
+  m.close();
+});

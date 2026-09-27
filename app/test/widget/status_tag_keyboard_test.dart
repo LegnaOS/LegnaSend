@@ -17,6 +17,16 @@ void main() {
         addTearDown(tester.view.resetDevicePixelRatio);
         await LocaleSettings.setLocale(AppLocale.en);
         final calls = <String>[];
+        const browserChannel = MethodChannel('plugins.flutter.io/url_launcher');
+        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(browserChannel, (call) async {
+          expect(call.method, 'launch');
+          expect((call.arguments as Map)['url'], 'http://192.168.1.4:53318/share');
+          expect((call.arguments as Map)['useWebView'], false);
+          expect((call.arguments as Map)['useSafariVC'], false);
+          calls.add('open');
+          return true;
+        });
+        addTearDown(() => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(browserChannel, null));
         await tester.pumpWidget(
           MaterialApp(
             home: Scaffold(
@@ -35,8 +45,8 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
-        final buttons = [find.byType(TextButton), ...List.generate(3, (i) => find.byType(IconButton).at(i))];
-        final labels = ['Open link workspace', t.general.copy, t.dialogs.qr.title, t.dialogs.zoom.title];
+        final buttons = [find.byType(TextButton), ...List.generate(4, (i) => find.byType(IconButton).at(i))];
+        final labels = ['Open link workspace', t.general.copy, t.general.open, t.dialogs.qr.title, t.dialogs.zoom.title];
         for (var index = 0; index < buttons.length; index++) {
           await tester.sendKeyEvent(LogicalKeyboardKey.tab);
           await tester.pumpAndSettle();
@@ -52,7 +62,7 @@ void main() {
             expect(tester.getSize(buttons[index]).height, greaterThanOrEqualTo(48));
           }
         }
-        expect(calls, ['tag', 'copy', 'qr', 'zoom']);
+        expect(calls, ['tag', 'copy', 'open', 'qr', 'zoom']);
         semantics.dispose();
       },
       variant: TargetPlatformVariant({TargetPlatform.macOS, TargetPlatform.android, TargetPlatform.iOS}),

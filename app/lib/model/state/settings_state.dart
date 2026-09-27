@@ -72,6 +72,6 @@ class SettingsState with SettingsStateMappable {
     required this.verifyChecksums,
     required this.discoveryTimeout,
     required this.advancedSettings,
-    this.receiveCacheRetentionDays = 0,
+    this.receiveCacheRetentionDays = -2,
   });
 }

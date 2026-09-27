@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:localsend_app/gen/strings.g.dart';
+import 'package:localsend_app/util/native/open_share_link.dart';
 import 'package:localsend_app/widget/accessible_icon_button.dart';
 
 /// Every interface has separate named actions. Do not merge these with the
@@ -14,11 +15,11 @@ class ShareLinkActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FocusTraversalGroup(
-    child: Row(
-      mainAxisSize: MainAxisSize.min,
+    child: Wrap(
       children: [
         for (final action in [
           (Icons.content_copy, t.general.copy, onCopy),
+          (Icons.open_in_browser, t.general.open, () => openShareLink(context, url)),
           (Icons.qr_code, t.dialogs.qr.title, onQr),
           (Icons.tv, t.dialogs.zoom.title, onZoom),
         ])

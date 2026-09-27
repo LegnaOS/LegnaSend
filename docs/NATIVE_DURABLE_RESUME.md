@@ -38,7 +38,7 @@ Transport retries retain bounded reconnect behavior. Durable verification has se
 
 If reconnect attempts are exhausted, the sender attempts a file-local suspend. It distinguishes a confirmed retained checkpoint from an unknown outcome. An unknown suspend acknowledgement does not permit a later generic v2 cancel: the two connections can reorder and delete a checkpoint in transition. Explicit active cancellation and detected source changes still abort. A successful prior publication remains successful even if its acknowledgement was lost.
 
-Reservations have an absolute **one-day lease**, at most **128 records**, in a private host registry. Status requests and new approvals do not extend that deadline. Source identity, approved destination identity/name, owned cache identity and all committed blocks are rechecked before adoption. Missing birthtime/lock support disables this extension rather than weakening identity. A changed source invalidates only its verified owned old cache; unrelated or replaced files are preserved.
+Reservations have an absolute **one-hour lease for new records**, at most **128 records**, in a private host registry. Status requests and new approvals do not extend that deadline. Source identity, approved destination identity/name, owned cache identity and all committed blocks are rechecked before adoption. Missing birthtime/lock support disables this extension rather than weakening identity. A changed source invalidates only its verified owned old cache; unrelated or replaced files are preserved.
 
 Crash recovery does not restore wire credentials or a live server session. The new attempt reopens the owned journal under an exclusive process lock. Publication intent and a persistent receipt UUID are recorded before final acknowledgement. A lost-ACK retry verifies the owned final output and reuses the receipt, avoiding a numbered duplicate or duplicate history item. Clearing/deleting history persists suppression across restart.
 
@@ -62,7 +62,7 @@ Android uses a real nonblocking system lock adapter because the pinned Rust stan
 
 A sender that is offline when a user explicitly ends a source can persist that intent and notify the same receiver later. This is separately negotiated authority, not a reuse of `resumeKey`, an old session/file token, or an administrative bearer key. Ordinary LocalSend peers and durable peers without this capability keep their existing behavior; local cancellation alone never proves remote cache deletion.
 
-The receiver advertises `durable.sourceEnd: {"version":1}`. Only a supporting sender requesting `recovery.sourceEnd:1` receives a `sourceEnd` grant in its ready/status receipt. The grant contains `version`, `grantId`, `round`, a random 32-byte base64url `token`, and `expiresAtUnixMs`. The receiver persists only its hash. Authority is bound to the cache transaction and the original certificate, or exact IP without TLS. Each fresh approved attachment rotates the authority; the record's original one-day absolute deadline is not renewed.
+The receiver advertises `durable.sourceEnd: {"version":1}`. Only a supporting sender requesting `recovery.sourceEnd:1` receives a `sourceEnd` grant in its ready/status receipt. The grant contains `version`, `grantId`, `round`, a random 32-byte base64url `token`, and `expiresAtUnixMs`. The receiver persists only its hash. Authority is bound to the cache transaction and the original certificate, or exact IP without TLS. Each fresh approved attachment rotates the authority; the record's original one-hour absolute deadline is not renewed.
 
 Before sending its first block, the app persists this grant in its separate private journal and acknowledges the exact native upload. Negative acknowledgement, timeout or cancellation sends no first block. Journal I/O uses an opaque native lease with no-follow directory/lock identity checks, a real process lock, and owner-only permissions on Unix. A write failure with an uncertain commit disables further writes until reopening and reading actual disk state. Windows uses the application support directory's inherited private ACL; this is not a claim of tested Windows power-loss durability.
 
@@ -80,3 +80,6 @@ Source-end cleanup authenticates its private ledger before requesting the stored
 
 An externally scoped attempt cancelled before a save target is accepted only drops private registry ownership; it does not run target cleanup after the receive scope has drained. Its registered partial content remains available for a fresh approved retry or subsequent coordinated source-end/expiry cleanup.
 
+Legacy one-day records remain valid until their original deadlines; upgrades do not expire them early.
+
+Active exclusive writers continue beyond the announced recovery deadline. Activity delays only local leftover cleanup; it never extends published recovery expiry or source-end grants. Expired reconnect claims remain rejected. Unknown/future activity times retain data conservatively.

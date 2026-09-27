@@ -108,22 +108,18 @@ fn restart_requires_matching_source_approved_target_and_released_process_lease()
         second.claim(&changed, &f.root.join("received"), "file.bin"),
         Err(Error::Identity)
     ));
-    assert!(
-        second
-            .claim(&f.source, &f.root.join("received"), "other.bin")
-            .unwrap()
-            .is_none()
-    );
+    assert!(second
+        .claim(&f.source, &f.root.join("received"), "other.bin")
+        .unwrap()
+        .is_none());
     changed = f.source.clone();
     changed.peer = Peer::Http {
         address: "127.0.0.2".into(),
     };
-    assert!(
-        second
-            .claim(&changed, &f.root.join("received"), "file.bin")
-            .unwrap()
-            .is_none()
-    );
+    assert!(second
+        .claim(&changed, &f.root.join("received"), "file.bin")
+        .unwrap()
+        .is_none());
 }
 #[test]
 fn replaced_parent_or_cache_inode_is_never_adopted_or_deleted() {
@@ -138,12 +134,11 @@ fn replaced_parent_or_cache_inode_is_never_adopted_or_deleted() {
     drop(lease);
     std::fs::rename(f.root.join("received"), f.root.join("previous")).unwrap();
     std::fs::create_dir(f.root.join("received")).unwrap();
-    assert!(
-        f.registry
-            .claim(&f.source, &f.root.join("received"), "file.bin")
-            .unwrap()
-            .is_none()
-    );
+    assert!(f
+        .registry
+        .claim(&f.source, &f.root.join("received"), "file.bin")
+        .unwrap()
+        .is_none());
 }
 #[test]
 fn publishing_intent_can_identify_lost_ack_without_overwriting_or_cleaning_final() {
@@ -218,12 +213,11 @@ fn manual_cleanup_respects_real_locks_and_default_cleanup_retains_pending_lease(
     assert_eq!(report.removed_records, 1);
     assert_eq!(report.removed_files, 1);
     assert!(!cache.exists());
-    assert!(
-        f.registry
-            .claim(&f.source, &f.root.join("received"), "file.bin")
-            .unwrap()
-            .is_none()
-    );
+    assert!(f
+        .registry
+        .claim(&f.source, &f.root.join("received"), "file.bin")
+        .unwrap()
+        .is_none());
 }
 #[test]
 fn unknown_journal_file_is_not_recursively_deleted() {
@@ -299,4 +293,92 @@ fn partial_export_can_be_rebuilt_only_from_owned_staging() {
     lease.reset_export().unwrap();
     assert!(!staging.exists());
     assert!(lease.open_cache().is_ok());
+}
+
+#[test]
+fn new_reservations_expire_after_one_hour_and_legacy_one_day_records_still_restore() {
+    let f = Fixture::new();
+    let lease = f.create();
+    assert_eq!(
+        lease.record.expires_unix_ms - lease.record.created_unix_ms,
+        3_600_000
+    );
+    let mut record = lease.record.clone();
+    let path = f
+        .root
+        .join("journal")
+        .join(record.key())
+        .join("record.json");
+    drop(lease);
+    // Preserve an already-issued legacy reservation's original deadline.
+    record.expires_unix_ms = record.created_unix_ms + 86_400_000;
+    let write = |record: &registry::Record| {
+        let sha256 = crypto::hash::sha256_hex(&serde_json::to_vec(record).unwrap());
+        std::fs::write(
+            &path,
+            serde_json::to_vec(&serde_json::json!({
+                "version": 1, "value": record, "sha256": sha256,
+            }))
+            .unwrap(),
+        )
+        .unwrap();
+    };
+    write(&record);
+    let restored = f
+        .registry
+        .claim(&f.source, &f.root.join("received"), "file.bin")
+        .unwrap()
+        .unwrap();
+    assert_eq!(restored.record.expires_unix_ms, record.expires_unix_ms);
+    drop(restored);
+    // An arbitrary new duration is not accepted as a trusted reservation format.
+    record.expires_unix_ms = record.created_unix_ms + 7_200_000;
+    write(&record);
+    assert!(matches!(
+        f.registry
+            .claim(&f.source, &f.root.join("received"), "file.bin"),
+        Err(Error::Identity)
+    ));
+    // One-hour records actually expire, independent of day-based preferences.
+    record.created_unix_ms -= 3_600_001;
+    record.cache.created_unix_ms = record.created_unix_ms;
+    record.expires_unix_ms = record.created_unix_ms + 3_600_000;
+    write(&record);
+    assert!(matches!(
+        f.registry
+            .claim(&f.source, &f.root.join("received"), "file.bin"),
+        Err(Error::Expired)
+    ));
+}
+
+#[test]
+fn long_active_transfer_retention_never_renews_sender_authorization() {
+    let f = Fixture::new();
+    let mut lease = f.create();
+    let original = lease.record.created_unix_ms;
+    lease.record.created_unix_ms = original - 7_200_000;
+    lease.record.cache.created_unix_ms = lease.record.created_unix_ms;
+    lease.record.expires_unix_ms = lease.record.created_unix_ms + 3_600_000;
+    let expiry = lease.record.expires_unix_ms;
+    assert!(
+        lease.valid_lease(),
+        "An exclusive active writer must not be stopped by retention"
+    );
+    lease.suspend().unwrap();
+    assert_eq!(
+        lease.record.expires_unix_ms, expiry,
+        "Activity must not extend advertised authorization"
+    );
+    drop(lease);
+    assert!(matches!(
+        f.registry
+            .claim(&f.source, &f.root.join("received"), "file.bin"),
+        Err(Error::Expired)
+    ));
+    let report = f.registry.cleanup(128, false).unwrap();
+    assert_eq!(
+        report.removed_files, 0,
+        "Recently interrupted cache remains despite expired authorization"
+    );
+    assert_eq!(report.retained, 1);
 }

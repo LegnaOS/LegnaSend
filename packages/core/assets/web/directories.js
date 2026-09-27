@@ -5,12 +5,15 @@
     'zh-CN': {contentRevision:'内容 R',contentPending:'更新待核验',contentHint:'已观察到的元数据代次，不是整个目录的内容哈希；下载仍按每个文件的版本核验。',anchorLost:'在刷新预算内未找到原位置。请点击刷新，从头浏览。',searching:'正在搜索当前目录…',filterLabel:'搜索文件和文件夹名称',filterHint:'仅当前目录 · 名称字面匹配 · 结果分页加载',filterClear:'清除搜索',filterMore:'继续搜索',noMatches:'当前目录中没有匹配的名称。',matches:'项匹配已加载',uploadAllowed:'允许上传',updates:'列表有更新 · 重新加载',previous:'上一段条目',start:'从头浏览',preview:'预览',"locked":"需要密码","unlock":"解锁","logout":"锁定工作区","password":"工作区密码或 PIN","cancel":"取消","wrongPassword":"密码不正确，请重试。","rateLimited":"尝试过于频繁，请等待一分钟后重试。","authHint":"密码控制访问权限，不加密保存的文件。","httpPassword":"HTTP 不保护传输中的密码，HTTPS 传输在发送端应用设置。","unlocking":"正在验证…",title:'工作区',refresh:'刷新',readOnly:'只读共享',empty:'暂无已开启的可见工作区。',loading:'正在加载…',failed:'工作区或目录暂不可用，请刷新重试。',changed:'目录已变化或分页已过期，请刷新列表。',files:'项已加载',more:'加载更多',up:'上级目录',temporary:'临时共享',temporaryHint:'现有双向文件共享',open:'打开工作区',http:'HTTP · 未使用 TLS',https:'HTTPS · TLS',end:'已加载全部条目。'},
     'zh-TW': {contentRevision:'內容 R',contentPending:'更新待核驗',contentHint:'已觀察到的中繼資料代次，不是整個目錄的內容雜湊；下載仍按每個檔案的版本核驗。',anchorLost:'在重新整理預算內找不到原位置。請點擊重新整理，從頭瀏覽。',searching:'正在搜尋目前目錄…',filterLabel:'搜尋檔案與資料夾名稱',filterHint:'僅目前目錄 · 名稱字面比對 · 結果分頁載入',filterClear:'清除搜尋',filterMore:'繼續搜尋',noMatches:'目前目錄中沒有符合的名稱。',matches:'項符合已載入',uploadAllowed:'允許上傳',updates:'清單有更新 · 重新載入',previous:'上一段項目',start:'從頭瀏覽',preview:'預覽',"locked":"需要密碼","unlock":"解鎖","logout":"鎖定工作區","password":"工作區密碼或 PIN","cancel":"取消","wrongPassword":"密碼不正確，請重試。","rateLimited":"嘗試過於頻繁，請等待一分鐘後重試。","authHint":"密碼控制存取權限，不加密儲存的檔案。","httpPassword":"HTTP 不保護傳輸中的密碼，HTTPS 傳輸在傳送端應用設定。","unlocking":"正在驗證…",title:'工作區',refresh:'重新整理',readOnly:'唯讀分享',empty:'暫無已開啟的可見工作區。',loading:'正在載入…',failed:'工作區或目錄暫不可用，請重新整理後重試。',changed:'目錄已變更或分頁已過期，請重新整理列表。',files:'項已載入',more:'載入更多',up:'上層目錄',temporary:'臨時分享',temporaryHint:'既有雙向檔案分享',open:'開啟工作區',http:'HTTP · 未使用 TLS',https:'HTTPS · TLS',end:'已載入全部項目。'}
   };
-  Object.assign(messages.en,{selectLoaded:'Select loaded (up to 128)',clearSelection:'Clear selection',downloadSelection:'Download selected ZIP',selected:'selected',selectionLimit:'Selection limit reached or encoded paths are too long.',browserDownload:'Download handed to your browser.',selectItem:'Select',selectionHint:'Selection applies to this folder and clears on refresh or navigation.'});
-  Object.assign(messages['zh-CN'],{selectLoaded:'选择已加载（最多128项）',clearSelection:'清除选择',downloadSelection:'下载所选 ZIP',selected:'项已选择',selectionLimit:'已达选择上限，或所选路径过长。',browserDownload:'已交给浏览器下载。',selectItem:'选择',selectionHint:'选择仅限当前目录，刷新或切换目录后清空。'});
-  Object.assign(messages['zh-TW'],{selectLoaded:'選擇已載入（最多128項）',clearSelection:'清除選擇',downloadSelection:'下載所選 ZIP',selected:'項已選擇',selectionLimit:'已達選擇上限，或所選路徑過長。',browserDownload:'已交給瀏覽器下載。',selectItem:'選擇',selectionHint:'選擇僅限目前目錄，重新整理或切換目錄後清空。'});
+  Object.assign(messages.en,{selectLoaded:'Select loaded (up to 128)',clearSelection:'Clear selection',downloadSelection:'Download selected ZIP',selected:'selected',selectionLimit:'This host allows 128 selections or a bounded download link. Previous choices kept; use the whole-folder download for larger folders.',browserDownload:'Download handed to your browser.',selectItem:'Select',selectionHint:'Selection applies to this folder and clears on refresh or navigation.'});
+  Object.assign(messages['zh-CN'],{selectLoaded:'选择已加载（最多128项）',clearSelection:'清除选择',downloadSelection:'下载所选 ZIP',selected:'项已选择',selectionLimit:'已达128项或下载链接长度上限，原有选择已保留；更多文件可直接下载整个文件夹。',browserDownload:'已交给浏览器下载。',selectItem:'选择',selectionHint:'选择仅限当前目录，刷新或切换目录后清空。'});
+  Object.assign(messages['zh-TW'],{selectLoaded:'選擇已載入（最多128項）',clearSelection:'清除選擇',downloadSelection:'下載所選 ZIP',selected:'項已選擇',selectionLimit:'已達128項或下載連結長度上限，原有選擇已保留；更多檔案可直接下載整個目錄。',browserDownload:'已交給瀏覽器下載。',selectItem:'選擇',selectionHint:'選擇僅限目前目錄，重新整理或切換目錄後清空。'});
   Object.assign(messages.en,{selectLoadedLarge:'Select loaded',selectionHintLarge:'Selections persist across visited pages in this folder (20,000 items / 2 MiB metadata). Refresh or navigation to another folder clears them.',selectionLimitLarge:'Selection reached 20,000 items or the 2 MiB metadata limit.',archivePreparing:'Preparing selected ZIP…',archiveCancelPrepare:'Cancel preparation',archiveCancelDownload:'Cancel latest browser ZIP',archiveCancelled:'Preparation cancelled.',archiveDownloadCancelled:'Cancellation requested for this ZIP only.',archiveFailed:'ZIP preparation failed. Retry or refresh the list.',archiveExpired:'The selection expired or changed. Refresh and select again.',archiveBusy:'Up to four ZIP preparations or downloads can be active. Wait or cancel one.',archiveTimeout:'Preparation timed out. No download was started; retry when the connection recovers.',archiveCancelFailed:'Cancellation was not confirmed. Retry or use your browser download controls.'});
   Object.assign(messages['zh-CN'],{selectLoadedLarge:'选择已加载',selectionHintLarge:'可跨当前目录已访问分页保留选择，最多20,000项或2 MiB元数据；刷新或切换目录会清空。',selectionLimitLarge:'已达20,000项或2 MiB元数据上限。',archivePreparing:'正在准备所选 ZIP…',archiveCancelPrepare:'取消准备',archiveCancelDownload:'取消最近的浏览器 ZIP',archiveCancelled:'已取消准备。',archiveDownloadCancelled:'仅对此 ZIP 请求取消。',archiveFailed:'ZIP准备失败，请重试或刷新列表。',archiveExpired:'选择已过期或内容已变化，请刷新后重新选择。',archiveBusy:'最多同时准备或下载4个ZIP，请稍候或取消其中一个。',archiveTimeout:'准备超时，尚未启动下载；网络恢复后可重试。',archiveCancelFailed:'尚未确认取消，请重试或使用浏览器下载管理。'});
   Object.assign(messages['zh-TW'],{selectLoadedLarge:'選擇已載入',selectionHintLarge:'可跨目前目錄已瀏覽分頁保留選擇，最多20,000項或2 MiB中繼資料；重新整理或切換目錄會清空。',selectionLimitLarge:'已達20,000項或2 MiB中繼資料上限。',archivePreparing:'正在準備所選 ZIP…',archiveCancelPrepare:'取消準備',archiveCancelDownload:'取消最近的瀏覽器 ZIP',archiveCancelled:'已取消準備。',archiveDownloadCancelled:'僅對此 ZIP 請求取消。',archiveFailed:'ZIP準備失敗，請重試或重新整理清單。',archiveExpired:'選擇已過期或內容已變更，請重新整理後再選擇。',archiveBusy:'最多同時準備或下載4個ZIP，請稍候或取消其中一個。',archiveTimeout:'準備逾時，尚未啟動下載；網絡恢復後可重試。',archiveCancelFailed:'尚未確認取消，請重試或使用瀏覽器下載管理。'});
+  Object.assign(messages.en,{selectAll:'Select all',selectAllCancel:'Cancel selection',selectAllProgress:'Selecting current folder…',selectAllCancelled:'Selection cancelled. Previous choices kept.',selectAllFailed:'Could not select the entire folder. Previous choices kept. Try again.',selectAllTimeout:'Selection timed out. Previous choices kept.',selectAllChanged:'The folder changed. Previous choices kept; refresh before selecting again.',downloadMethods:'Download options',downloadMethodsHint:'Select all includes unloaded entries in the current folder, not only search matches. Folder files save individually to an authorized folder with pause and resume. ZIP saves an archive through your browser; ZIP has no in-page resume. Selection limits: 20,000 entries / 2 MiB metadata; older hosts allow 128. Refresh or changing folders clears selection.',archiveTarget:'ZIP download to cancel',archiveCancelDownload:'Cancel selected ZIP download',archiveDownloadCancelled:'Cancellation requested for the selected ZIP. Already saved files are not deleted.'});
+  Object.assign(messages['zh-CN'],{selectAll:'全选',selectAllCancel:'取消全选',selectAllProgress:'正在选择当前目录…',selectAllCancelled:'已取消全选，保留原有选择。',selectAllFailed:'未能全选当前目录，原有选择已保留，请重试。',selectAllTimeout:'全选超时，原有选择已保留。',selectAllChanged:'目录已变化，原有选择已保留；请刷新后重新选择。',downloadMethods:'下载方式',downloadMethodsHint:'全选包括当前目录尚未加载的项目，不限于搜索结果。原文件夹下载：逐文件保存到已授权目录，可暂停、续传。ZIP 下载：由浏览器保存压缩包，不支持页内续传。最多选择20,000项／2 MiB元数据，旧版服务最多128项。刷新或切换目录会清空选择。',archiveTarget:'要取消的 ZIP 下载',archiveCancelDownload:'取消所选 ZIP 下载',archiveDownloadCancelled:'已请求取消所选 ZIP，不删除已保存的文件。'});
+  Object.assign(messages['zh-TW'],{selectAll:'全選',selectAllCancel:'取消全選',selectAllProgress:'正在選擇目前目錄…',selectAllCancelled:'已取消全選，保留原有選擇。',selectAllFailed:'未能全選目前目錄，原有選擇已保留，請重試。',selectAllTimeout:'全選逾時，原有選擇已保留。',selectAllChanged:'目錄已變更，原有選擇已保留；請重新整理後再選擇。',downloadMethods:'下載方式',downloadMethodsHint:'全選包含目前目錄尚未載入的項目，不限於搜尋結果。原檔案目錄下載：逐檔儲存至已授權目錄，可暫停、續傳。ZIP 下載：由瀏覽器儲存壓縮檔，不支援頁內續傳。最多選擇20,000項／2 MiB中繼資料，舊版服務最多128項。重新整理或切換目錄會清空選擇。',archiveTarget:'要取消的 ZIP 下載',archiveCancelDownload:'取消所選 ZIP 下載',archiveDownloadCancelled:'已請求取消所選 ZIP，不刪除已儲存的檔案。'});
   messages['zh-HK'] = messages['zh-TW'];
   function locale(value) { return /^zh/i.test(value) ? (/HK/i.test(value) ? 'zh-HK' : /TW|Hant/i.test(value) ? 'zh-TW' : 'zh-CN') : 'en'; }
   function filePath(path, name) { return path ? path + '/' + name : name; }
@@ -42,9 +45,10 @@
   if (!root.document) return;
   var doc=root.document, $=function(id){return doc.getElementById(id);}, language=locale(root.navigator.language), text;
   try { language=locale(root.localStorage.getItem('legnasend-directory-language') || language); } catch (_) {}
-  var filterValue='',filterTimer=0,selection=new Selection(),selectionMessage='',archiveController=null,archiveCancelling=false;
+  var filterValue='',filterTimer=0,selection=new Selection(),selectionMessage='',archiveController=null,archiveCancelling=false,selectAllController=null,selectAllCount=0,cancelledArchiveTicket=null;
   function preparedArchive(){return !!(root.LegnaDirectoryArchiveSelection&&preparedArchiveCapability(workspace));}
-  function abandonArchive(){var old=archiveController;archiveController=null;archiveCancelling=false;if(old)old.close();}
+  function cancelSelectAll(){if(selectAllController)selectAllController.abort();selectAllController=null;}
+  function abandonArchive(){cancelSelectAll();var old=archiveController;archiveController=null;archiveCancelling=false;if(old)old.close();}
   function archivePreparing(){return !!(archiveController&&archiveController.snapshot().preparing);}
   var workspace=null, directory='', items=[], cursor=null, finished=false, loading=false, epoch=0, controller=null, indexData=null;
   var uploads=null,uploadRefresh=0,downloads=null, policy=root.LegnaDirectoryWindow, windowState=new policy.Window();
@@ -82,7 +86,7 @@
   function foreground(){return pageActive&&!doc.hidden&&root.navigator.onLine!==false;}
   function scheduleProbe(immediate){
     if(probeTimer)root.clearTimeout(probeTimer);probeTimer=0;
-    if(!foreground()||loading||authBusy||$('auth').open||workspace&&!$('unlock').hidden)return;
+    if(!foreground()||loading||selectAllController||authBusy||$('auth').open||workspace&&!$('unlock').hidden)return;
     watchEvents();
     probeTimer=root.setTimeout(probe,immediate?0:documents()?Math.min(15000,policy.delay(unchanged,latency,failures)):policy.delay(unchanged,latency,failures));
   }
@@ -266,14 +270,18 @@
     var state=archiveController?archiveController.snapshot():{preparing:false,tickets:[]},preparing=state.preparing,large=preparedArchive();
 
     bar.hidden=!workspace||!capability('archive')||!$('unlock').hidden;
-    $('select-loaded').textContent=text?(large?text.selectLoadedLarge:text.selectLoaded):'';$('clear-selection').textContent=text?text.clearSelection:'';
+    $('select-loaded').textContent=text?(selectAllController?text.selectAllCancel:text.selectAll):'';$('clear-selection').textContent=text?text.clearSelection:'';
     $('download-selection').textContent=text?text.downloadSelection:'';$('selection-count').textContent=text?selection.items.size+' '+text.selected:'';
-    bar.title=text?(large?text.selectionHintLarge:text.selectionHint):'';bar.setAttribute('aria-label',text?text.selectItem:'');
+    bar.title='';$('selection-details-title').textContent=text?text.downloadMethods:'';$('selection-details-copy').textContent=text?text.downloadMethodsHint:'';bar.setAttribute('aria-label',text?text.selectItem:'');
     var message=preparing?'archivePreparing':large&&selectionMessage==='selectionLimit'?'selectionLimitLarge':selectionMessage;
-    $('selection-status').textContent=text&&message?text[message]:'';$('selection-status').hidden=!message;
-    $('clear-selection').disabled=!selection.items.size;$('download-selection').disabled=!selection.items.size||dirty||loading||preparing||archiveCancelling;
-    $('select-loaded').disabled=loading||!items.length||dirty||preparing;
-    $('rows').querySelectorAll('.directory-select').forEach(function(control){control.disabled=preparing||control.dataset.unavailable==='true';});
+    $('selection-status').textContent=selectAllController?text.selectAllProgress+' '+selectAllCount+' '+text.selected:text&&message?text[message]:'';$('selection-status').hidden=!message&&!selectAllController;if(message==='archiveDownloadCancelled'&&cancelledArchiveTicket)$('selection-status').textContent+=' '+cancelledArchiveTicket.scope+' · '+cancelledArchiveTicket.selectedEntries+' '+text.selected+' · #'+cancelledArchiveTicket.selection.slice(0,8);
+    $('clear-selection').disabled=!!selectAllController||!selection.items.size;$('download-selection').disabled=!selection.items.size||dirty||loading||preparing||archiveCancelling||!!selectAllController;
+    $('select-loaded').disabled=!selectAllController&&(loading||dirty||preparing);
+    $('rows').querySelectorAll('.directory-select').forEach(function(control){control.disabled=preparing||!!selectAllController||control.dataset.unavailable==='true';});
+    var target=$('archive-target'),previous=target.value;target.replaceChildren();target.hidden=preparing||!state.tickets.length;target.disabled=archiveCancelling;
+    target.setAttribute('aria-label',text?text.archiveTarget:'');
+    state.tickets.forEach(function(ticket){var option=node('option','',(directory||workspace.name)+' · '+ticket.selectedEntries+' '+text.selected+' · '+new Date(ticket.startedAt).toLocaleTimeString(language)+' · #'+ticket.selection.slice(0,8));option.value=ticket.selection;target.append(option);});
+    if(state.tickets.some(function(ticket){return ticket.selection===previous;}))target.value=previous;else if(state.tickets.length)target.value=state.tickets[state.tickets.length-1].selection;
     var cancel=$('cancel-archive-selection');if(cancel){cancel.hidden=!preparing&&!state.tickets.length;cancel.disabled=archiveCancelling;cancel.textContent=text?(preparing?text.archiveCancelPrepare:text.archiveCancelDownload):'';}
   }
   function startFolderDownload(path){
@@ -356,15 +364,30 @@
   $('directory-filter-form').addEventListener('submit',function(event){event.preventDefault();applyFilter(true);});
   $('directory-filter-clear').addEventListener('click',function(){$('directory-filter').value='';applyFilter(true);$('directory-filter').focus();});
   $('download-folder').onclick=function(){if(workspace)startFolderDownload(directory);};
-  $('select-loaded').onclick=function(){
-    if(!workspace||dirty||loading)return;var limited=false;
-    items.forEach(function(item){if(documents()&&!item.directory&&item.downloadable!==true)return;if(!selection.toggle(item,true,function(ids){archiveSelectionUrl(routeUrl(),workspace.generation,directory,ids);}))limited=true;});
-    selectionMessage=limited?'selectionLimit':'';draw();
+  $('select-loaded').onclick=async function(){
+    if(selectAllController){cancelSelectAll();selectionMessage='selectAllCancelled';selectionControls();scheduleProbe(false);return;}
+    if(!workspace||dirty||loading||archivePreparing())return;
+    var own=selectAllController=new AbortController(),active=epoch,id=workspace.id,generation=workspace.generation,path=directory;
+    selectAllCount=0;selectionMessage='';stopProbe();selectionControls();
+    var timer=root.setTimeout(function(){own.abort();},60000);
+    try{
+      var result=await root.LegnaDirectoryArchiveSelection.collectAll({signal:own.signal,generation:generation,path:path,documents:documents(),
+        createSelection:function(){return preparedArchive()?new root.LegnaDirectoryArchiveSelection.Selection(path):new Selection();},
+        page:function(token){return get(routeUrl()+'/files?generation='+generation+'&path='+encodeURIComponent(path)+(token?'&cursor='+encodeURIComponent(token):''),own.signal);},
+        validate:function(ids){archiveSelectionUrl(routeUrl(),generation,path,ids);},
+        progress:function(count){if(selectAllController===own){selectAllCount=count;selectionControls();}}
+      });
+      if(selectAllController!==own||active!==epoch||workspace.id!==id||dirty)return;
+      selection=result;selectionMessage='';
+    }catch(error){
+      if(selectAllController!==own||active!==epoch)return;
+      selectionMessage=error.code==='selection-limit'?'selectionLimit':own.signal.aborted||error.code==='selection-timeout'?'selectAllTimeout':error.code==='selection-changed'||error.status===409||error.status===410?'selectAllChanged':'selectAllFailed';
+    }finally{root.clearTimeout(timer);if(selectAllController===own){selectAllController=null;draw();scheduleProbe(false);}}
   };
   $('clear-selection').onclick=function(){if(archiveController)archiveController.cancel();selection.clear();selectionMessage='';draw();};
   $('cancel-archive-selection').onclick=async function(){
-    var own=archiveController;if(!own||archiveCancelling)return;var state=own.snapshot(),ticket=state.tickets[state.tickets.length-1];archiveCancelling=true;selectionControls();
-    try{await own.cancel(state.preparing?null:ticket&&ticket.selection);if(archiveController===own)selectionMessage=state.preparing?'archiveCancelled':'archiveDownloadCancelled';}
+    var own=archiveController;if(!own||archiveCancelling)return;var state=own.snapshot(),ticket=state.tickets.find(function(item){return item.selection===$('archive-target').value;});archiveCancelling=true;selectionControls();
+    try{await own.cancel(state.preparing?null:ticket&&ticket.selection);if(archiveController===own){selectionMessage=state.preparing?'archiveCancelled':'archiveDownloadCancelled';cancelledArchiveTicket=ticket?Object.assign({scope:directory||workspace.name},ticket):null;}}
     catch(_){if(archiveController===own)selectionMessage='archiveCancelFailed';}
     finally{if(archiveController===own){archiveCancelling=false;selectionControls();}}
   };

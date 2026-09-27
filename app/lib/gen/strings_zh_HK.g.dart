@@ -698,6 +698,12 @@ class Translations$directoryWorkspaces$zh_HK extends Translations$directoryWorks
   String get permissionHint => '上載權限';
   @override
   String get startService => '啟動服務';
+  @override
+  String get moreAddresses => '其他位址';
+  @override
+  String get restoreAccess => '重新授權目錄';
+  @override
+  String get openFailed => '瀏覽器開啟失敗，請複製連結開啟。';
 }
 
 // Path: changelogPage

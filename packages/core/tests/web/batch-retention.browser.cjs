@@ -54,10 +54,10 @@ const server = http.createServer((req, res) => {
     const user = await child.getFileHandle('user.ls', { create: true });
     const writer = await user.createWritable(); await writer.write('user file'); await writer.close();
     const records = await files.registry.all();
-    const old = Date.now() - 8 * 86400000;
+    const old = Date.now() - 3600000;
     for (const record of records) { record.updatedUnixMs = old; await files.registry.put(record); }
     const record = await files.registry.batch(b.id); record.updatedUnixMs = old; await files.registry.putBatch(record);
-    await files.registry.retention(7);
+    if (await files.registry.retention() !== undefined) throw Error('Expected unset retention default');
     return { id: b.id, saved: b.record.savedFiles };
   });
   // A second tab actively owns the old batch: startup cleanup must retain it.
@@ -71,6 +71,7 @@ const server = http.createServer((req, res) => {
     return window.lockReady;
   }, first.id);
   await init();
+  assert.equal(await page.evaluate(() => files.retentionDays), -2);
   assert.equal(await page.evaluate(() => batches.batches.length), 1);
   assert.equal(await page.evaluate(() => files.cleanupReport.retained), 1);
   await holder.evaluate(() => release());
@@ -115,7 +116,7 @@ const server = http.createServer((req, res) => {
   assert.deepEqual(ended, { batches: 0, tasks: 0, names: ['a.txt'], a: 'content\n' });
   assert.deepEqual(errors, []);
   console.log(JSON.stringify({ browser: await browser.version(), first, cleaned, ended,
-    scenarios: ['refresh retention', 'cross-tab batch lock', 'published and unregistered files preserved', 'HTTP 401 retained', 'HTTP 410 cleaned'],
+    scenarios: ['one-hour default after refresh', 'cross-tab batch lock', 'published and unregistered files preserved', 'HTTP 401 retained', 'HTTP 410 cleaned'],
     boundary: 'Real browser storage and HTTP; OPFS substituted for an authorized directory, not native Downloads permission acceptance' }, null, 2));
 })().catch(error => { console.error(error); process.exitCode = 1; }).finally(async () => {
   if (browser) await browser.close();

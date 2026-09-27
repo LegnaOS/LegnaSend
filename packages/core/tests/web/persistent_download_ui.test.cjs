@@ -235,7 +235,9 @@ test('duplicate batch clicks share one preflight and closing aborts it',async()=
 test('retention policy is an accessible inline setting with live cleanup report and translated labels',async()=>{
   const f=fixture();await f.panel.ready;
   const select=f.descendants().find(n=>n.tag==='select'&&n.getAttribute('aria-label')==='Keep unfinished downloads');
-  assert.ok(select);select.value='7';await select.onchange();
+  assert.ok(select);assert.ok(select.children.some(n=>n.value==='-2'&&n.textContent==='1 hour (default)'));
+  select.value='-2';await select.onchange();assert.equal(f.manager.retentionDays,-2);
+  select.value='7';await select.onchange();
   assert.equal(f.manager.retentionDays,7);assert.ok(f.container.textContent.includes('Removed: 2'));
   f.document.documentElement={lang:'zh-CN'};f.manager.emit();
   assert.equal(select.getAttribute('aria-label'),'未完成下载保留');assert.ok(f.container.textContent.includes('保留／待重试: 2'));

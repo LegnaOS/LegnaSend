@@ -15,7 +15,9 @@ use std::{
 #[cfg(not(target_vendor = "apple"))]
 use {cap_std::ambient_authority, std::path::Component};
 
-pub(crate) const LEASE_MS: u64 = 86_400_000;
+pub(crate) const LEASE_MS: u64 = 3_600_000;
+// Keep already-issued reservations valid until their original deadline.
+const LEGACY_LEASE_MS: u64 = 86_400_000;
 pub(crate) const MAX_RECORDS: usize = 128;
 const MAX_JSON: u64 = 64 * 1024;
 pub(crate) const BLOCK: u32 = 1024 * 1024;
@@ -205,6 +207,8 @@ pub(crate) struct Record {
     cache_stamp: Stamp,
     pub(crate) created_unix_ms: u64,
     pub(crate) expires_unix_ms: u64,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    last_activity_unix_ms: Option<u64>,
 }
 impl Record {
     fn valid(&self) -> bool {
@@ -226,7 +230,23 @@ impl Record {
             && self.cache.chunk_size == BLOCK
             && self.cache.file_name == self.target.final_name
             && self.cache.created_unix_ms == self.created_unix_ms
-            && self.expires_unix_ms.checked_sub(self.created_unix_ms) == Some(LEASE_MS)
+            && self
+                .last_activity_unix_ms
+                .is_none_or(|time| time >= self.created_unix_ms)
+            && matches!(
+                self.expires_unix_ms.checked_sub(self.created_unix_ms),
+                Some(LEASE_MS | LEGACY_LEASE_MS)
+            )
+    }
+    fn cleanup_deadline(&self) -> u64 {
+        // Last activity affects local cache retention only. It never renews the
+        // expiry already advertised to senders or any signed source-end grant.
+        let duration = self.expires_unix_ms.saturating_sub(self.created_unix_ms);
+        self.expires_unix_ms.max(
+            self.last_activity_unix_ms
+                .map(|time| time.saturating_add(duration))
+                .unwrap_or(self.expires_unix_ms),
+        )
     }
     pub(crate) fn key(&self) -> String {
         sha256_hex(
@@ -523,6 +543,7 @@ impl Registry {
         let record = Record {
             source,
             source_end: None,
+            last_activity_unix_ms: None,
             receipt_id,
             target,
             cache_stamp: Stamp::of(&Metadata::from_file(file)?),
@@ -770,7 +791,7 @@ impl Registry {
                 ) {
                     return Ok(false);
                 }
-                if !force && (now < record.created_unix_ms || now < record.expires_unix_ms) {
+                if !force && (now < record.created_unix_ms || now < record.cleanup_deadline()) {
                     return Ok(false);
                 }
                 let mut lease = Lease {
@@ -806,7 +827,11 @@ impl Registry {
             detail.disposition = match result {
                 Ok(true) => {
                     report.removed_records += 1;
-                    if removed.1 > 0 { "removed" } else { "retired" }
+                    if removed.1 > 0 {
+                        "removed"
+                    } else {
+                        "retired"
+                    }
                 }
                 Ok(false) => {
                     if inspection && planned > 0 {
@@ -998,8 +1023,13 @@ impl Lease {
         crate::receive_scope_policy::requires_coordinated_access(&self.record.target.approved_root)
     }
     pub(crate) fn valid_lease(&self) -> bool {
+        // Claim checks the deadline before obtaining this exclusive writer lease.
+        // Retention must not time out a still-active transfer or verification.
         now_ms().is_ok_and(|now| {
-            now >= self.record.created_unix_ms && now < self.record.expires_unix_ms
+            now >= self
+                .record
+                .last_activity_unix_ms
+                .unwrap_or(self.record.created_unix_ms)
         })
     }
     fn eligible_bytes(&self) -> Result<u64> {
@@ -1088,9 +1118,28 @@ impl Lease {
         self.state = state;
         Ok(())
     }
+    pub(crate) fn checkpoint_activity(&mut self, force: bool) -> Result<()> {
+        let now = now_ms()?;
+        let anchor = self
+            .record
+            .last_activity_unix_ms
+            .unwrap_or(self.record.created_unix_ms);
+        let elapsed = now.checked_sub(anchor).ok_or(Error::Expired)?;
+        if !force && elapsed < 60_000 {
+            return Ok(());
+        }
+        let mut updated = self.record.clone();
+        updated.last_activity_unix_ms = Some(now);
+        atomic(&self.directory, "record.json", &updated)?;
+        self.record = updated;
+        Ok(())
+    }
     pub(crate) fn suspend(&mut self) -> Result<()> {
         match self.state {
-            State::Receiving | State::Suspended => self.write_state(State::Suspended),
+            State::Receiving | State::Suspended => {
+                self.checkpoint_activity(true)?;
+                self.write_state(State::Suspended)
+            }
             // Retain publication evidence if verification was interrupted; never
             // erase a committed final-file identity just to label the task paused.
             State::Exporting { .. } | State::Publishing { .. } | State::Published { .. } => Ok(()),

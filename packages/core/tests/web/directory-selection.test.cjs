@@ -43,5 +43,5 @@ test('prepared archive selection requires an explicit capability; old filesystem
  const {preparedArchiveCapability}=require('../../assets/web/directories.js');
  for(const workspace of[null,{}, {backend:'filesystem'}, {capabilities:{archive:true}}, {capabilities:{archiveSelection:false}}, {capabilities:{archiveSelection:'true'}}])assert.equal(preparedArchiveCapability(workspace),false);
  assert.equal(preparedArchiveCapability({capabilities:{archiveSelection:true}}),true);
- for(const locale of['en','zh-CN','zh-TW','zh-HK'])for(const key of['selectLoadedLarge','selectionHintLarge','selectionLimitLarge','archivePreparing','archiveCancelPrepare','archiveCancelDownload','archiveCancelled','archiveDownloadCancelled','archiveFailed','archiveExpired','archiveBusy','archiveTimeout','archiveCancelFailed'])assert.ok(messages[locale][key]);
+ for(const locale of['en','zh-CN','zh-TW','zh-HK'])for(const key of['selectAll','selectAllCancel','selectAllProgress','downloadMethods','downloadMethodsHint','archiveTarget','selectLoadedLarge','selectionHintLarge','selectionLimitLarge','archivePreparing','archiveCancelPrepare','archiveCancelDownload','archiveCancelled','archiveDownloadCancelled','archiveFailed','archiveExpired','archiveBusy','archiveTimeout','archiveCancelFailed'])assert.ok(messages[locale][key]);
 });

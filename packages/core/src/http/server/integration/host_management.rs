@@ -53,7 +53,7 @@ pub(super) fn request(
 fn retention_days(value: &Value) -> bool {
     value
         .as_i64()
-        .is_some_and(|days| (-1..=3650).contains(&days))
+        .is_some_and(|days| (-2..=3650).contains(&days))
 }
 fn retention_state(value: &Value) -> bool {
     exact(

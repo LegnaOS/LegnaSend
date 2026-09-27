@@ -10,8 +10,8 @@ use std::{
     io::{self, Read, Write},
     path::{Path, PathBuf},
     sync::{
-        Arc, Mutex, OnceLock, RwLock,
         atomic::{AtomicBool, Ordering},
+        Arc, Mutex, OnceLock, RwLock,
     },
 };
 
@@ -19,7 +19,8 @@ const RECORD_LIMIT: u64 = 64 * 1024;
 const SCAN_LIMIT: usize = 4096;
 static CURRENT: OnceLock<RwLock<Option<Arc<Registry>>>> = OnceLock::new();
 static RETENTION: OnceLock<RwLock<RetentionPolicy>> = OnceLock::new();
-const DAY_MS: u64 = 86_400_000;
+const HOUR_MS: u64 = 3_600_000;
+const DAY_MS: u64 = 24 * HOUR_MS;
 static SINGLE_CLEANUP_DURABLE: AtomicBool = AtomicBool::new(false);
 static SINGLE_INSPECT_DURABLE: AtomicBool = AtomicBool::new(false);
 
@@ -27,8 +28,9 @@ static SINGLE_INSPECT_DURABLE: AtomicBool = AtomicBool::new(false);
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub enum RetentionMode {
-    #[default]
     Immediate,
+    #[default]
+    Hour,
     Days,
     Manual,
 }
@@ -39,9 +41,16 @@ pub struct RetentionPolicy {
     pub days: Option<u32>,
 }
 impl RetentionPolicy {
+    pub(crate) fn immediate() -> Self {
+        Self {
+            mode: RetentionMode::Immediate,
+            days: None,
+        }
+    }
     fn parse(mode: &str, days: Option<u32>) -> io::Result<Self> {
         let mode = match (mode, days) {
             ("immediate", None) => RetentionMode::Immediate,
+            ("hour", None) => RetentionMode::Hour,
             ("manual", None) => RetentionMode::Manual,
             ("days", Some(1..=3650)) => RetentionMode::Days,
             _ => {
@@ -57,14 +66,19 @@ impl RetentionPolicy {
         match self.mode {
             RetentionMode::Immediate => None,
             RetentionMode::Manual => Some("retention_manual"),
-            RetentionMode::Days => {
+            RetentionMode::Hour | RetentionMode::Days => {
                 let Some(registered) = registered else {
                     return Some("retention_age_unknown");
                 };
                 let Some(age) = now.and_then(|now| now.checked_sub(registered)) else {
                     return Some("retention_clock_unverified");
                 };
-                (age < u64::from(self.days.unwrap_or(3650)) * DAY_MS).then_some("retention_period")
+                let duration = if self.mode == RetentionMode::Hour {
+                    HOUR_MS
+                } else {
+                    u64::from(self.days.unwrap_or(3650)) * DAY_MS
+                };
+                (age < duration).then_some("retention_period")
             }
         }
     }
@@ -338,7 +352,7 @@ pub fn maintain_in_scope(
         limit.saturating_sub(durable_budget),
         inspection,
         if force {
-            RetentionPolicy::default()
+            RetentionPolicy::immediate()
         } else {
             *policy
         },
@@ -371,7 +385,7 @@ fn scan_with_policy(limit: usize, inspection: bool, force: bool) -> io::Result<C
             limit.saturating_sub(durable_budget),
             inspection,
             if force {
-                RetentionPolicy::default()
+                RetentionPolicy::immediate()
             } else {
                 *policy
             },
@@ -546,7 +560,7 @@ impl Registry {
     }
     #[cfg(test)]
     fn scan_entries(&self, limit: usize, inspection: bool) -> io::Result<CleanupReport> {
-        self.scan_entries_at(limit, inspection, RetentionPolicy::default(), unix_ms())
+        self.scan_entries_at(limit, inspection, RetentionPolicy::immediate(), unix_ms())
     }
     fn scan_entries_at(
         &self,
@@ -1394,12 +1408,10 @@ mod tests {
         assert_eq!(inspection.active, 1);
         assert_eq!(inspection.retained, 1);
         assert_eq!(inspection.entries.len(), 2);
-        assert!(
-            inspection
-                .entries
-                .iter()
-                .all(|entry| entry.file_name.is_none())
-        );
+        assert!(inspection
+            .entries
+            .iter()
+            .all(|entry| entry.file_name.is_none()));
         assert!(inspection
             .entries
             .iter()
@@ -1514,7 +1526,11 @@ mod tests {
             days.retained_reason(None, Some(u64::MAX)),
             Some("retention_age_unknown")
         );
-        assert_eq!(RetentionPolicy::default().retained_reason(None, None), None);
+        assert_eq!(
+            RetentionPolicy::immediate().retained_reason(None, None),
+            None
+        );
+        assert_eq!(RetentionPolicy::default().mode, RetentionMode::Hour);
         assert_eq!(
             RetentionPolicy::parse("manual", None)
                 .unwrap()
@@ -1537,6 +1553,7 @@ mod tests {
             ("days", Some(3651)),
             ("manual", Some(1)),
             ("immediate", Some(0)),
+            ("hour", Some(1)),
             ("unknown", None),
         ] {
             assert!(configure_retention_policy(mode, days).is_err());
@@ -1548,6 +1565,40 @@ mod tests {
             serde_json::json!({"mode":"manual","days":null})
         );
         configure_retention_policy("immediate", None).unwrap();
+    }
+
+    #[test]
+    fn default_hour_retention_expires_at_3600000_ms_not_one_day() {
+        let f = Fixture::new();
+        let (file, registration, path) = f.create(&f.identity(), true);
+        let registered = stored_record(&f, &registration)
+            .record
+            .registered_unix_ms
+            .unwrap();
+        let policy = RetentionPolicy::default();
+        assert_eq!(
+            serde_json::to_value(policy).unwrap(),
+            serde_json::json!({"mode":"hour","days":null})
+        );
+        assert_eq!(
+            policy.retained_reason(None, Some(u64::MAX)),
+            Some("retention_age_unknown")
+        );
+        assert_eq!(
+            policy.retained_reason(Some(registered), Some(registered - 1)),
+            Some("retention_clock_unverified")
+        );
+        drop((file, registration));
+        assert_eq!(
+            retained_scan(&f, policy, Some(registered + 3_599_999), false).removed_files,
+            0
+        );
+        assert!(path.exists());
+        assert_eq!(
+            retained_scan(&f, policy, Some(registered + 3_600_000), false).removed_files,
+            1
+        );
+        assert!(!path.exists());
     }
 
     #[test]

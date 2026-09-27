@@ -1128,6 +1128,7 @@ public final class AndroidSafReceiveTransaction implements SafReceiveTransaction
                     .put("recoveryClaimId", record.recoveryClaimId == null ? JSONObject.NULL : record.recoveryClaimId)
                     .put("recoverySupersededBy", record.recoverySupersededBy == null ? JSONObject.NULL : record.recoverySupersededBy)
                     .put("recoveryCompleted", record.recoveryCompleted).put("recoveryRejected", record.recoveryRejected)
+                    .put("recoveryRetentionMs", SafReceiveTransaction.recoveryRetentionMillis(record.recoveryRetentionMs))
                     .put("recoveryLength", record.recoveryLength)
                     .put("recoverySha256", record.recoverySha256 == null ? JSONObject.NULL : record.recoverySha256);
                 byte[] bytes = json.toString().getBytes(StandardCharsets.UTF_8);
@@ -1154,6 +1155,8 @@ public final class AndroidSafReceiveTransaction implements SafReceiveTransaction
                 if ((json.getInt("version") != 1 && json.getInt("version") != 2) || !id.equals(json.getString("id"))) throw new IOException("Transaction journal identity mismatch");
                 SafReceiveTransaction.Record record = new SafReceiveTransaction.Record(id, json.getString("tree"), json.getString("parent"),
                     json.getString("desiredName"), json.getString("sessionId"), json.getString("fileId"), json.getString("attemptId"));
+                record.recoveryRetentionMs = SafReceiveTransaction.recoveryRetentionMillis(
+                    json.has("recoveryRetentionMs") ? json.get("recoveryRetentionMs") : null);
                 record.state = SafReceiveTransaction.State.valueOf(json.getString("state"));
                 record.lease = json.isNull("lease") ? null : json.getString("lease");
                 record.cache = document(json, "cache"); record.staging = document(json, "staging");

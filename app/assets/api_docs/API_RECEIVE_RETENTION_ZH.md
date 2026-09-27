@@ -10,9 +10,9 @@
 {"version":"VERSION_FROM_READ","field":"receiveCacheRetentionDays","value":7}
 ```
 
-`value` 必须是 **−1 至 3650** 的 JSON 整数。`-1` 表示保留已登记原生接收残留直至明确手动清理；`0` 允许立即自动清理；正整数表示保留天数。原生设置界面提供 −1、0、1、7、30 五档，API 还接受范围内其他整数。字符串 `"7"`、布尔值 `true`、浮点 JSON 写法 `7.0`、`null` 及越界值均被拒绝，不做类型转换。
+`value` 必须是 **−2 至 3650** 的 JSON 整数。`-2` 表示 1 小时（3,600,000 毫秒）；`-1` 表示保留已登记原生接收残留直至明确手动清理；`0` 允许立即自动清理；正整数表示保留天数。原生设置界面提供 −2、−1、0、1、7、30 六档，API 还接受范围内其他整数。字符串 `"7"`、布尔值 `true`、浮点 JSON 写法 `7.0`、`null` 及越界值均被拒绝，不做类型转换。
 
-此设置作用于意外退出后已登记、不可续传的原生接收暂存；普通取消和不可续传失败仍清理事务缓存。已协商的持久续传记录单独采用一天绝对租约，网络失败可保留已确认块，不由本设置延长。启动和API清理保留有效租约，本地明确手动清理可提前回收非活动自有缓存；活动、成品及身份不符内容仍受保护。汇总原因`durable_resume`表示检查了持久记录，`durable_resume_failed`表示其存储检查失败，不等于成功释放空间。详情见[持久续传](NATIVE_DURABLE_RESUME_ZH.md)。工作区上传、私有工作区导出副本和 Android 文档提供器事务分别管理。保留缓存不会为原始 LocalSend 协议增加分片续传能力。
+此设置作用于意外退出后已登记、不可续传的原生接收暂存；普通取消和不可续传失败仍清理事务缓存。新的持久续传记录单独采用 1 小时绝对租约；已有旧记录保留原先的一天期限，网络失败可保留已确认块，不由本设置延长。启动和API清理保留有效租约，本地明确手动清理可提前回收非活动自有缓存；活动、成品及身份不符内容仍受保护。汇总原因`durable_resume`表示检查了持久记录，`durable_resume_failed`表示其存储检查失败，不等于成功释放空间。详情见[持久续传](NATIVE_DURABLE_RESUME_ZH.md)。工作区上传、私有工作区导出副本和 Android 文档提供器事务分别管理。保留缓存不会为原始 LocalSend 协议增加分片续传能力。
 
 修改只保存并同步策略，**不会执行清理**、绕过年龄、停止传输或重启监听。API `POST /cache/cleanup` 仍须 `cache.clean` 权限并遵守保留期。只有本地接收缓存管理对话框经过单独确认后才忽略年龄，身份、缓存头和活动写入保护始终保留。到期表示下一次维护时具备清理资格，不是精确时刻触发的删除计时器。
 
@@ -38,7 +38,7 @@
 
 | 运行状态字段 | 类型与含义 |
 | --- | --- |
-| `effectiveDays` | −1…3650 的整数；实际原生策略尚未确认时为 `null` |
+| `effectiveDays` | −2…3650 的整数；实际原生策略尚未确认时为 `null` |
 | `automaticCleanupPaused` | 布尔值；当前是否暂停自动原生缓存清理 |
 | `busy` | 布尔值；策略设置操作是否进行中 |
 | `error` | `null`、`invalid`、`save`、`apply` 或 `restore` |
@@ -70,7 +70,7 @@ SNAPSHOT=$(curl --fail-with-body --silent --show-error \
   -H "Authorization: Bearer $LEGNASEND_API_TOKEN" "$BASE/settings")
 VERSION=$(printf '%s' "$SNAPSHOT" | jq -er '.version')
 BODY=$(jq -nc --arg version "$VERSION" --argjson days "$DAYS" \
-  'if ($days|type)=="number" and ($days|floor)==$days and $days>=-1 and $days<=3650
+  'if ($days|type)=="number" and ($days|floor)==$days and $days>=-2 and $days<=3650
    then {version:$version,field:"receiveCacheRetentionDays",value:$days}
    else error("Expected integer -1..3650") end')
 curl --include --request POST \
@@ -96,7 +96,7 @@ async function readSettings() {
 }
 async function setRetention(days) {
   // 不使用 Number(days)，避免把 true 或数值字符串悄悄转换。
-  if (!Number.isInteger(days) || days < -1 || days > 3650) {
+  if (!Number.isInteger(days) || days < -2 || days > 3650) {
     throw new TypeError('Expected integer -1..3650');
   }
   const snapshot = await readSettings();
@@ -135,7 +135,7 @@ def call(method, route, payload=None):
         return response.status, json.loads(response.read(262144))
 
 def set_retention(days):
-    if type(days) is not int or not -1 <= days <= 3650:
+    if type(days) is not int or not -2 <= days <= 3650:
         raise TypeError('Expected integer -1..3650')
     status, snapshot = call('GET', '/settings')
     if status != 200:
@@ -152,3 +152,7 @@ set_retention(-1)
 ```
 
 HTTPS 可用 `ssl.create_default_context(cafile='DEVICE_CA.pem')` 创建受信任设备 CA 上下文并传给 `urlopen`；监听要求客户端证书时再提供相应证书。原始传输协议、证书身份验证和文件格式不变。
+
+未设置保留期时默认 1 小时；已有显式设置不覆盖。原字段名 receiveCacheRetentionDays 为兼容保留，−2 是小时策略代码而非负天数。原生桥接为 `{mode:"hour",days:null}`。网页单文件与原文件批次采用相同的 1 小时默认；Android SAF 新恢复记录也采用 1 小时，旧记录保留原期限。
+
+持久记录的活动时间仅延后本地清理，不延长已经公布的续传授权期限；活动写入与完成文件继续受保护。

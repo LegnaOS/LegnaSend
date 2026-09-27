@@ -127,6 +127,24 @@ public final class SafReceiveRecoveryClaimTest {
         damaged.recoveryClaimId=proofTarget.id;damaged.cache=null;proof.save(damaged);
         eq(proof.manager.recoveryCleanupSource(proofTarget.id,proofTarget.lease,proofSource.id).cache,null); // durable delete replay
         eq(proof.load(proofTarget.id).output.uri,"final:user");eq(proof.load(proofSource.id).staging.uri,proofSource.staging.uri);
+        eq(SafReceiveTransaction.recoveryRetentionMillis(null), 86400000L);
+        eq(SafReceiveTransaction.recoveryRetentionMillis(3600000), 3600000L);
+        for (Object invalid : new Object[]{"3600000", 3600000.0, -1L, 0L, 7200000L, Long.MAX_VALUE, true})
+            fails(() -> SafReceiveTransaction.recoveryRetentionMillis(invalid));
+        for (long duration : new long[]{3600000L, 86400000L}) {
+            for (long delta : new long[]{duration - 1, duration}) {
+                Fixture timed = new Fixture(); SafReceiveTransaction.Record a = timed.create(1000), b = timed.create(2000);
+                eq(a.recoveryRetentionMs, 3600000L);
+                a.recoveryRetentionMs = duration; timed.save(a);
+                eq(timed.load(a.id).copy().recoveryRetentionMs, duration);
+                eq(timed.claim(b, a, 1000 + delta), delta < duration);
+                if (delta < duration) timed.manager.releaseRecoveryClaim(timed.load(b.id));
+                SafReceiveTransaction.Record publishing = timed.load(a.id);
+                publishing.state = SafReceiveTransaction.State.PUBLISHING; timed.save(publishing);
+                eq(timed.manager.hasProtectedRecovery(b.id, a.id, 1000 + delta), delta < duration);
+                eq(timed.load(a.id).cache.uri, a.cache.uri); // Expiry never authorizes unproven deletion.
+            }
+        }
         System.out.println("SAF recovery claims: "+checks+" assertions passed (private-journal simulation)");
     }
 }

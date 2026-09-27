@@ -97,7 +97,7 @@ fn scoped_cleanup_visits_registered_descendants_not_sibling_roots_or_user_files(
         .join(format!("{}.json", uuid::Uuid::new_v4()));
     std::fs::write(&unknown, b"unknown registry data").unwrap();
     let bytes = std::fs::metadata(&a).unwrap().len() + std::fs::metadata(&b).unwrap().len();
-    let report = f.scan(&f.root, false, RetentionPolicy::default());
+    let report = f.scan(&f.root, false, RetentionPolicy::immediate());
     assert_eq!(report.examined, 2);
     assert_eq!(report.removed_files, 2);
     assert_eq!(report.removed_records, 2);
@@ -120,7 +120,7 @@ fn scoped_inspection_has_its_own_cursor_and_never_mutates_candidates() {
     let scope = CoordinatedRoot::open(&f.root).unwrap();
     let preview = f
         .registry
-        .scan_scope(&scope, 1, true, RetentionPolicy::default())
+        .scan_scope(&scope, 1, true, RetentionPolicy::immediate())
         .unwrap();
     assert!(preview.inspection);
     assert!(preview.budget_reached);
@@ -132,7 +132,7 @@ fn scoped_inspection_has_its_own_cursor_and_never_mutates_candidates() {
     for (path, bytes) in paths.iter().zip(&before) {
         assert_eq!(&std::fs::read(path).unwrap(), bytes);
     }
-    let cleanup = f.scan(&f.root, false, RetentionPolicy::default());
+    let cleanup = f.scan(&f.root, false, RetentionPolicy::immediate());
     assert_eq!(cleanup.removed_files, 3);
     assert_eq!(
         cleanup.unlinked_bytes,
@@ -151,7 +151,7 @@ fn scoped_cleanup_preserves_active_registration_and_active_cache_writer() {
         .open(&second)
         .unwrap();
     writer.try_lock().unwrap();
-    let report = f.scan(&f.root, false, RetentionPolicy::default());
+    let report = f.scan(&f.root, false, RetentionPolicy::immediate());
     assert_eq!(report.active, 2);
     assert_eq!(report.removed_files, 0);
     assert_eq!(report.reasons.get("active_registration"), Some(&1));
@@ -160,7 +160,7 @@ fn scoped_cleanup_preserves_active_registration_and_active_cache_writer() {
     drop(writer);
     drop(registration);
     assert_eq!(
-        f.scan(&f.root, false, RetentionPolicy::default())
+        f.scan(&f.root, false, RetentionPolicy::immediate())
             .removed_files,
         2
     );
@@ -194,7 +194,7 @@ fn scoped_cleanup_respects_manual_and_age_retention_before_explicit_immediate_po
         assert_eq!(std::fs::read(&file).unwrap(), before);
     }
     assert_eq!(
-        f.scan(&f.root, false, RetentionPolicy::default())
+        f.scan(&f.root, false, RetentionPolicy::immediate())
             .removed_files,
         1
     );
@@ -209,7 +209,7 @@ fn scoped_cleanup_rejects_replaced_parent_identity() {
     std::fs::rename(&parent, &old).unwrap();
     std::fs::create_dir(&parent).unwrap();
     std::fs::write(&path, b"replacement user file").unwrap();
-    let report = f.scan(&f.root, false, RetentionPolicy::default());
+    let report = f.scan(&f.root, false, RetentionPolicy::immediate());
     assert_eq!(report.retained, 1);
     assert_eq!(report.reasons.get("parent_identity_unverified"), Some(&1));
     assert_eq!(report.removed_files, 0);
@@ -228,7 +228,7 @@ fn scoped_cleanup_does_not_follow_replaced_descendant_symlinks() {
     let victim = f.other.join(path.file_name().unwrap());
     std::fs::write(&victim, b"external user file").unwrap();
     std::os::unix::fs::symlink(&f.other, &parent).unwrap();
-    let report = f.scan(&f.root, false, RetentionPolicy::default());
+    let report = f.scan(&f.root, false, RetentionPolicy::immediate());
     assert_eq!(report.removed_files, 0);
     assert_eq!(report.failed + report.retained, 1);
     assert_eq!(std::fs::read(victim).unwrap(), b"external user file");
@@ -243,7 +243,7 @@ fn scoped_cursor_is_bounded_and_reaches_candidates_among_other_roots() {
     let scope = CoordinatedRoot::open(&f.root).unwrap();
     let zero = f
         .registry
-        .scan_scope(&scope, 0, false, RetentionPolicy::default())
+        .scan_scope(&scope, 0, false, RetentionPolicy::immediate())
         .unwrap();
     assert_eq!(zero.examined, 0);
     assert!(!zero.budget_reached);
@@ -253,7 +253,7 @@ fn scoped_cursor_is_bounded_and_reaches_candidates_among_other_roots() {
     for _ in 0..20 {
         let report = f
             .registry
-            .scan_scope(&scope, 1, false, RetentionPolicy::default())
+            .scan_scope(&scope, 1, false, RetentionPolicy::immediate())
             .unwrap();
         assert!(report.examined <= 1 && report.entries.len() <= 1);
         removed += report.removed_files;
@@ -268,7 +268,7 @@ fn scoped_cursor_is_bounded_and_reaches_candidates_among_other_roots() {
     assert!(others.iter().all(|path| path.exists()));
     assert!(f.registry.scoped_scans.lock().unwrap().is_empty());
     assert_eq!(
-        f.scan(&f.other, false, RetentionPolicy::default())
+        f.scan(&f.other, false, RetentionPolicy::immediate())
             .removed_files,
         5
     );

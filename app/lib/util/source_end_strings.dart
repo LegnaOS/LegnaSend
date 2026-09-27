@@ -6,11 +6,11 @@ class SourceEndStrings {
       : RegExp('tw|hk|hant', caseSensitive: false).hasMatch(locale)
       ? hant
       : zh;
-  String get title => _p('Source cleanup notices', '来源结束通知', '來源結束通知');
+  String get title => _p('Transfer cache cleanup', '传输缓存清理', '傳輸快取清理');
   String get detail => _p(
     'Only acknowledged removal confirms cleanup. Active transfers and published files are preserved. Offline or expired notices do not prove deletion.',
-    '只有接收端确认删除才算清理完成；活动传输和已发布文件保留。离线或通知过期不代表已经删除。',
-    '只有接收端確認刪除才算清理完成；活動傳輸與已發布檔案保留。離線或通知過期不代表已經刪除。',
+    '只有接收端确认删除才算清理完成；活动传输和文件已保存，不会删除。离线或通知过期不代表已经删除。',
+    '只有接收端確認刪除才算清理完成；活動傳輸與檔案已儲存，不會刪除。離線或通知過期不代表已經刪除。',
   );
   String get capacity => _p(
     'Some files have no cleanup-notice authorization. Ordinary transfer remains available.',
@@ -21,12 +21,12 @@ class SourceEndStrings {
   String get unavailable => _p('Private notification storage is unavailable. No cleanup is confirmed.', '私有通知存储暂不可用，未确认任何清理。', '私有通知儲存暫不可用，未確認任何清理。');
   String get retry => _p('Retry notice', '重试通知', '重試通知');
   String get help => _p('Cleanup details', '清理说明', '清理說明');
-  String get receiptTitle => _p('Receiver cleanup receipt', '接收端清理回执', '接收端清理回執');
+  String get receiptTitle => _p('Cleanup result', '清理结果', '清理結果');
   String get receiptId => _p('Receipt ID', '回执编号', '回執編號');
   String get noReceipt => _p(
-    'No itemized cleanup receipt is available.',
-    '暂无包含实际清理数量的回执。',
-    '暫無包含實際清理數量的回執。',
+    'The other device has not returned cleanup details.',
+    '对方尚未返回清理结果。',
+    '對方尚未回傳清理結果。',
   );
   String get logicalBytesDetail => _p(
     'These are logical bytes of removed temporary files, not measured physical disk space reclaimed. Published files are not included.',
@@ -39,23 +39,23 @@ class SourceEndStrings {
     '已移除暫存檔案：$count',
   );
   String logicalBytes(int bytes, String readable) => _p(
-    'Logical size: $readable ($bytes bytes)',
-    '逻辑大小：$readable（$bytes 字节）',
-    '邏輯大小：$readable（$bytes 位元組）',
+    'Temporary file size: $readable ($bytes bytes)',
+    '临时文件大小：$readable（$bytes 字节）',
+    '暫存檔案大小：$readable（$bytes 位元組）',
   );
   String cleanupSummary(int count, String readable) => _p(
-    '$count temporary files removed · $readable logical',
-    '已移除 $count 个临时文件 · 逻辑大小 $readable',
-    '已移除 $count 個暫存檔案 · 邏輯大小 $readable',
+    '$count temporary files removed · $readable',
+    '已移除 $count 个临时文件 · 大小 $readable',
+    '已移除 $count 個暫存檔案 · 大小 $readable',
   );
   String state(String code) => switch (code) {
     'pending' => _p('Pending notification', '待通知', '待通知'),
-    'waitingPeer' => _p('Waiting for verified peer / route', '等待设备身份与路线核验', '等待裝置身分與路線核驗'),
+    'waitingPeer' => _p('Waiting for the other device', '等待连接对方设备', '等待連接對方裝置'),
     'sharedSource' => _p('Shared by another task · retained', '其他任务仍使用 · 保留', '其他任務仍使用 · 保留'),
     'busy' => _p('Receiver busy · retained', '接收端忙 · 保留', '接收端忙 · 保留'),
     'authorizationRequired' => _p('Authorization required · unconfirmed', '需要重新授权 · 未确认清理', '需要重新授權 · 未確認清理'),
     'removed' => _p('Receiver confirmed removal', '接收端已确认删除', '接收端已確認刪除'),
-    'publishedPreserved' => _p('Published file preserved', '已发布文件保留', '已發布檔案保留'),
+    'publishedPreserved' => _p('File saved; kept on the other device', '文件已保存，不会删除', '檔案已儲存，不會刪除'),
     'expired' => _p('Notice expired · cleanup unconfirmed', '通知已过期 · 未确认清理', '通知已過期 · 未確認清理'),
     'unsupported' => _p('Peer does not support cleanup notices', '对端不支持清理通知', '對端不支援清理通知'),
     'superseded' => _p('Old authorization replaced · not a removal receipt', '旧授权已替换 · 不代表已删除', '舊授權已替換 · 不代表已刪除'),

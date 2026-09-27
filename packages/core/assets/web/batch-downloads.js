@@ -203,7 +203,7 @@
   };
   Manager.prototype.cleanupExpired = async function (days, report) {
     if (this.closed || !days) return;
-    var self = this, before = this.manager.wallNow() - days * 86400000;
+    var self = this, before = this.manager.wallNow() - engine.retentionMilliseconds(days);
     function eligible(record) {
       return record && !['complete', 'cancelled'].includes(record.state) &&
         Number.isSafeInteger(record.updatedUnixMs) && record.updatedUnixMs > 0 && record.updatedUnixMs <= before;
@@ -219,7 +219,7 @@
           if (!lock) { report.retained++; return; }
           var latest = await self.registry.batch(original.id);
           if (!eligible(latest)) { report.skipped++; return; }
-          if (self.registry.retention && await self.registry.retention() !== days) { report.retained++; return; }
+          if (self.registry.retention && engine.retentionPolicy(await self.registry.retention()) !== days) { report.retained++; return; }
           if (!latest.directory.queryPermission || await latest.directory.queryPermission({ mode: 'readwrite' }) !== 'granted') {
             report.retained++; return;
           }

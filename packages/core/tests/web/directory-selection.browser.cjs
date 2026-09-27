@@ -46,7 +46,7 @@ with zipfile.ZipFile(sys.argv[1]) as z:
   assert.notEqual(colors.background,'rgb(237, 244, 238)');
   await page.screenshot({path:path.join(evidence,'selection-mobile-dark-hant.png')});
   await page.locator('#clear-selection').click();assert.equal(await page.locator('#download-selection').isDisabled(),true);
-  await page.locator('#select-loaded').click();assert.equal(await page.locator('.directory-select:checked').count(),3);
+  await page.locator('#select-loaded').click();await page.waitForFunction(()=>document.querySelectorAll('.directory-select:checked').length===3);assert.equal(await page.locator('.directory-select:checked').count(),3);
   await page.locator('#refresh').click();await page.locator('#select-loaded:enabled').waitFor();
   assert.equal(await page.locator('.directory-select:checked').count(),0);
   await page.locator('.row[title="文件夹"] .file-link').click();await page.locator('.row[title="nested.txt"]').waitFor();

@@ -14,6 +14,7 @@ import 'package:localsend_app/provider/workspace_catalog_provider.dart';
 import 'package:localsend_app/util/api/api_quota_strings.dart';
 import 'package:localsend_app/util/api/api_settings.dart';
 import 'package:localsend_app/util/api/api_transfer_strings.dart';
+import 'package:localsend_app/util/native/open_share_link.dart';
 import 'package:localsend_app/util/ui/snackbar.dart';
 import 'package:localsend_app/widget/network_address_tags.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
@@ -510,10 +511,6 @@ class _ApiTabState extends State<ApiTab> {
             ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 12),
-          child: Text(text.nextStage, style: Theme.of(context).textTheme.bodySmall),
-        ),
       ],
     );
   }
@@ -541,6 +538,11 @@ class _Address extends StatelessWidget {
         onPressed: () async {
           await _copyApiText(context, url);
         },
+      ),
+      IconButton(
+        tooltip: t.general.open,
+        icon: const Icon(Icons.open_in_browser, size: 18),
+        onPressed: () => openShareLink(context, url),
       ),
     ],
   );

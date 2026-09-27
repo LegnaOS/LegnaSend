@@ -8,7 +8,7 @@ void main() {
   final operation = ApiOperation('/settings/update', 'POST', {'operationId': 'updateSettings'});
   Map<String, String> values(String value) => {'body.version': 'a' * 64, 'body.field': 'receiveCacheRetentionDays', 'body.value': value};
   test('retention input accepts exact signed JSON integer values and encodes typed JSON', () {
-    for (final days in [-1, 0, 1, 7, 30, 3650]) {
+    for (final days in [-2, -1, 0, 1, 7, 30, 3650]) {
       final form = values('$days');
       expect(operation.valid(form), true);
       expect(operation.body(form)!['value'], days);
@@ -28,7 +28,7 @@ void main() {
       '"7"',
       '7.0',
       '1e1',
-      '-2',
+      '-3',
       '3651',
       '999999999999999999999999999999999999',
       '+7',

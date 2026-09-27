@@ -702,6 +702,12 @@ class Translations$directoryWorkspaces$zh_CN extends Translations$directoryWorks
   String get permissionHint => '上传权限';
   @override
   String get startService => '启动服务';
+  @override
+  String get moreAddresses => '其他地址';
+  @override
+  String get restoreAccess => '重新授权目录';
+  @override
+  String get openFailed => '浏览器打开失败，请复制链接打开。';
 }
 
 // Path: changelogPage

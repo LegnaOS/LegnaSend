@@ -7,7 +7,7 @@ const repo=path.resolve(__dirname,'../../../..'),root=fs.mkdtempSync(path.join(o
 const evidence=process.env.EVIDENCE_DIR||path.join(os.tmpdir(),'legnasend-large-workspace-selection-evidence');fs.mkdirSync(evidence,{recursive:true});
 const count=5200;fs.mkdirSync(path.join(root,'a'));fs.mkdirSync(path.join(root,'b'));
 for(let i=0;i<count;i++)fs.writeFileSync(path.join(root,'a',String(i).padStart(5,'0')+'.txt'),'entry '+i+'\n');
-let fixture,browser,page,output='';const errors=[],requests=[],responses=[];let oldBackend=false,holdPrepare=false,releasePrepare=null;const downloads=[];
+let fixture,browser,page,output='';const errors=[],requests=[],responses=[];let oldBackend=false,holdPrepare=false,releasePrepare=null,holdSelection=false,releaseSelection=null,failSelection=false;const downloads=[];
 async function until(fn){for(let i=0;i<1200;i++){if(await fn())return;await new Promise(r=>setTimeout(r,25));}throw Error('condition timed out');}
 (async()=>{
  fixture=spawn(process.env.DIRECTORY_FIXTURE||path.join(repo,'target/debug/examples/directory_workspace_fixture'),[root]);fixture.stdout.on('data',d=>output+=d);fixture.stderr.on('data',d=>process.stderr.write(d));
@@ -20,33 +20,35 @@ async function until(fn){for(let i=0;i<1200;i++){if(await fn())return;await new 
   if(request.url().includes('/?meta')&&oldBackend){const response=await route.fetch(),data=await response.json();delete data.capabilities.archiveSelection;return route.fulfill({response,json:data});}
   if(/\/(prepare-archive|cancel-archive|archive)\?/.test(request.url()))requests.push({url:request.url(),method:request.method(),navigation:request.isNavigationRequest(),body:request.postData()});
   if(request.url().includes('/prepare-archive?')&&holdPrepare){holdPrepare=false;const response=await route.fetch();await new Promise(resolve=>releasePrepare=resolve);return route.fulfill({response});}
+  if(request.url().includes('/files?')&&holdSelection){holdSelection=false;const response=await route.fetch();await new Promise(resolve=>releaseSelection=resolve);return route.fulfill({response}).catch(()=>{});}
+  if(request.url().includes('/files?')&&failSelection&&new URL(request.url()).searchParams.has('cursor')){failSelection=false;return route.fulfill({status:503,body:'Injected page failure'});}
   return route.continue();
  });
  await page.goto(base+'design/');await page.locator('#language').selectOption('en');await page.locator('#select-loaded').waitFor();
- assert.equal(await page.locator('#select-loaded').textContent(),'Select loaded');
- let peakRows=0;
- // Each iteration is an explicit click on already loaded content, never an app-wide auto-enumeration.
- for(let n=0;n<100;n++){
-  await until(async()=>!(await page.locator('#select-loaded').isDisabled()));await page.locator('#select-loaded').click();
-  peakRows=Math.max(peakRows,await page.locator('#rows .row').count());
-  const selected=parseInt(await page.locator('#selection-count').textContent(),10);if(selected===count)break;
-  assert.ok(selected<count);const before=await page.locator('#count').textContent();await page.locator('#more').click();
-  await until(async()=>(await page.locator('#count').textContent())!==before);
- }
- assert.equal(parseInt(await page.locator('#selection-count').textContent(),10),count);assert.ok(peakRows<=30);
- // Revisit a page after its virtual window was evicted; all choices remain bound to this folder.
- await page.locator('#previous').click();await until(async()=>!(await page.locator('#select-loaded').isDisabled()));
- assert.equal(parseInt(await page.locator('#selection-count').textContent(),10),count);
+ assert.equal(await page.locator('#select-loaded').textContent(),'Select all');
+ await page.locator('#rows input.directory-select').first().check();
+ holdSelection=true;await page.locator('#select-loaded').click();await until(()=>releaseSelection!==null);
+ assert.equal(await page.locator('#select-loaded').textContent(),'Cancel selection');
+ await page.locator('#select-loaded').click();releaseSelection();await page.waitForTimeout(100);
+ assert.equal(parseInt(await page.locator('#selection-count').textContent(),10),1);
+ failSelection=true;await page.locator('#select-loaded').click();await until(async()=>(await page.locator('#select-loaded').textContent())==='Select all');
+ assert.equal(parseInt(await page.locator('#selection-count').textContent(),10),1);assert.match(await page.locator('#selection-status').textContent(),/Previous choices kept/);
+ await page.locator('#select-loaded').click();await until(async()=>parseInt(await page.locator('#selection-count').textContent(),10)===count);
+ const peakRows=await page.locator('#rows .row').count();assert.ok(peakRows<=30);
  assert.ok(await page.locator('#rows input.directory-select').first().isChecked());
+ assert.equal(await page.locator('#selection-details').evaluate(element=>element.open),false);
  // Hold a real prepared receipt after server allocation, then cancel in-page.
  // Its late token must be revoked rather than launching a stale browser download.
  holdPrepare=true;await page.locator('#download-selection').click();await until(()=>releasePrepare!==null);
  assert.equal(await page.locator('#cancel-archive-selection').textContent(),'Cancel preparation');
  await page.locator('#cancel-archive-selection').click();releasePrepare();
  await until(()=>requests.some(r=>r.url.includes('/cancel-archive?')));await page.waitForTimeout(100);assert.equal(downloads.length,0);
- const cancelledBeforeDownload=requests.filter(r=>r.url.includes('/cancel-archive?')).length;
+ let cancelledBeforeDownload=requests.filter(r=>r.url.includes('/cancel-archive?')).length;
  const [download]=await Promise.all([page.waitForEvent('download',{timeout:120000}),page.locator('#download-selection').click()]);
  assert.equal(await download.failure(),null);assert.ok(download.url().length<250);assert.ok(download.url().includes('selection='));
+ assert.equal(await page.locator('#cancel-archive-selection').textContent(),'Cancel selected ZIP download');
+ assert.match(await page.locator('#archive-target').textContent(),/5200 selected.*#/);
+ assert.doesNotMatch(await page.locator('#archive-target').textContent(),/Invalid Date/);
  const zip=path.join(root,'selected.zip');await download.saveAs(zip);
  const verified=JSON.parse(execFileSync('/usr/bin/python3',['-c',`import sys,zipfile,json,hashlib
 with zipfile.ZipFile(sys.argv[1]) as z:
@@ -65,14 +67,30 @@ with zipfile.ZipFile(sys.argv[1]) as z:
  // native download plus no fetch of archive bytes, not a fabricated route event.
  assert.equal(downloads.length,1);assert.deepEqual(await page.evaluate(()=>window.__archiveFetches),[]);
  for(const request of requests.filter(r=>r.url.includes('/archive?'))){assert.equal(request.method,'GET');assert.equal(request.navigation,true);}
+ const firstTicket=await page.locator('#archive-target').inputValue();
+ await page.locator('#clear-selection').click();await page.locator('#rows input.directory-select').first().check();
+ const [secondDownload]=await Promise.all([page.waitForEvent('download'),page.locator('#download-selection').click()]);assert.equal(await secondDownload.failure(),null);
+ assert.equal(await page.locator('#archive-target option').count(),2);
+ await page.setViewportSize({width:390,height:844});await page.locator('#language').selectOption('zh-CN');
+ await page.screenshot({path:path.join(evidence,'zip-target-390.png')});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ await page.locator('#language').selectOption('en');await page.setViewportSize({width:1080,height:900});
+ await page.locator('#archive-target').selectOption(firstTicket);await page.locator('#cancel-archive-selection').click();
+ await until(()=>requests.filter(r=>r.url.includes('/cancel-archive?')).length>cancelledBeforeDownload);
+ assert.equal(JSON.parse(requests.filter(r=>r.url.includes('/cancel-archive?')).at(-1).body).selection,firstTicket);
+ await until(async()=>(await page.locator('#archive-target option').count())===1);
+ assert.ok((await page.locator('#selection-status').textContent()).includes('#'+firstTicket.slice(0,8)));
+ cancelledBeforeDownload++;
  await page.locator('#refresh').click();await page.locator('#select-loaded').waitFor();assert.equal(requests.filter(r=>r.url.includes('/cancel-archive?')).length,cancelledBeforeDownload,'refresh must not silently cancel native browser download');
  await page.setViewportSize({width:320,height:844});for(const language of['en','zh-CN','zh-TW','zh-HK']){await page.locator('#language').selectOption(language);await page.waitForTimeout(30);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
  await page.screenshot({path:path.join(evidence,'selection-320.png')});
  // Actual old GET path remains reachable when an older server omits the capability.
  oldBackend=true;await page.reload();await page.locator('#language').selectOption('en');await page.locator('#rows input.directory-select').first().check();
- assert.match(await page.locator('#select-loaded').textContent(),/128/);
+ assert.equal(await page.locator('#select-loaded').textContent(),'Select all');
+ await page.locator('#select-loaded').click();await until(async()=>(await page.locator('#select-loaded').textContent())==='Select all');
+ assert.equal(parseInt(await page.locator('#selection-count').textContent(),10),1);
  const [legacy]=await Promise.all([page.waitForEvent('download'),page.locator('#download-selection').click()]);assert.equal(await legacy.failure(),null);assert.ok(legacy.url().includes('ids='));
- assert.equal(requests.filter(r=>r.url.includes('/prepare-archive?')).length,2);assert.deepEqual(errors,[]);
- const summary={...verified,selected:count,peakRows,shortUrl:download.url().length,legacyGet:true,latePrepareCancelled:true,nativeDownloads:downloads.length,pageArchiveFetches:await page.evaluate(()=>window.__archiveFetches),errors,responses,requestShapes:requests.map(r=>({method:r.method,navigation:r.navigation,urlLength:r.url.length,kind:r.url.includes('prepare-archive')?'prepare':r.url.includes('cancel-archive')?'cancel':'archive'}))};
+ assert.equal(requests.filter(r=>r.url.includes('/prepare-archive?')).length,3);assert.deepEqual(errors,[]);
+ const summary={...verified,selected:count,selectAllAcrossUnloadedPages:true,cancelAndFailureKeepPrevious:true,explicitZipCancellationTarget:true,peakRows,shortUrl:download.url().length,legacyGet:true,latePrepareCancelled:true,nativeDownloads:downloads.length,pageArchiveFetches:await page.evaluate(()=>window.__archiveFetches),errors,responses,requestShapes:requests.map(r=>({method:r.method,navigation:r.navigation,urlLength:r.url.length,kind:r.url.includes('prepare-archive')?'prepare':r.url.includes('cancel-archive')?'cancel':'archive'}))};
  fs.writeFileSync(path.join(evidence,'results.json'),JSON.stringify(summary,null,2)+'\n');console.log(JSON.stringify(summary));
 })().catch(async e=>{console.error(e);if(page){await page.screenshot({path:path.join(evidence,'failure.png'),fullPage:true}).catch(()=>{});const state=await page.evaluate(()=>({status:document.querySelector('#selection-status')?.textContent,selection:document.querySelector('#selection-count')?.textContent,disabled:document.querySelector('#download-selection')?.disabled})).catch(()=>null);fs.writeFileSync(path.join(evidence,'failure.json'),JSON.stringify({state,responses,errors,requests:requests.map(r=>({...r,body:r.body?{ids:JSON.parse(r.body).ids?.length,selection:JSON.parse(r.body).selection}:null}))},null,2));}process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();if(fixture)fixture.kill();fs.rmSync(root,{recursive:true,force:true});});

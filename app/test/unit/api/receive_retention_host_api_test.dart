@@ -105,7 +105,7 @@ void main() {
 
   test('successful typed retention updates expose actual policy without triggering cleanup', () async {
     expect(await fixture.controller.initialize(), true);
-    for (final days in [-1, 0, 1, 7, 30, 3650]) {
+    for (final days in [-2, -1, 0, 1, 7, 30, 3650]) {
       final old = (await fixture.read())['version'];
       final result = await fixture.change(days);
       expect(result['status'], 200);
@@ -114,8 +114,8 @@ void main() {
       expect(result['body']['version'], isNot(old));
       expect(fixture.controller.automaticCleanupAllowed, true);
     }
-    expect(fixture.saves, [-1, 0, 1, 7, 30, 3650]);
-    expect(fixture.applies, [7, -1, 0, 1, 7, 30, 3650]);
+    expect(fixture.saves, [-2, -1, 0, 1, 7, 30, 3650]);
+    expect(fixture.applies, [7, -2, -1, 0, 1, 7, 30, 3650]);
     expect(fixture.cacheCalls, isEmpty);
   });
 
@@ -123,7 +123,7 @@ void main() {
     await fixture.controller.initialize();
     final version = (await fixture.read())['version'] as String;
     final oldClaims = fixture.claims;
-    for (final value in <Object>[-2, 3651, true, false, 1.0, -1.0, '7', 'manual']) {
+    for (final value in <Object>[-3, 3651, true, false, 1.0, -1.0, '7', 'manual']) {
       final result = await fixture.change(value, version: version);
       expect(result['status'], 400, reason: '$value (${value.runtimeType})');
       expect(result['body']['error']['code'], 'invalid_setting');
@@ -294,7 +294,7 @@ void main() {
   test('invalid recovered runtime value stays unknown and paused', () async {
     await fixture.controller.initialize();
     fixture.applyHook = (_) async => throw StateError('bad acknowledgment');
-    fixture.actualHook = () async => -2;
+    fixture.actualHook = () async => -3;
     final result = await fixture.change(30);
     expect(result['status'], 503);
     expectState(await fixture.read(), saved: 7, effective: null, paused: true, error: 'apply');

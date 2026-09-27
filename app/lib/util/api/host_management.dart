@@ -61,7 +61,7 @@ class HostManagement {
         final next = change['value'];
         if (!fields.containsKey(field)) return fail(400, 'invalid_setting');
         if (field == 'receiveCacheRetentionDays') {
-          if (next is! int || next < -1 || next > 3650) return fail(400, 'invalid_setting');
+          if (next is! int || next < -2 || next > 3650) return fail(400, 'invalid_setting');
         } else if (fields[field] is bool ? next is! bool : next is! String) {
           return fail(400, 'invalid_setting');
         }

@@ -590,3 +590,18 @@ test('continuous folder downloads retire only completed receipts instead of stop
  for(const directory of f.directory.subdirs.values())assert.equal(directory.subdirs.get('folder').entries.get('中文.txt').bytes.toString(),'content\n');
  f.close();
 });
+
+test('batch uses the same exact one-hour default including refreshed old task metadata', async () => {
+  const { f, b, advance } = await unfinishedBatch();
+  f.registry.retention = async () => undefined;
+  advance(3599999 / 86400000);
+  await f.manager.cleanupExpired();
+  assert.equal(f.manager.retentionDays, -2);
+  assert.ok(f.batchRecords.has(b.id));
+  advance(1 / 86400000);
+  await f.manager.cleanupExpired();
+  assert.ok(!f.batchRecords.has(b.id));
+  assert.equal(f.records.size, 0);
+  assert.equal(f.directory.subdirs.get('Shared').entries.get('other.txt').bytes.toString(), 'content\n');
+  f.close();
+});

@@ -652,12 +652,12 @@
           "generation",
           "path",
           "scanned",
-          "filter",
           "contentEpoch",
           "contentKnowledge",
           "contentRevision",
           "dirty",
-          "lastObservedAt"
+          "lastObservedAt",
+          "filter"
         ],
         "type": "object"
       },
@@ -700,9 +700,9 @@
                 "type": "string"
               },
               "receiveCacheRetentionDays": {
-                "description": "Native receive crash-residue retention: -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support.",
+                "description": "Native receive crash-residue retention: -2 is exactly one hour (default), -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support.",
                 "maximum": 3650,
-                "minimum": -1,
+                "minimum": -2,
                 "type": "integer"
               },
               "theme": {
@@ -1323,9 +1323,9 @@
             "type": "boolean"
           },
           "effectiveDays": {
-            "description": "Currently effective native day encoding; null means unconfirmed, never inferred from the saved preference.",
+            "description": "Currently effective native retention encoding (-2 means one hour); null means unconfirmed, never inferred from the saved preference.",
             "maximum": 3650,
-            "minimum": -1,
+            "minimum": -2,
             "type": [
               "integer",
               "null"
@@ -11011,9 +11011,9 @@
                     "then": {
                       "properties": {
                         "value": {
-                          "description": "Native receive crash-residue retention: -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support.",
+                          "description": "Native receive crash-residue retention: -2 is exactly one hour (default), -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support.",
                           "maximum": 3650,
-                          "minimum": -1,
+                          "minimum": -2,
                           "type": "integer"
                         }
                       }
@@ -11044,9 +11044,9 @@
                         "type": "boolean"
                       },
                       {
-                        "description": "Native receive crash-residue retention: -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support.",
+                        "description": "Native receive crash-residue retention: -2 is exactly one hour (default), -1 waits for explicit local cleanup, 0 adds no retention delay at the next maintenance, and 1–3650 is days. Changing policy does not itself clean files. Applies only to registered inactive native remnants; grants no immediate-cleanup override, does not alter normal cancellation and does not imply resume support.",
                         "maximum": 3650,
-                        "minimum": -1,
+                        "minimum": -2,
                         "type": "integer"
                       }
                     ]

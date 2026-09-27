@@ -5,18 +5,17 @@ import 'package:localsend_app/gen/assets.gen.dart';
 class LocalSendLogo extends StatelessWidget {
   final bool withText;
 
-  const LocalSendLogo({required this.withText});
+  const LocalSendLogo({required this.withText, super.key});
 
   @override
   Widget build(BuildContext context) {
-    final logo = ColorFiltered(
-      colorFilter: ColorFilter.mode(
-        Theme.of(context).colorScheme.primary,
-        BlendMode.srcATop,
-      ),
+    final logo = Semantics(
+      image: true,
+      label: Brand.name,
       child: Assets.img.logo512.image(
         width: 200,
         height: 200,
+        excludeFromSemantics: true,
       ),
     );
 

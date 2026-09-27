@@ -61,7 +61,11 @@ class ApiTransferStrings {
       '檔案 JSON：id；本機檔案另需帶引號的 ETag version',
     ),
     'field' => _s('Setting field', '设置字段', '設定欄位'),
-    'value' => _s('Value: boolean, text, or retention days (−1…3650)', '新值：布尔、文本或保留天数（−1…3650）', '新值：布林、文字或保留天數（−1…3650）'),
+    'value' => _s(
+      'Value: boolean, text, or retention code (−2 = 1 hour; −1…3650)',
+      '新值：布尔、文本或保留期编码（−2 为 1 小时；−1…3650）',
+      '新值：布林、文字或保留期編碼（−2 為 1 小時；−1…3650）',
+    ),
     'deviceId' => _s('Destination device ID', '目标设备 ID', '目標裝置 ID'),
     'selectionVersion' => _s('Local selection version', '本地已选文件版本', '本機已選檔案版本'),
     'requestId' => _s('Request ID (keep after errors)', '请求 ID（失败后保留）', '請求 ID（失敗後保留）'),
@@ -110,9 +114,9 @@ class ApiTransferStrings {
       '僅清理已登記且身分核驗通過的非活動接收暫存，保留使用者檔案、未知資料和活動工作。',
     ),
     'updateSettings' => _s(
-      'Update one supported setting using its current version. receiveCacheRetentionDays is an integer: −1 keeps manually, 0 cleans automatically, 1…3650 retains days. Updating does not run cleanup. Secrets, paths and listener restarts are excluded.',
-      '核验当前版本后修改一项设置。receiveCacheRetentionDays 必须是整数：−1 手动保留、0 自动清理、1…3650 保留天数；修改不会执行清理。不包含秘密、路径和监听重启。',
-      '核驗目前版本後修改一項設定。receiveCacheRetentionDays 必須是整數：−1 手動保留、0 自動清理、1…3650 保留天數；修改不會執行清理。不包含秘密、路徑和監聽重新啟動。',
+      'Update one supported setting using its current version. receiveCacheRetentionDays is an integer: −2 keeps one hour (default), −1 keeps manually, 0 cleans automatically, 1…3650 retains days. Updating does not run cleanup. Secrets, paths and listener restarts are excluded.',
+      '核验当前版本后修改一项设置。receiveCacheRetentionDays 必须是整数：−2 保留 1 小时（默认）、−1 手动保留、0 自动清理、1…3650 保留天数；修改不会执行清理。不包含秘密、路径和监听重启。',
+      '核驗目前版本後修改一項設定。receiveCacheRetentionDays 必須是整數：−2 保留 1 小時（預設）、−1 手動保留、0 自動清理、1…3650 保留天數；修改不會執行清理。不包含秘密、路徑和監聽重新啟動。',
     ),
     'sendSelection' => _s(
       'Send the current local selection to this device. The receiver still decides whether to accept.',

@@ -120,6 +120,7 @@ void main() {
       expect(find.text(t.directoryWorkspaces.closed), findsOneWidget);
       await tap(find.text(t.directoryWorkspaces.enable));
       expect(find.text(t.directoryWorkspaces.serving), findsOneWidget);
+      await tap(find.byKey(const ValueKey('share-more-addresses')));
       expect(find.text('http://192.168.9.4:54321/design/'), findsOneWidget);
       expect(find.text('http://198.18.0.1:54321/design/'), findsOneWidget);
       expect(server.epoch, 9);

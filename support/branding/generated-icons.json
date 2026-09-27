@@ -1,0 +1,1281 @@
+{
+  "brand": "LegnaSend",
+  "color": "#54B865",
+  "source": "support/branding/legnasend-mark.svg",
+  "outputs": [
+    {
+      "path": "app/assets/img/logo-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "b807e7c544087be8faf4e5c58fba65da501b4762df01494003eae0298deb7b1d"
+    },
+    {
+      "path": "app/assets/img/logo-128.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "7b29db6dac53f4afe0895052b811dc31771cdb0f936ff3f632cd56b7185bbbde"
+    },
+    {
+      "path": "app/assets/img/logo-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "46317e209121f3bdf0df757173f3f21365846fa79f6cbc54dcbf17164e75e27f"
+    },
+    {
+      "path": "app/assets/img/logo-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "c01fc669e1414feab197caf1da5776c90376f67d97856e38f38fb15baa0ee461"
+    },
+    {
+      "path": "app/assets/img/logo-32-black.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "1275c426335b39be2dab8c6211b788765c8311097e1bcfb0c57367323b4a8f8e"
+    },
+    {
+      "path": "app/assets/img/logo-32-white.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "0c5b55bd5fb1544e370d460c52ed49acd8197fc2add44379ea228439266f1023"
+    },
+    {
+      "path": "app/assets/img/logo-512-white.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "84e6e0ba9bc6d8da9c0bbcfd3a2664bc278a3f7d959742bd89224f0ec2b5de1e"
+    },
+    {
+      "path": "app/assets/img/logo.ico",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "7660c3e88ebb3ee12b37d994248250f763939cef0b8352094bab2249b3e4c22b"
+    },
+    {
+      "path": "app/assets/packaging/logo.ico",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "7660c3e88ebb3ee12b37d994248250f763939cef0b8352094bab2249b3e4c22b"
+    },
+    {
+      "path": "app/windows/runner/resources/app_icon.ico",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "7660c3e88ebb3ee12b37d994248250f763939cef0b8352094bab2249b3e4c22b"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20@2x.png",
+      "size": [
+        40,
+        40
+      ],
+      "mode": "RGB",
+      "sha256": "957a1629558421fb38e0f28b8786a5cb06afb4026382ff9b7000d55d4c414ac8"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20@3x.png",
+      "size": [
+        60,
+        60
+      ],
+      "mode": "RGB",
+      "sha256": "80345f46e8ff80672003b35f71481613cd5728bc4e3624e2069e607171241e5a"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20.png",
+      "size": [
+        20,
+        20
+      ],
+      "mode": "RGB",
+      "sha256": "742fb396ce09b92d86a9ed87aedebf1311df25b9b4219493727e4db6694ad3f8"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29@2x.png",
+      "size": [
+        58,
+        58
+      ],
+      "mode": "RGB",
+      "sha256": "b027d545e4d715204ecf57653e64d8892000cd95055366457d954054e100cfe9"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29@3x.png",
+      "size": [
+        87,
+        87
+      ],
+      "mode": "RGB",
+      "sha256": "1bc713f6ef0ff9105ac887390d56f51d594ec30ad1f23383eba085bce02f014f"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40@2x.png",
+      "size": [
+        80,
+        80
+      ],
+      "mode": "RGB",
+      "sha256": "64c26b5bac62895f1ef29e6f280412d0c0c1bd68e396a7f7aebd9810aefdc3a0"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40@3x.png",
+      "size": [
+        120,
+        120
+      ],
+      "mode": "RGB",
+      "sha256": "6d77edb41147f056cca832d12b692a841e0c50754370b758aa8a4e35880ac99e"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60@2x.png",
+      "size": [
+        120,
+        120
+      ],
+      "mode": "RGB",
+      "sha256": "6d77edb41147f056cca832d12b692a841e0c50754370b758aa8a4e35880ac99e"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60@3x.png",
+      "size": [
+        180,
+        180
+      ],
+      "mode": "RGB",
+      "sha256": "0fd675323d4d88867627b5d884c9904d4232c412cd7a02aa09f98fc526f3df6b"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29.png",
+      "size": [
+        29,
+        29
+      ],
+      "mode": "RGB",
+      "sha256": "1934dfbe3fcca56ee5c39d29666c1c7e2614cb837ce77bb0d44316a6dd1b61e6"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40.png",
+      "size": [
+        40,
+        40
+      ],
+      "mode": "RGB",
+      "sha256": "957a1629558421fb38e0f28b8786a5cb06afb4026382ff9b7000d55d4c414ac8"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76.png",
+      "size": [
+        76,
+        76
+      ],
+      "mode": "RGB",
+      "sha256": "e44f859cf8484334da23c85b00f43f60f4e64cf4ab561e964fd601dbb6270915"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76@2x.png",
+      "size": [
+        152,
+        152
+      ],
+      "mode": "RGB",
+      "sha256": "cd2a629f500b3a80aefcee508c5e9d25a720b839b79736ae3ee4a1f1d5ab4e9f"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5@2x.png",
+      "size": [
+        167,
+        167
+      ],
+      "mode": "RGB",
+      "sha256": "c597818ef2527e2115a10a4bf230fa4f2fa8d8c51c40b838308020c9e4a975da"
+    },
+    {
+      "path": "app/ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGB",
+      "sha256": "6e13537752a468e75c584f9dcc2915069d50b6df0c00a4573645f691ec7a2bda"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-16.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "25796be173fb748939ca4b2523e70934e3831b676a1e79c4f10f4a21461fe809"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "b807e7c544087be8faf4e5c58fba65da501b4762df01494003eae0298deb7b1d"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "3f73e60ec5227cf40169635a6b5619253897306aec023e17f03e0bcdd0fa52f2"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-128.png",
+      "size": [
+        128,
+        128
+      ],
+      "mode": "RGBA",
+      "sha256": "7b29db6dac53f4afe0895052b811dc31771cdb0f936ff3f632cd56b7185bbbde"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "46317e209121f3bdf0df757173f3f21365846fa79f6cbc54dcbf17164e75e27f"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-512.png",
+      "size": [
+        512,
+        512
+      ],
+      "mode": "RGBA",
+      "sha256": "c01fc669e1414feab197caf1da5776c90376f67d97856e38f38fb15baa0ee461"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIcon.appiconset/logo-1024-mac-1024.png",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "7349585cf3a7588f855b79f33fa10731daa89e25d21fd05cf4b3614d7afefe1d"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/StatusBarItemIcon.imageset/logo-32-black.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "1275c426335b39be2dab8c6211b788765c8311097e1bcfb0c57367323b4a8f8e"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIconWithSuccessMark.imageset/logo-1024-mac-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "3a2990dc9a6589cbc27f1a7f87eb3f45b1c1bdd217fc5d6c098b0b01c648133b"
+    },
+    {
+      "path": "app/macos/Runner/Assets.xcassets/AppIconWithErrorMark.imageset/logo-1024-mac-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "9eb70d6d99bc8819d1d84dc809b0ef51c4b5adb643cce28263ccf7192d454cea"
+    },
+    {
+      "path": "app/macos/ShareExtension/icon.icns",
+      "size": [
+        1024,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "d32dfc23f8e713f956d646893b7ddd8e9a1ef64beac7edbcaa59e3a55be64524"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "sha256": "90506ef5385b657fc41e04f94bb61664140d8394d17233eecb9f2469e5830c61"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-mdpi/ic_launcher_foreground.png",
+      "size": [
+        108,
+        108
+      ],
+      "mode": "RGBA",
+      "sha256": "654360b137ed00b1ee3ced77a22feff00f9c316278d614d12351748ba55ec094"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-mdpi/ic_launcher_monochrome.png",
+      "size": [
+        108,
+        108
+      ],
+      "mode": "RGBA",
+      "sha256": "1cdafbfad46f7a60fe7db972e40b2450108ff374609966d7fd549ed6f8a1e8b7"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-mdpi/ic_launcher_quicktile_foreground.png",
+      "size": [
+        108,
+        108
+      ],
+      "mode": "RGBA",
+      "sha256": "1cdafbfad46f7a60fe7db972e40b2450108ff374609966d7fd549ed6f8a1e8b7"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "size": [
+        72,
+        72
+      ],
+      "mode": "RGBA",
+      "sha256": "96ec9b7f8f90fd822751d790523b8997b92d9d660df1ef341c3d1de0d6c63591"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-hdpi/ic_launcher_foreground.png",
+      "size": [
+        162,
+        162
+      ],
+      "mode": "RGBA",
+      "sha256": "1ed37f27a82914d9197e79818175359a699b7e1eac7b42c58ee30ae778251516"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-hdpi/ic_launcher_monochrome.png",
+      "size": [
+        162,
+        162
+      ],
+      "mode": "RGBA",
+      "sha256": "69bfa4e13f7bd16ac36ae73f0996ba5cdb7fc2d1a97f6488b697db79484666fe"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-hdpi/ic_launcher_quicktile_foreground.png",
+      "size": [
+        162,
+        162
+      ],
+      "mode": "RGBA",
+      "sha256": "69bfa4e13f7bd16ac36ae73f0996ba5cdb7fc2d1a97f6488b697db79484666fe"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "6621025d65e3f56dd354c7bdbc8e034cf9c3da94c675e560b987a99d71187e5a"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png",
+      "size": [
+        216,
+        216
+      ],
+      "mode": "RGBA",
+      "sha256": "cc495562adebf83f9b8c4b028f273c0866b3bcd921a7129509303e6e16b1f383"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xhdpi/ic_launcher_monochrome.png",
+      "size": [
+        216,
+        216
+      ],
+      "mode": "RGBA",
+      "sha256": "f3cf3927cf6711f3189ca0c183a2d3560c8828efc190c5909ea989ceff78fe5a"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xhdpi/ic_launcher_quicktile_foreground.png",
+      "size": [
+        216,
+        216
+      ],
+      "mode": "RGBA",
+      "sha256": "f3cf3927cf6711f3189ca0c183a2d3560c8828efc190c5909ea989ceff78fe5a"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "size": [
+        144,
+        144
+      ],
+      "mode": "RGBA",
+      "sha256": "ac492bc0174a189136af2c04700a1710aa62b2e7320d9f576769877a9c7714e8"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_foreground.png",
+      "size": [
+        324,
+        324
+      ],
+      "mode": "RGBA",
+      "sha256": "c2295a4874e5f3a63bd39d9e4bd650ba003a703b70eb1bb8fe909c8d90112fda"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_monochrome.png",
+      "size": [
+        324,
+        324
+      ],
+      "mode": "RGBA",
+      "sha256": "688cde4e2fe3212457ccf040f3c66af742a45eeadea829f682eaae1bdf551b5e"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxhdpi/ic_launcher_quicktile_foreground.png",
+      "size": [
+        324,
+        324
+      ],
+      "mode": "RGBA",
+      "sha256": "688cde4e2fe3212457ccf040f3c66af742a45eeadea829f682eaae1bdf551b5e"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGBA",
+      "sha256": "2a734b1afab93e611d75ed9397fce984087952ea3e5a43c76a57c72263c78bed"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_foreground.png",
+      "size": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "sha256": "1963391de047645fab82c85eb920e6a7f3095f4db8510dde4a1d29931d47d970"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_monochrome.png",
+      "size": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "sha256": "6c95e8a4a402b2b0bec01405826ba1a7b13a0cd3641c1e5474f74407c95842de"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_quicktile_foreground.png",
+      "size": [
+        432,
+        432
+      ],
+      "mode": "RGBA",
+      "sha256": "6c95e8a4a402b2b0bec01405826ba1a7b13a0cd3641c1e5474f74407c95842de"
+    },
+    {
+      "path": "app/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png",
+      "size": [
+        192,
+        192
+      ],
+      "mode": "RGBA",
+      "sha256": "2a734b1afab93e611d75ed9397fce984087952ea3e5a43c76a57c72263c78bed"
+    },
+    {
+      "path": "support/build/msix/content/Images/BadgeLogo.scale-100.png",
+      "size": [
+        24,
+        24
+      ],
+      "mode": "RGBA",
+      "sha256": "d8d1c441eacc6ea919fea5b3749a64d869812e0815c489bb41812427b7db4de7"
+    },
+    {
+      "path": "support/build/msix/content/Images/BadgeLogo.scale-125.png",
+      "size": [
+        30,
+        30
+      ],
+      "mode": "RGBA",
+      "sha256": "bdd432acb8a7ee1db7c3845fcfdd13eafe04209db16921ec46a01aef76234f37"
+    },
+    {
+      "path": "support/build/msix/content/Images/BadgeLogo.scale-150.png",
+      "size": [
+        36,
+        36
+      ],
+      "mode": "RGBA",
+      "sha256": "60ae87bb0ae59378ecaaa09ce2000e5a47a0c8fc741fd743c9e3b524722b8368"
+    },
+    {
+      "path": "support/build/msix/content/Images/BadgeLogo.scale-200.png",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "sha256": "b6ba369c45d3e1dbdb7aeb5312a1880c9af78b3a92a53e782fe16221d0500624"
+    },
+    {
+      "path": "support/build/msix/content/Images/BadgeLogo.scale-400.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "93844d7aaa69e8d5ce5f09d1d54f216d003bf11816b435338fd480676bdb8b0a"
+    },
+    {
+      "path": "support/build/msix/content/Images/LargeTile.scale-100.png",
+      "size": [
+        310,
+        310
+      ],
+      "mode": "RGBA",
+      "sha256": "f16dbfcfd3571364f66a6358d604f7eec01a8823d674004ff65b3f369e13c7d2"
+    },
+    {
+      "path": "support/build/msix/content/Images/LargeTile.scale-125.png",
+      "size": [
+        388,
+        388
+      ],
+      "mode": "RGBA",
+      "sha256": "25eaff6d3422cce1251e088e62e14a08543eb657d2ae6babb6ee51b9b617912f"
+    },
+    {
+      "path": "support/build/msix/content/Images/LargeTile.scale-150.png",
+      "size": [
+        465,
+        465
+      ],
+      "mode": "RGBA",
+      "sha256": "b17fa1f8331d23027ce6a7a4dc4a72128b99b4965fe6109048e5cd8905c4e081"
+    },
+    {
+      "path": "support/build/msix/content/Images/LargeTile.scale-200.png",
+      "size": [
+        620,
+        620
+      ],
+      "mode": "RGBA",
+      "sha256": "5d2b72e41289a94a80091ab805ab6917f4aa47c41e42937295f74b5e6a267f02"
+    },
+    {
+      "path": "support/build/msix/content/Images/LargeTile.scale-400.png",
+      "size": [
+        1240,
+        1240
+      ],
+      "mode": "RGBA",
+      "sha256": "bfa199ceb867c8149d3f294857a902f8e6297fabe55a8ab1911f62d981c87b1d"
+    },
+    {
+      "path": "support/build/msix/content/Images/SmallTile.scale-100.png",
+      "size": [
+        71,
+        71
+      ],
+      "mode": "RGBA",
+      "sha256": "35c8abac800a724b26a6193d0e2d01053fd1ad1b3d9347d4a6cea41e700b5bb9"
+    },
+    {
+      "path": "support/build/msix/content/Images/SmallTile.scale-125.png",
+      "size": [
+        89,
+        89
+      ],
+      "mode": "RGBA",
+      "sha256": "b36fd36be7213b035e95f63aa8b904a104e54b85a66e7e890dc09eeb4542c34e"
+    },
+    {
+      "path": "support/build/msix/content/Images/SmallTile.scale-150.png",
+      "size": [
+        107,
+        107
+      ],
+      "mode": "RGBA",
+      "sha256": "156cd96f5005d6b5e44ff092ba7979ee4cc45905c0655f8fd84be11c727ca1d4"
+    },
+    {
+      "path": "support/build/msix/content/Images/SmallTile.scale-200.png",
+      "size": [
+        142,
+        142
+      ],
+      "mode": "RGBA",
+      "sha256": "9c9fd8fbef68f968ebdd7b56a2037a817a2fb69a6bc2143848514fbf37dbae7d"
+    },
+    {
+      "path": "support/build/msix/content/Images/SmallTile.scale-400.png",
+      "size": [
+        284,
+        284
+      ],
+      "mode": "RGBA",
+      "sha256": "4de2f148419f6965a21e8cc69496e5a37e5f6f710ff403a73876588517046464"
+    },
+    {
+      "path": "support/build/msix/content/Images/SplashScreen.scale-100.png",
+      "size": [
+        620,
+        300
+      ],
+      "mode": "RGBA",
+      "sha256": "b705c964d084d4489338de71c7c3200a446239d782af085794fbdfb7164a52b9"
+    },
+    {
+      "path": "support/build/msix/content/Images/SplashScreen.scale-125.png",
+      "size": [
+        775,
+        375
+      ],
+      "mode": "RGBA",
+      "sha256": "1cf3e7fe40706c5253477db6521bac79e8497382474e70d8403ded959da73767"
+    },
+    {
+      "path": "support/build/msix/content/Images/SplashScreen.scale-150.png",
+      "size": [
+        930,
+        450
+      ],
+      "mode": "RGBA",
+      "sha256": "f82f810b5501b1cb43f1baac32d1a8d4859c4f3a21d81f3b5f9cb16ecf46cd73"
+    },
+    {
+      "path": "support/build/msix/content/Images/SplashScreen.scale-200.png",
+      "size": [
+        1240,
+        600
+      ],
+      "mode": "RGBA",
+      "sha256": "819cbf44a32e8e52e84fad1cf1bdec4dd1ce9745340348fbe9db0418622af34c"
+    },
+    {
+      "path": "support/build/msix/content/Images/SplashScreen.scale-400.png",
+      "size": [
+        2480,
+        1200
+      ],
+      "mode": "RGBA",
+      "sha256": "865959533590ec6d5b3ea0e674c230f63993b17e6f926a07c3684e8a16dac97d"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square150x150Logo.scale-100.png",
+      "size": [
+        150,
+        150
+      ],
+      "mode": "RGBA",
+      "sha256": "32baceb2e2745caa629f38ac67273ffb7a89d6e99b3d0160f3cdc8a0923472a7"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square150x150Logo.scale-125.png",
+      "size": [
+        188,
+        188
+      ],
+      "mode": "RGBA",
+      "sha256": "f0fdf464b565397641374ef595326ae3767c5ee24cc82dab3eb5efbe649a38f7"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square150x150Logo.scale-150.png",
+      "size": [
+        225,
+        225
+      ],
+      "mode": "RGBA",
+      "sha256": "ef09d6864fd80fbf6f1ffd01dfbb18c8f71cfc2be830cb05ed88c696e98eb2b2"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square150x150Logo.scale-200.png",
+      "size": [
+        300,
+        300
+      ],
+      "mode": "RGBA",
+      "sha256": "bdbb56b80b80a61d84753a8e9e4bd2ce2806150237aa58da72c381551372c732"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square150x150Logo.scale-400.png",
+      "size": [
+        600,
+        600
+      ],
+      "mode": "RGBA",
+      "sha256": "06deadcfb79232d6492b326f5debcc41181e3c47417c0320d5c6c27fc9be4380"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-16.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "25796be173fb748939ca4b2523e70934e3831b676a1e79c4f10f4a21461fe809"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-20.png",
+      "size": [
+        20,
+        20
+      ],
+      "mode": "RGBA",
+      "sha256": "232e0a9facc188c1df05038b531b660031a82efcd85474a33cb002dfb51f9b1f"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-24.png",
+      "size": [
+        24,
+        24
+      ],
+      "mode": "RGBA",
+      "sha256": "b2220343b19dd5f5febf97764742c699c9d3b32337958deb1a59258e97d64c32"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "f24c62aa1a13acd14822ef9b6c3864237705b6591f27fd462407108a784cfbea"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-30.png",
+      "size": [
+        30,
+        30
+      ],
+      "mode": "RGBA",
+      "sha256": "07eb44073085755031fbb9043d200976bb7834017c7bc43274966bd75aa75d41"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "6e0179a7c5c13935149c0d3a2e6e3b6cd0344e59b8a9ec7ae87403d8bf10fd65"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-36.png",
+      "size": [
+        36,
+        36
+      ],
+      "mode": "RGBA",
+      "sha256": "5144d32ad25237dd0dd5672eba6a1fddac8f434a36ed868acdc96cd53ca82fd4"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-40.png",
+      "size": [
+        40,
+        40
+      ],
+      "mode": "RGBA",
+      "sha256": "4e925da2fae10863e91542a99d8a9e4d5bb936fd5f55de9ad0f7f96bcb8d6649"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "sha256": "a5473c0516e43b66078e0f15b8e4da4295db66f9c155276bd3b4cdb5bf05674e"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-60.png",
+      "size": [
+        60,
+        60
+      ],
+      "mode": "RGBA",
+      "sha256": "8e82a250fc0b540a3759dc0dfbb327403ebadf84519e1d7577a8b202d3a3f7ff"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "3f73e60ec5227cf40169635a6b5619253897306aec023e17f03e0bcdd0fa52f2"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-72.png",
+      "size": [
+        72,
+        72
+      ],
+      "mode": "RGBA",
+      "sha256": "96ec9b7f8f90fd822751d790523b8997b92d9d660df1ef341c3d1de0d6c63591"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-80.png",
+      "size": [
+        80,
+        80
+      ],
+      "mode": "RGBA",
+      "sha256": "e3f17bf5dc865be28e29037072bf4c7a4fdbc5819253063d710e688f15369670"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-lightunplated_targetsize-96.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "6f1cca52c567a431d78ebb251a136472b7f7cec6bc5196081d79ed52e725250b"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-16.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "25796be173fb748939ca4b2523e70934e3831b676a1e79c4f10f4a21461fe809"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-20.png",
+      "size": [
+        20,
+        20
+      ],
+      "mode": "RGBA",
+      "sha256": "232e0a9facc188c1df05038b531b660031a82efcd85474a33cb002dfb51f9b1f"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-24.png",
+      "size": [
+        24,
+        24
+      ],
+      "mode": "RGBA",
+      "sha256": "b2220343b19dd5f5febf97764742c699c9d3b32337958deb1a59258e97d64c32"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "f24c62aa1a13acd14822ef9b6c3864237705b6591f27fd462407108a784cfbea"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-30.png",
+      "size": [
+        30,
+        30
+      ],
+      "mode": "RGBA",
+      "sha256": "07eb44073085755031fbb9043d200976bb7834017c7bc43274966bd75aa75d41"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "6e0179a7c5c13935149c0d3a2e6e3b6cd0344e59b8a9ec7ae87403d8bf10fd65"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-36.png",
+      "size": [
+        36,
+        36
+      ],
+      "mode": "RGBA",
+      "sha256": "5144d32ad25237dd0dd5672eba6a1fddac8f434a36ed868acdc96cd53ca82fd4"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-40.png",
+      "size": [
+        40,
+        40
+      ],
+      "mode": "RGBA",
+      "sha256": "4e925da2fae10863e91542a99d8a9e4d5bb936fd5f55de9ad0f7f96bcb8d6649"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "sha256": "a5473c0516e43b66078e0f15b8e4da4295db66f9c155276bd3b4cdb5bf05674e"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-60.png",
+      "size": [
+        60,
+        60
+      ],
+      "mode": "RGBA",
+      "sha256": "8e82a250fc0b540a3759dc0dfbb327403ebadf84519e1d7577a8b202d3a3f7ff"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "3f73e60ec5227cf40169635a6b5619253897306aec023e17f03e0bcdd0fa52f2"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-72.png",
+      "size": [
+        72,
+        72
+      ],
+      "mode": "RGBA",
+      "sha256": "96ec9b7f8f90fd822751d790523b8997b92d9d660df1ef341c3d1de0d6c63591"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-80.png",
+      "size": [
+        80,
+        80
+      ],
+      "mode": "RGBA",
+      "sha256": "e3f17bf5dc865be28e29037072bf4c7a4fdbc5819253063d710e688f15369670"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.altform-unplated_targetsize-96.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "6f1cca52c567a431d78ebb251a136472b7f7cec6bc5196081d79ed52e725250b"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.scale-100.png",
+      "size": [
+        44,
+        44
+      ],
+      "mode": "RGBA",
+      "sha256": "3b550a4b8f4137a847947dfc6d06a2cc796ac3da745571dd5cc8f2208ef9aecd"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.scale-125.png",
+      "size": [
+        55,
+        55
+      ],
+      "mode": "RGBA",
+      "sha256": "ffb39b6c0b27e1a7f1424c38993196456148bb4533dc9fd95f7d7c2c0ad63da1"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.scale-150.png",
+      "size": [
+        66,
+        66
+      ],
+      "mode": "RGBA",
+      "sha256": "51b49dc478436c441bcc1e32f48ee13216509e85ec8042326dfd54660216a8c4"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.scale-200.png",
+      "size": [
+        88,
+        88
+      ],
+      "mode": "RGBA",
+      "sha256": "cca9a22a4ec4dffc16e76c8a586a869ccc8333e2efa996fb431b58f16bcbb79d"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.scale-400.png",
+      "size": [
+        176,
+        176
+      ],
+      "mode": "RGBA",
+      "sha256": "5b1892db33a96820c14a0c55dc608d97f1089ccd6d09303803f522b32f81d174"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-16.png",
+      "size": [
+        16,
+        16
+      ],
+      "mode": "RGBA",
+      "sha256": "25796be173fb748939ca4b2523e70934e3831b676a1e79c4f10f4a21461fe809"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-20.png",
+      "size": [
+        20,
+        20
+      ],
+      "mode": "RGBA",
+      "sha256": "232e0a9facc188c1df05038b531b660031a82efcd85474a33cb002dfb51f9b1f"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-24.png",
+      "size": [
+        24,
+        24
+      ],
+      "mode": "RGBA",
+      "sha256": "b2220343b19dd5f5febf97764742c699c9d3b32337958deb1a59258e97d64c32"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-256.png",
+      "size": [
+        256,
+        256
+      ],
+      "mode": "RGBA",
+      "sha256": "f24c62aa1a13acd14822ef9b6c3864237705b6591f27fd462407108a784cfbea"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-30.png",
+      "size": [
+        30,
+        30
+      ],
+      "mode": "RGBA",
+      "sha256": "07eb44073085755031fbb9043d200976bb7834017c7bc43274966bd75aa75d41"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-32.png",
+      "size": [
+        32,
+        32
+      ],
+      "mode": "RGBA",
+      "sha256": "6e0179a7c5c13935149c0d3a2e6e3b6cd0344e59b8a9ec7ae87403d8bf10fd65"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-36.png",
+      "size": [
+        36,
+        36
+      ],
+      "mode": "RGBA",
+      "sha256": "5144d32ad25237dd0dd5672eba6a1fddac8f434a36ed868acdc96cd53ca82fd4"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-40.png",
+      "size": [
+        40,
+        40
+      ],
+      "mode": "RGBA",
+      "sha256": "4e925da2fae10863e91542a99d8a9e4d5bb936fd5f55de9ad0f7f96bcb8d6649"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-48.png",
+      "size": [
+        48,
+        48
+      ],
+      "mode": "RGBA",
+      "sha256": "a5473c0516e43b66078e0f15b8e4da4295db66f9c155276bd3b4cdb5bf05674e"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-60.png",
+      "size": [
+        60,
+        60
+      ],
+      "mode": "RGBA",
+      "sha256": "8e82a250fc0b540a3759dc0dfbb327403ebadf84519e1d7577a8b202d3a3f7ff"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-64.png",
+      "size": [
+        64,
+        64
+      ],
+      "mode": "RGBA",
+      "sha256": "3f73e60ec5227cf40169635a6b5619253897306aec023e17f03e0bcdd0fa52f2"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-72.png",
+      "size": [
+        72,
+        72
+      ],
+      "mode": "RGBA",
+      "sha256": "96ec9b7f8f90fd822751d790523b8997b92d9d660df1ef341c3d1de0d6c63591"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-80.png",
+      "size": [
+        80,
+        80
+      ],
+      "mode": "RGBA",
+      "sha256": "e3f17bf5dc865be28e29037072bf4c7a4fdbc5819253063d710e688f15369670"
+    },
+    {
+      "path": "support/build/msix/content/Images/Square44x44Logo.targetsize-96.png",
+      "size": [
+        96,
+        96
+      ],
+      "mode": "RGBA",
+      "sha256": "6f1cca52c567a431d78ebb251a136472b7f7cec6bc5196081d79ed52e725250b"
+    },
+    {
+      "path": "support/build/msix/content/Images/StoreLogo.scale-100.png",
+      "size": [
+        50,
+        50
+      ],
+      "mode": "RGBA",
+      "sha256": "2a6efe94f65a3589683f7797ba0b83ce7eac2f305e29d294ace326dfd3310e31"
+    },
+    {
+      "path": "support/build/msix/content/Images/StoreLogo.scale-125.png",
+      "size": [
+        63,
+        63
+      ],
+      "mode": "RGBA",
+      "sha256": "6942bee9e23e9850371f89afe0907616dea889e7e4e740a656fecc8840d9121a"
+    },
+    {
+      "path": "support/build/msix/content/Images/StoreLogo.scale-150.png",
+      "size": [
+        75,
+        75
+      ],
+      "mode": "RGBA",
+      "sha256": "65f22e4339b7ee322d14613da6d7f6b6d1bb9b5c9092eba9a10d11802194d721"
+    },
+    {
+      "path": "support/build/msix/content/Images/StoreLogo.scale-200.png",
+      "size": [
+        100,
+        100
+      ],
+      "mode": "RGBA",
+      "sha256": "5024f403a29a0e8dea491d49a25b4ed91014def22cf1830cd0ab90ff153aa40d"
+    },
+    {
+      "path": "support/build/msix/content/Images/StoreLogo.scale-400.png",
+      "size": [
+        200,
+        200
+      ],
+      "mode": "RGBA",
+      "sha256": "53e9b68e0051905246c690687d7ac5bba0431b60e2c2e13e458b0028b4055fbf"
+    },
+    {
+      "path": "support/build/msix/content/Images/Wide310x150Logo.scale-100.png",
+      "size": [
+        310,
+        150
+      ],
+      "mode": "RGBA",
+      "sha256": "b930dea8eb0d49898ed4bfa479ceeae7b1748a1ea8851d51ce1eacb07efe91d2"
+    },
+    {
+      "path": "support/build/msix/content/Images/Wide310x150Logo.scale-125.png",
+      "size": [
+        388,
+        188
+      ],
+      "mode": "RGBA",
+      "sha256": "4c4cd93d5ecb7b9028a078f656b04957de988868a860484467378ec6a43deebb"
+    },
+    {
+      "path": "support/build/msix/content/Images/Wide310x150Logo.scale-150.png",
+      "size": [
+        465,
+        225
+      ],
+      "mode": "RGBA",
+      "sha256": "5809f9d1285fc354e38bfd4b72815d884a751483eea2bcc62f76cdaefe710aac"
+    },
+    {
+      "path": "support/build/msix/content/Images/Wide310x150Logo.scale-200.png",
+      "size": [
+        620,
+        300
+      ],
+      "mode": "RGBA",
+      "sha256": "b705c964d084d4489338de71c7c3200a446239d782af085794fbdfb7164a52b9"
+    },
+    {
+      "path": "support/build/msix/content/Images/Wide310x150Logo.scale-400.png",
+      "size": [
+        1240,
+        600
+      ],
+      "mode": "RGBA",
+      "sha256": "819cbf44a32e8e52e84fad1cf1bdec4dd1ce9745340348fbe9db0418622af34c"
+    },
+    {
+      "path": "app/android/app/src/main/res/drawable/banner.png",
+      "size": [
+        320,
+        180
+      ],
+      "mode": "RGB",
+      "sha256": "bf85972228575f9e51e0232272e6129ba954bcdb4cae0be0240084fe32618975"
+    }
+  ],
+  "auxiliary": [
+    {
+      "path": "support/branding/legnasend-mark.svg",
+      "sha256": "7ae6e5707975299c1da9e5a83166c9535b5355f253e2f7a0113b99f8524c6c67"
+    },
+    {
+      "path": "app/android/app/src/main/res/drawable/ic_launcher_foreground.xml",
+      "sha256": "e193c8f48614c5e4ae6b5c68030dbd17e8b5f076c9ebf55bc650425e48b3d6ec"
+    },
+    {
+      "path": "app/android/app/src/main/res/values/ic_launcher_background.xml",
+      "sha256": "5de098778b7c80736c9af457fc6d15059e0fd79190994c1d0fde467beaee27b4"
+    }
+  ]
+}

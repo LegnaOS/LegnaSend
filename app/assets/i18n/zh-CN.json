@@ -377,7 +377,10 @@
     "uploadHint": "访客可直接上传，无需逐次确认。已有文件不会被覆盖。",
     "uploadPending": "上传权限待同步",
     "permissionHint": "上传权限",
-    "startService": "启动服务"
+    "startService": "启动服务",
+    "moreAddresses": "其他地址",
+    "restoreAccess": "重新授权目录",
+    "openFailed": "浏览器打开失败，请复制链接打开。"
   },
   "changelogPage": {
     "title": "更新日志",

@@ -320,7 +320,7 @@ async fn exported_contracts_match_live_server_and_describe_supported_host_fields
 #[tokio::test]
 async fn retention_setting_boundaries_and_live_state_are_strict_and_path_free() {
     let mut f = Fixture::new(true).await;
-    for days in [-1, 0, 1, 7, 30, 3650] {
+    for days in [-2, -1, 0, 1, 7, 30, 3650] {
         let request = f
             .client
             .post(f.endpoint("/settings/update"))
@@ -339,7 +339,7 @@ async fn retention_setting_boundaries_and_live_state_are_strict_and_path_free() 
         body["receiveCacheRetention"]["effectiveDays"] = json!(days);
         if days == -1 {
             for value in [
-                json!(-2),
+                json!(-3),
                 json!(3651),
                 json!(1.5),
                 json!(1.0),
@@ -355,7 +355,7 @@ async fn retention_setting_boundaries_and_live_state_are_strict_and_path_free() 
                         .is_err()
                 );
             }
-            for value in [json!(-2), json!(3651), json!(1.5), json!("7"), json!(false)] {
+            for value in [json!(-3), json!(3651), json!(1.5), json!("7"), json!(false)] {
                 let mut invalid = body.clone();
                 invalid["receiveCacheRetention"]["effectiveDays"] = value;
                 assert!(
@@ -451,7 +451,7 @@ async fn retention_setting_boundaries_and_live_state_are_strict_and_path_free() 
 async fn retention_invalid_requests_are_rejected_before_dispatch_and_errors_stay_stable() {
     let mut f = Fixture::new(true).await;
     for value in [
-        json!(-2),
+        json!(-3),
         json!(3651),
         json!(1.5),
         json!(1.0),
@@ -570,7 +570,7 @@ async fn retention_contract_is_localized_required_and_not_overwritten_by_workspa
                 .contains(&json!("receiveCacheRetentionDays"))
         );
         let days = &settings["properties"]["settings"]["properties"]["receiveCacheRetentionDays"];
-        assert_eq!(days["minimum"], -1);
+        assert_eq!(days["minimum"], -2);
         assert_eq!(days["maximum"], 3650);
         assert_eq!(days["type"], "integer");
         let description = days["description"].as_str().unwrap();
