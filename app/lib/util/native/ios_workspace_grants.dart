@@ -11,11 +11,13 @@ class WorkspaceGrantLease {
   const WorkspaceGrantLease(this.id, this.roots);
 }
 
+/// Shared Apple grant bridge. The historical channel/provider name stays stable.
 /// Native bookmark bytes never enter a workspace URL, catalog or API response.
+/// Existing plain macOS paths are not grants: they need explicit folder selection.
 class IosWorkspaceGrants {
   final MethodChannel channel;
   const IosWorkspaceGrants({this.channel = const MethodChannel('legnasend/ios_workspace')});
-  bool get supported => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+  bool get supported => !kIsWeb && (defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS);
   static final _id = RegExp(r'^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$');
   static String _grant(Object? value) {
     if (value is! String || !_id.hasMatch(value)) throw const FormatException('Invalid workspace grant');
@@ -30,14 +32,14 @@ class IosWorkspaceGrants {
   }
 
   Future<WorkspaceSource?> pick() async {
-    if (!supported) throw UnsupportedError('iOS directory authorization unavailable');
+    if (!supported) throw UnsupportedError('Apple directory authorization unavailable');
     final result = await channel.invokeMapMethod<String, Object?>('pick');
     if (result == null) return null;
     return WorkspaceSource(kind: WorkspaceSourceKind.appleBookmark, locator: _path(result['locator']), grantId: _grant(result['grantId']));
   }
 
   Future<String> probe(String id) async {
-    if (!supported) throw UnsupportedError('iOS directory authorization unavailable');
+    if (!supported) throw UnsupportedError('Apple directory authorization unavailable');
     return _path(await channel.invokeMethod<Object?>('probe', {'grantId': _grant(id)}));
   }
 

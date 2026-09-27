@@ -6,6 +6,7 @@ import 'package:localsend_app/model/persistence/directory_workspace.dart';
 import 'package:localsend_app/model/state/server/server_state.dart';
 import 'package:localsend_app/provider/directory_publication_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
+import 'package:localsend_app/provider/persistence_provider.dart';
 import 'package:localsend_app/provider/workspace_catalog_provider.dart';
 import 'package:localsend_app/util/workspace/workspace_catalog.dart';
 import 'package:localsend_app/util/workspace/workspace_directory_probe.dart';
@@ -13,6 +14,7 @@ import 'package:refena_flutter/refena_flutter.dart';
 import 'package:test/test.dart';
 
 import 'workspace_fixtures.dart';
+import 'workspace_test_persistence.dart';
 
 class TestWorkspaceCatalog extends WorkspaceCatalogNotifier {
   final MemoryWorkspaceStore store;
@@ -69,7 +71,11 @@ void main() {
     source = TestWorkspaceCatalog(MemoryWorkspaceStore([entry]));
     server = DirectoryTestServer();
     container = RefenaContainer(
-      overrides: [workspaceCatalogProvider.overrideWithNotifier((_) => source), serverProvider.overrideWithNotifier((_) => server)],
+      overrides: [
+        persistenceProvider.overrideWithValue(MemoryWorkspacePersistence()),
+        workspaceCatalogProvider.overrideWithNotifier((_) => source),
+        serverProvider.overrideWithNotifier((_) => server),
+      ],
     );
     container.notifier(workspaceCatalogProvider);
     await source.catalog.initialize();
@@ -103,6 +109,7 @@ void main() {
     server = DirectoryTestServer();
     container = RefenaContainer(
       overrides: [
+        persistenceProvider.overrideWithValue(MemoryWorkspacePersistence()),
         workspaceCatalogProvider.overrideWithNotifier((_) => source),
         serverProvider.overrideWithNotifier((_) => server),
       ],
@@ -115,7 +122,7 @@ void main() {
     expect(published['root'], '');
     expect(published['documentTree'], tree);
     expect(published['allowUpload'], true);
-    expect(published['uploadApproval'], true);
+    expect(published['uploadApproval'], false);
     expect(published['passwordHash'], fixturePasswordHash);
     expect(published['visible'], false);
     expect(publisher.state.published, {entry.id: entry.generation + 1});

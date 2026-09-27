@@ -49,7 +49,12 @@ final class IosWorkspaceGrantStore {
           let size = values.fileSize, size > 0 && size <= 1024 * 1024 else { throw Failure.invalidGrant }
     let data = try Data(contentsOf: path)
     var stale = false
-    let url = try URL(resolvingBookmarkData: data, options: [.withoutUI], relativeTo: nil, bookmarkDataIsStale: &stale)
+    #if os(macOS)
+    let options: URL.BookmarkResolutionOptions = [.withSecurityScope, .withoutUI]
+    #else
+    let options: URL.BookmarkResolutionOptions = [.withoutUI]
+    #endif
+    let url = try URL(resolvingBookmarkData: data, options: options, relativeTo: nil, bookmarkDataIsStale: &stale)
     guard url.isFileURL else { throw Failure.unsafeRoot }
     // A stale grant requires an explicit user re-selection. Never silently bind
     // an old public workspace to a relocated/replaced folder.
@@ -64,7 +69,14 @@ final class IosWorkspaceGrantStore {
     guard start(url) else { throw Failure.denied }
     defer { stop(url) }
     let path = try inspect(url)
-    let data = try url.bookmarkData(options: [.minimalBookmark], includingResourceValuesForKeys: nil, relativeTo: nil)
+    #if os(macOS)
+    // macOS app-sandbox authority must survive process restart. A minimal
+    // bookmark remembers a location but is not a persisted sandbox capability.
+    let options: URL.BookmarkCreationOptions = [.withSecurityScope]
+    #else
+    let options: URL.BookmarkCreationOptions = [.minimalBookmark]
+    #endif
+    let data = try url.bookmarkData(options: options, includingResourceValuesForKeys: nil, relativeTo: nil)
     guard !data.isEmpty && data.count <= 1024 * 1024 else { throw Failure.invalidGrant }
     let id = UUID().uuidString.lowercased()
     try data.write(to: file(id), options: [.withoutOverwriting])

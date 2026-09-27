@@ -278,9 +278,11 @@ Only registered owned partial files qualify. Existing final files, source files,
 
 Original-file batches share the download panel’s manual/1/7/30-day retention setting. Expiry checks re-read journals under batch and file locks and clean only owned unfinished caches and metadata, preserving completed files and user directories. Active/queued batches, unknown permission and changed ownership are retained. HTTP 401/403 and transient network failures remain retryable; definitive source loss or version change cleans owned remnants, with a localized reason. This is browser-managed authorized storage, not ZIP Range support or native cross-restart resume.
 
-## Per-batch browser upload approval
+## Browser upload permission and optional per-batch approval
 
-App-published workspaces advertise `uploadApproval: true`. `allowUpload` is the workspace’s write permission, not approval of any incoming request. The app requires **one host decision per browser selection/drop**, including a folder with thousands of files. New workspaces remain read-only. Explicit `files.upload` API-key authorization uses the separate integration namespace and does not inherit browser approval tokens. Original LocalSend endpoints and file formats are unchanged.
+App-published workspaces advertise `uploadApproval: false`. New workspaces remain read-only. Enabling `allowUpload` gives authorized visitors standing permission to upload and retry without repeated host prompts. Workspace passwords, valid authorization, directory write grants, generation checks, and no-overwrite protection remain enforced. Disabling uploads rejects further writes and cancels active uploads through the existing mechanism. Explicit `files.upload` API keys use the separate integration namespace. Original LocalSend endpoints, receive decisions, and file formats remain unchanged.
+
+The following approval contract remains supported for core embeddings explicitly configured with `uploadApproval: true` and older clients. Browsers must inspect metadata: when false, call upload directly rather than `prepare-upload`.
 
 1. POST `/api/legnasend/v1/workspaces/{id}/prepare-upload` using the current browser cookie, `Content-Type: application/json` and `X-LegnaSend-Upload: 1`. Send `{requestId, generation, files: [{path, size, directory}]}`. `requestId` is a fresh canonical UUID v4, paths are workspace-root-relative, directories have zero size. Keep the manifest immutable.
 2. The app’s pending tag opens an in-page batch summary, total size and lazy file preview. Accept or reject within the server’s 60-second deadline. Closing/back only hides the panel; it never stops native receiving or sharing.
@@ -289,7 +291,7 @@ App-published workspaces advertise `uploadApproval: true`. `allowUpload` is the 
 
 Limits: 1 MiB manifest, at most 10,000 unique paths, safe-integer total size, 64 path components and 255 UTF-8 bytes per component; two pending batches per workspace and sixteen globally, plus sixteen live approved manifests per workspace. Cancellation has independent bounded admission so a full waiting queue can still be drained. Preparation rejects cross-origin requests. Outcomes include 400 invalid manifest, 401 lost browser grant, 403 declined/permission denied, 409 changed generation/canceled, 408 deadline, 429 capacity and 503 unavailable host responder. An upload without an applicable token returns 428 before writing. Declining a batch does not turn off the workspace’s upload permission.
 
-Closing/changing a workspace, losing browser authorization, disconnecting or expiring a pending request invalidates that decision. Approved tokens are memory-only and not restored after restart. A raw core embedding that omits `uploadApproval` retains its explicitly configured direct-upload behavior; this backward-compatible field default is not the app’s published policy. Shared Flutter/mobile layout tests and local browser/bridge tests are distinct from Android/iOS device permission and background acceptance.
+Closing/changing a workspace, losing browser authorization, disconnecting or expiring a pending request invalidates that decision. Approved tokens are memory-only and not restored after restart. A core embedding that omits `uploadApproval` retains direct-upload behavior.
 
 ## Bounded refresh around a visible entry
 

@@ -9,7 +9,6 @@ import 'package:localsend_app/provider/directory_publication_provider.dart';
 import 'package:localsend_app/provider/local_ip_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
 import 'package:localsend_app/provider/workspace_catalog_provider.dart';
-import 'package:localsend_app/provider/workspace_content_provider.dart';
 import 'package:localsend_app/util/api/api_source_strings.dart';
 import 'package:localsend_app/util/native/ios_workspace_grants.dart';
 import 'package:localsend_app/util/native/pick_directory_path.dart';
@@ -17,7 +16,7 @@ import 'package:localsend_app/util/ui/snackbar.dart';
 import 'package:localsend_app/util/workspace/workspace_batch_strings.dart';
 import 'package:localsend_app/util/workspace/workspace_catalog.dart';
 import 'package:localsend_app/util/workspace/workspace_catalog_codec.dart';
-import 'package:localsend_app/util/workspace/workspace_content_strings.dart';
+import 'package:localsend_app/util/workspace/workspace_draft_defaults.dart';
 import 'package:localsend_app/widget/dialogs/workspace_password_dialog.dart';
 import 'package:localsend_app/widget/responsive_list_view.dart';
 import 'package:localsend_app/widget/status_tag.dart';
@@ -49,9 +48,10 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
   }
 
   Future<void> _edit([DirectoryWorkspace? entry]) async {
+    final slug = nextWorkspaceSlug(context.ref.read(workspaceCatalogProvider).entries.map((entry) => entry.slug));
     final result = await showDialog<_WorkspaceDraft>(
       context: context,
-      builder: (_) => _WorkspaceEditor(entry: entry),
+      builder: (_) => _WorkspaceEditor(entry: entry, initialName: '${t.directoryWorkspaces.title} ${slug.substring(9)}', initialSlug: slug),
     );
     if (result == null) return;
     if (!mounted) {
@@ -81,6 +81,18 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
       }
     }
   }
+
+  Future<void> _startServiceIfNeeded() async {
+    final ref = context.ref;
+    if (ref.read(serverProvider) != null) return;
+    await ref.notifier(serverProvider).startServerFromSettings();
+    if (ref.read(serverProvider) == null) throw StateError('Workspace listener did not start');
+  }
+
+  Future<void> _enable(DirectoryWorkspace entry) => _run(() async {
+    final enabled = await context.ref.notifier(workspaceCatalogProvider).catalog.enable(entry.id);
+    if (enabled.enabled) await _startServiceIfNeeded();
+  });
 
   Future<void> _protection(DirectoryWorkspace entry) async {
     final result = await showDialog<WorkspacePasswordResult>(
@@ -199,6 +211,7 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
     List<WorkspaceBatchResult>? results;
     try {
       results = await ref.notifier(workspaceCatalogProvider).catalog.setEnabledBatch(entries, enabled);
+      if (enabled && ref.read(workspaceCatalogProvider).publishable.isNotEmpty) await _startServiceIfNeeded();
       await ref.notifier(directoryPublicationProvider).synchronize();
     } catch (_) {
       if (mounted && results == null) context.showSnackBar(text.failed);
@@ -248,8 +261,6 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
     final ref = context.ref;
     final catalog = ref.watch(workspaceCatalogProvider);
     final publication = ref.watch(directoryPublicationProvider);
-    final content = ref.watch(workspaceContentProvider);
-    final contentLabels = WorkspaceContentStrings(TranslationProvider.of(context).locale.languageTag);
     final server = ref.watch(serverProvider);
     final network = ref.watch(localIpProvider);
     final pending = _busy || publication.busy || catalog.checking;
@@ -299,7 +310,6 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
           ],
         ),
         const SizedBox(height: 12),
-        Text(text.readOnlyHint, style: Theme.of(context).textTheme.bodySmall),
         Align(
           alignment: Alignment.centerLeft,
           child: TextButton.icon(
@@ -318,7 +328,13 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
           children: [
             StatusTag(label: server == null ? text.serverOff : '${server.https ? 'HTTPS · TLS' : 'HTTP'} · ${server.port}'),
             if (pending) StatusTag(label: text.syncing, icon: Icons.sync),
-            StatusTag(label: text.permissionHint, icon: Icons.folder_outlined),
+            if (server == null)
+              StatusTag(
+                key: const ValueKey('workspace-start-service'),
+                label: text.startService,
+                icon: Icons.play_arrow,
+                onTap: pending ? null : () => _run(_startServiceIfNeeded),
+              ),
           ],
         ),
         if (publication.failed || catalog.failure != null) ...[
@@ -406,11 +422,6 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
                         ),
                         StatusTag(label: '/${entry.slug}/'),
                         StatusTag(
-                          label: contentLabels.label(content.entries[entry.id], failed: content.failed),
-                          tooltip: contentLabels.hint,
-                          icon: content.failed ? Icons.error_outline : Icons.update,
-                        ),
-                        StatusTag(
                           label: (entry.enabled || publication.published.containsKey(entry.id)) && publication.published[entry.id] != entry.generation
                               ? text.uploadPending
                               : entry.allowUpload
@@ -441,19 +452,39 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
                             children: [
                               StatusTag(label: address.label, icon: address.isTunnel ? Icons.shield_outlined : Icons.lan_outlined),
                               if (address.cidr != null) StatusTag(label: address.cidr!),
-                              StatusTag(
-                                label: address.address,
-                                onTap: () async {
-                                  final link = Uri(
-                                    scheme: server.https ? 'https' : 'http',
-                                    host: address.address,
-                                    port: server.port,
-                                    path: '/${entry.slug}/',
-                                  );
-                                  await Clipboard.setData(ClipboardData(text: link.toString()));
-                                  if (context.mounted) context.showSnackBar(t.general.copiedToClipboard);
-                                },
-                                tooltip: t.general.copy,
+                              SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: SelectableText(
+                                        Uri(
+                                          scheme: server.https ? 'https' : 'http',
+                                          host: address.address,
+                                          port: server.port,
+                                          path: '/${entry.slug}/',
+                                        ).toString(),
+                                        style: Theme.of(context).textTheme.bodyMedium,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    TextButton.icon(
+                                      key: ValueKey('workspace-copy-${entry.id}-${address.address}'),
+                                      onPressed: () async {
+                                        final link = Uri(
+                                          scheme: server.https ? 'https' : 'http',
+                                          host: address.address,
+                                          port: server.port,
+                                          path: '/${entry.slug}/',
+                                        );
+                                        await Clipboard.setData(ClipboardData(text: link.toString()));
+                                        if (context.mounted) context.showSnackBar(t.general.copiedToClipboard);
+                                      },
+                                      icon: const Icon(Icons.copy_outlined, size: 18),
+                                      label: Text(t.general.copy),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -470,13 +501,7 @@ class _WorkspacesTabState extends State<WorkspacesTab> {
                           label: Text(text.uploadPermission),
                         ),
                         TextButton.icon(
-                          onPressed: pending
-                              ? null
-                              : () => entry.enabled
-                                    ? _confirm(entry, false)
-                                    : _run(() async {
-                                        await ref.notifier(workspaceCatalogProvider).catalog.enable(entry.id);
-                                      }),
+                          onPressed: pending ? null : () => entry.enabled ? _confirm(entry, false) : _enable(entry),
                           icon: Icon(entry.enabled ? Icons.stop_circle_outlined : Icons.play_arrow, size: 18),
                           label: Text(entry.enabled ? text.close : text.enable),
                         ),
@@ -524,20 +549,35 @@ class _WorkspaceDraft {
 
 class _WorkspaceEditor extends StatefulWidget {
   final DirectoryWorkspace? entry;
-  const _WorkspaceEditor({this.entry});
+  final String initialName, initialSlug;
+  const _WorkspaceEditor({this.entry, required this.initialName, required this.initialSlug});
   @override
   State<_WorkspaceEditor> createState() => _WorkspaceEditorState();
 }
 
 class _WorkspaceEditorState extends State<_WorkspaceEditor> {
-  late final _name = TextEditingController(text: widget.entry?.name);
-  late final _slug = TextEditingController(text: widget.entry?.slug);
+  late final _name = TextEditingController(text: widget.entry?.name ?? widget.initialName);
+  late final _slug = TextEditingController(text: widget.entry?.slug ?? widget.initialSlug);
   late final _root = TextEditingController(text: widget.entry?.source.locator);
   late bool _visible = widget.entry?.visible ?? true;
   String? _error;
   WorkspaceSource? _picked;
   IosWorkspaceGrants? _grants;
-  bool _picking = false, _accepted = false;
+  bool _picking = false, _accepted = false, _nameEdited = false;
+
+  void _setPickedPath(String path) {
+    _root.text = path;
+    if (widget.entry == null && !_nameEdited) {
+      final name = workspaceFolderName(path);
+      if (name.isNotEmpty) _name.text = name;
+    }
+  }
+
+  InputDecoration _field(String label) => InputDecoration(
+    labelText: label,
+    floatingLabelBehavior: FloatingLabelBehavior.always,
+    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+  );
   @override
   void dispose() {
     if (!_accepted && _picked?.grantId != null) {
@@ -557,19 +597,25 @@ class _WorkspaceEditorState extends State<_WorkspaceEditor> {
       content: SizedBox(
         width: 450,
         child: SingleChildScrollView(
+          padding: const EdgeInsets.only(top: 8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
+                key: const ValueKey('workspace-name'),
                 controller: _name,
-                decoration: InputDecoration(labelText: text.name),
+                onChanged: (_) => _nameEdited = true,
+                decoration: _field(text.name),
                 maxLength: 120,
               ),
               const SizedBox(height: 10),
               TextField(
                 controller: _slug,
                 enabled: widget.entry?.enabled != true,
-                decoration: InputDecoration(labelText: text.slug, hintText: 'workspace1'),
+                key: const ValueKey('workspace-custom-path'),
+                autocorrect: false,
+                enableSuggestions: false,
+                decoration: _field(text.slug).copyWith(prefixText: '/', suffixText: '/'),
                 maxLength: 48,
               ),
               const SizedBox(height: 10),
@@ -577,8 +623,13 @@ class _WorkspaceEditorState extends State<_WorkspaceEditor> {
                 controller: _root,
                 enabled: widget.entry?.enabled != true,
                 readOnly: context.ref.read(iosWorkspaceGrantsProvider).supported,
-                decoration: InputDecoration(
-                  labelText: text.root,
+                onChanged: (_) {
+                  if (widget.entry == null && !_nameEdited) {
+                    final name = workspaceFolderName(_root.text);
+                    if (name.isNotEmpty) _name.text = name;
+                  }
+                },
+                decoration: _field(text.root).copyWith(
                   suffixIcon: IconButton(
                     icon: const Icon(Icons.folder_open),
                     tooltip: text.choose,
@@ -599,13 +650,13 @@ class _WorkspaceEditorState extends State<_WorkspaceEditor> {
                                   final previous = _picked?.grantId;
                                   setState(() {
                                     _picked = source;
-                                    _root.text = source.locator;
+                                    _setPickedPath(source.locator);
                                   });
                                   if (previous != null) await grants.discard(previous);
                                 }
                               } else {
                                 final path = await pickDirectoryPath();
-                                if (mounted && path != null) setState(() => _root.text = path);
+                                if (mounted && path != null) setState(() => _setPickedPath(path));
                               }
                             } catch (_) {
                               if (mounted) setState(() => _error = text.failed);
@@ -622,7 +673,7 @@ class _WorkspaceEditorState extends State<_WorkspaceEditor> {
                 value: _visible,
                 onChanged: (value) => setState(() => _visible = value),
               ),
-              Text(text.hiddenHint, style: Theme.of(context).textTheme.bodySmall),
+              if (!_visible) Text(text.hiddenHint, style: Theme.of(context).textTheme.bodySmall),
               if (widget.entry?.enabled == true) Text(text.closeToEdit, style: Theme.of(context).textTheme.bodySmall),
               if (_error != null) Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             ],

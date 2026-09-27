@@ -696,8 +696,8 @@ class Translations$directoryWorkspaces$en {
   /// en: 'Name'
   String get name => 'Name';
 
-  /// en: 'URL path'
-  String get slug => 'URL path';
+  /// en: 'Custom path'
+  String get slug => 'Custom path';
 
   /// en: 'Local directory'
   String get root => 'Local directory';
@@ -738,20 +738,20 @@ class Translations$directoryWorkspaces$en {
   /// en: 'Read-only directory'
   String get readOnly => 'Read-only directory';
 
-  /// en: 'Workspaces start read-only. Enable browser uploads separately for each directory; existing files are not overwritten.'
-  String get readOnlyHint => 'Workspaces start read-only. Enable browser uploads separately for each directory; existing files are not overwritten.';
+  /// en: 'Read-only unless uploads are enabled.'
+  String get readOnlyHint => 'Read-only unless uploads are enabled.';
 
-  /// en: 'Create a workspace from a local directory. Its files stay in their original location.'
-  String get empty => 'Create a workspace from a local directory. Its files stay in their original location.';
+  /// en: 'Choose a folder to create a workspace.'
+  String get empty => 'Choose a folder to create a workspace.';
 
-  /// en: 'The operation failed. Check the name, unique URL path, directory access and service status.'
-  String get failed => 'The operation failed. Check the name, unique URL path, directory access and service status.';
+  /// en: 'Could not save. Check the path and folder access.'
+  String get failed => 'Could not save. Check the path and folder access.';
 
-  /// en: 'Changes were not confirmed by the server. Previously published routes may still be active. Retry synchronization.'
-  String get syncFailed => 'Changes were not confirmed by the server. Previously published routes may still be active. Retry synchronization.';
+  /// en: 'Changes not applied. Previous sharing settings remain active.'
+  String get syncFailed => 'Changes not applied. Previous sharing settings remain active.';
 
-  /// en: 'Retry synchronization'
-  String get retry => 'Retry synchronization';
+  /// en: 'Retry'
+  String get retry => 'Retry';
 
   /// en: 'Open'
   String get enable => 'Open';
@@ -765,17 +765,17 @@ class Translations$directoryWorkspaces$en {
   /// en: 'Check directory'
   String get validate => 'Check directory';
 
-  /// en: 'Stop requests for this workspace. Other workspaces and native transfers continue. Source files will not be deleted.'
-  String get stopHint => 'Stop requests for this workspace. Other workspaces and native transfers continue. Source files will not be deleted.';
+  /// en: 'Stop sharing this workspace? Source files will be kept.'
+  String get stopHint => 'Stop sharing this workspace? Source files will be kept.';
 
-  /// en: 'Hidden workspaces are omitted from the index, but remain accessible by direct link. Hiding is not password protection.'
-  String get hiddenHint => 'Hidden workspaces are omitted from the index, but remain accessible by direct link. Hiding is not password protection.';
+  /// en: 'Hidden from the index. Anyone with the link can still access it.'
+  String get hiddenHint => 'Hidden from the index. Anyone with the link can still access it.';
 
   /// en: 'Close the workspace before changing its URL path or source directory.'
   String get closeToEdit => 'Close the workspace before changing its URL path or source directory.';
 
-  /// en: 'Enter a name, a lowercase URL path such as workspace1, and a local directory.'
-  String get invalidInput => 'Enter a name, a lowercase URL path such as workspace1, and a local directory.';
+  /// en: 'Enter a name, a unique path (letters, numbers or hyphens), and a folder.'
+  String get invalidInput => 'Enter a name, a unique path (letters, numbers or hyphens), and a folder.';
 
   Map<String, String> get reasons => {
     'missing': 'Directory missing',
@@ -807,9 +807,8 @@ class Translations$directoryWorkspaces$en {
   /// en: 'Use 4–128 characters and enter the same password twice.'
   String get passwordInvalid => 'Use 4–128 characters and enter the same password twice.';
 
-  /// en: 'Saving a changed password or access mode revokes previous grants and stops this workspace’s active downloads. HTTPS protects transport; the password controls access.'
-  String get passwordHint =>
-      'Saving a changed password or access mode revokes previous grants and stops this workspace’s active downloads. HTTPS protects transport; the password controls access.';
+  /// en: 'Changing access disconnects current downloads.'
+  String get passwordHint => 'Changing access disconnects current downloads.';
 
   /// en: 'Access policy awaiting server confirmation'
   String get accessPending => 'Access policy awaiting server confirmation';
@@ -820,15 +819,17 @@ class Translations$directoryWorkspaces$en {
   /// en: 'Allow browser uploads'
   String get allowUpload => 'Allow browser uploads';
 
-  /// en: 'Anyone who can access this workspace may upload files and folders directly into its directory. Existing files are never overwritten. Turning this off stops unfinished uploads; saved files remain. Password-protected workspaces still require unlocking.'
-  String get uploadHint =>
-      'Anyone who can access this workspace may upload files and folders directly into its directory. Existing files are never overwritten. Turning this off stops unfinished uploads; saved files remain. Password-protected workspaces still require unlocking.';
+  /// en: 'Visitors can upload without asking again. Existing files are kept.'
+  String get uploadHint => 'Visitors can upload without asking again. Existing files are kept.';
 
   /// en: 'Upload permission pending'
   String get uploadPending => 'Upload permission pending';
 
-  /// en: 'Uploads are controlled per workspace'
-  String get permissionHint => 'Uploads are controlled per workspace';
+  /// en: 'Upload permissions'
+  String get permissionHint => 'Upload permissions';
+
+  /// en: 'Start service'
+  String get startService => 'Start service';
 }
 
 // Path: changelogPage
@@ -1695,9 +1696,8 @@ class Translations$networkEnvironment$en {
   /// en: 'Not detected'
   String get notDetected => 'Not detected';
 
-  /// en: 'Local addresses and VPN/tunnel addresses are listed separately. Actual reachability follows both devices’ system routes and VPN rules. Native peer requests ignore application HTTP proxies, not system VPN routing. A tunnel name is only an interface hint; no route bypass has been verified.'
-  String get routeHint =>
-      'Local addresses and VPN/tunnel addresses are listed separately. Actual reachability follows both devices’ system routes and VPN rules. Native peer requests ignore application HTTP proxies, not system VPN routing. A tunnel name is only an interface hint; no route bypass has been verified.';
+  /// en: 'Choose a local or VPN address reachable by the other device.'
+  String get routeHint => 'Choose a local or VPN address reachable by the other device.';
 }
 
 // Path: linkWorkspace
@@ -3071,15 +3071,12 @@ class Translations$whatsNewPage$changes$v1_0_0$en with WhatsNewStrings {
   // Translations
   @override
   List<String> get changes => [
-    '1.0.0 is a development version and has not been officially released.',
-    'Send files and folders from a queue, retry failed files individually, and manage sending and receiving without leaving your current page.',
-    'Compatible devices and storage can resume large transfers. Reusing progress after restart needs fresh approval; other destinations retain whole-file retry.',
-    'Choose receive folders in iOS Files and Android document storage. Lost access is reported without silently changing the destination.',
-    'Check interrupted saves and automatically clean verified temporary copies. Completed files, active transfers and uncertain leftovers remain protected.',
-    'Share files and folder workspaces in a browser, with passwords, approved uploads, bulk ZIP downloads and optional authorized-folder download controls.',
-    'Preview images, audio, video, text and Markdown. Search document contents and keep your reading position when files refresh.',
-    'Choose a network connection per send task, view connection details, and access the optional integration API and its in-app reference.',
-    'iOS restores pending shares without sending automatically. Smaller screens and large text are easier to use, and the privacy policy is available offline.',
-    'Fixed an incorrect recovery-record save error when starting the sandboxed macOS app.',
+    'Create named workspaces with custom paths and copyable links.',
+    'Remember authorized workspace folders on macOS and restart sharing from the workspace page.',
+    'Enable workspace uploads once; authorized visitors can upload and retry without repeated prompts.',
+    'Select a mobile album in batches, or select multiple photos and videos on desktop.',
+    'Queue files and folders, and manage sending and receiving together.',
+    'Preview and search shared content in a browser.',
+    'Simpler workspace forms and fewer explanatory labels.',
   ];
 }

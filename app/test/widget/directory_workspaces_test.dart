@@ -1,21 +1,47 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:localsend_app/config/theme.dart';
 import 'package:localsend_app/gen/strings.g.dart';
+import 'package:localsend_app/model/persistence/color_mode.dart';
+import 'package:localsend_app/model/state/server/server_state.dart';
 import 'package:localsend_app/pages/tabs/workspaces_tab.dart';
 import 'package:localsend_app/provider/directory_publication_provider.dart';
 import 'package:localsend_app/provider/local_ip_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
+import 'package:localsend_app/provider/persistence_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:localsend_app/provider/workspace_catalog_provider.dart';
 import 'package:localsend_app/provider/workspace_password_provider.dart';
+import 'package:localsend_app/util/native/ios_workspace_grants.dart';
 import 'package:refena_flutter/refena_flutter.dart';
 
 import '../mocks.mocks.dart';
 import '../unit/workspace/directory_publication_test.dart' show DirectoryTestServer, TestWorkspaceCatalog;
 import '../unit/workspace/workspace_fixtures.dart';
+import '../unit/workspace/workspace_test_persistence.dart';
 import 'link_workspace_tags_test.dart' show TagNetwork;
+
+class _PlainDirectoryGrants extends IosWorkspaceGrants {
+  @override
+  bool get supported => false;
+}
+
+class _StoppedServer extends DirectoryTestServer {
+  int starts = 0;
+  @override
+  Future<bool> get listenerStopBarrier async => true;
+  @override
+  ServerState? init() => null;
+  @override
+  Future<ServerState?> startServerFromSettings() async {
+    starts++;
+    state = const ServerState(alias: 'Fixture', port: 54321, https: false, session: null, web: null);
+    return state;
+  }
+}
 
 void main() {
   for (final size in [const Size(390, 844), const Size(1040, 900)]) {
@@ -32,10 +58,12 @@ void main() {
       final original = File('${root.path}/source.txt')..writeAsStringSync('do not delete');
       addTearDown(() => temp.deleteSync(recursive: true));
       final source = TestWorkspaceCatalog(MemoryWorkspaceStore());
-      final server = DirectoryTestServer();
+      final server = _StoppedServer();
       final settings = SettingsService(MockPersistenceService());
       final container = RefenaContainer(
         overrides: [
+          iosWorkspaceGrantsProvider.overrideWithValue(_PlainDirectoryGrants()),
+          persistenceProvider.overrideWithValue(MemoryWorkspacePersistence()),
           workspaceCatalogProvider.overrideWithNotifier((_) => source),
           serverProvider.overrideWithNotifier((_) => server),
           workspacePasswordProvider.overrideWithValue((password) async {
@@ -53,7 +81,10 @@ void main() {
         RefenaScope.withContainer(
           container: container,
           child: TranslationProvider(
-            child: MaterialApp(home: Scaffold(body: WorkspacesTab())),
+            child: MaterialApp(
+              theme: getTheme(ColorMode.localsend, const Color(0xff54b865), Brightness.dark, null),
+              home: Scaffold(body: WorkspacesTab()),
+            ),
           ),
         ),
       );
@@ -72,6 +103,10 @@ void main() {
 
       await tap(find.text(t.general.add));
       expect(find.byType(AlertDialog), findsOneWidget);
+      expect(tester.widget<TextField>(find.byKey(const ValueKey('workspace-name'))).controller!.text, 'Workspaces 1');
+      expect(tester.widget<TextField>(find.byKey(const ValueKey('workspace-custom-path'))).controller!.text, 'workspace1');
+      await tester.enterText(find.byType(TextField).at(2), root.path);
+      expect(tester.widget<TextField>(find.byKey(const ValueKey('workspace-name'))).controller!.text, root.path.split('/').last.trim());
       await tester.enterText(find.byType(TextField).at(0), 'Design files');
       await tester.enterText(find.byType(TextField).at(1), 'api');
       await tester.enterText(find.byType(TextField).at(2), root.path);
@@ -85,9 +120,18 @@ void main() {
       expect(find.text(t.directoryWorkspaces.closed), findsOneWidget);
       await tap(find.text(t.directoryWorkspaces.enable));
       expect(find.text(t.directoryWorkspaces.serving), findsOneWidget);
-      expect(find.text('192.168.9.4'), findsOneWidget);
-      expect(find.text('198.18.0.1'), findsOneWidget);
+      expect(find.text('http://192.168.9.4:54321/design/'), findsOneWidget);
+      expect(find.text('http://198.18.0.1:54321/design/'), findsOneWidget);
       expect(server.epoch, 9);
+      expect(server.starts, 1);
+      String? copied;
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
+        if (call.method == 'Clipboard.setData') copied = (call.arguments as Map)['text'] as String;
+        return null;
+      });
+      await tap(find.byKey(ValueKey('workspace-copy-${source.state.entries.single.id}-192.168.9.4')));
+      expect(copied, 'http://192.168.9.4:54321/design/');
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(SystemChannels.platform, null);
       expect(source.state.entries.single.allowUpload, false);
       await tap(find.text(t.directoryWorkspaces.uploadPermission));
       await tap(find.byKey(const ValueKey('workspace-upload-switch')));
@@ -99,6 +143,7 @@ void main() {
       await tap(find.text(t.directoryWorkspaces.retry));
       expect(find.text(t.directoryWorkspaces.allowUpload), findsOneWidget);
       expect(server.requests.last['workspaces'][0]['allowUpload'], true);
+      expect(server.requests.last['workspaces'][0]['uploadApproval'], false);
       await tap(find.text(t.directoryWorkspaces.uploadPermission));
       await tap(find.byKey(const ValueKey('workspace-upload-switch')));
       await tap(find.text(t.general.save));

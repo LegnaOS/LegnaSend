@@ -2,7 +2,15 @@
 
 Author: Legna
 
-1.0.0 is a development version and has not been officially released.
+
+## Unreleased — 2026-09-28
+
+- Prefill workspace names and custom paths; selecting a folder supplies its name. Keep edited names unchanged and give form labels enough vertical space.
+- Show complete workspace URLs with explicit Copy buttons. Start a stopped sharing service from the workspace page.
+- Remember macOS workspace folder authorization across app restarts. Older path-only entries can restore access by selecting their folder again.
+- Once workspace uploads are enabled, authorized visitors can upload and retry without repeated prompts. Password protection and no-overwrite behavior remain.
+- Select the current mobile album in one operation, with cancellation and a 999-item limit. Desktop media selection supports multiple image and video files.
+- Simplify workspace and network hints; remove internal observation counters from workspace cards.
 
 ## 1.0.0 (2026-09-25)
 

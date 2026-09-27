@@ -19,6 +19,7 @@ import 'package:localsend_app/util/native/pick_directory_path.dart';
 import 'package:localsend_app/util/native/platform_check.dart';
 import 'package:localsend_app/util/native/source_cache_guard.dart';
 import 'package:localsend_app/util/ui/asset_picker_translated_text_delegate.dart';
+import 'package:localsend_app/widget/album_batch_picker.dart';
 import 'package:localsend_app/widget/dialogs/loading_dialog.dart';
 import 'package:localsend_app/widget/dialogs/message_input_dialog.dart';
 import 'package:localsend_app/widget/dialogs/no_permission_dialog.dart';
@@ -90,9 +91,10 @@ enum FilePickerOption {
         FilePickerOption.app,
       ];
     } else {
-      // Desktop
+      // Desktop media uses the filesystem's multi-selection dialog.
       return [
         FilePickerOption.file,
+        FilePickerOption.media,
         FilePickerOption.folder,
         FilePickerOption.text,
         FilePickerOption.clipboard,
@@ -258,43 +260,81 @@ Future<void> _pickFolder(BuildContext context, Ref ref) async {
   }
 }
 
+/// Desktop media is an ordinary filesystem multi-picker, not an OS album API.
+const desktopMediaFileTypes = <XTypeGroup>[
+  XTypeGroup(
+    label: 'Photos and videos',
+    extensions: [
+      'jpg',
+      'jpeg',
+      'png',
+      'gif',
+      'webp',
+      'heic',
+      'heif',
+      'avif',
+      'bmp',
+      'tif',
+      'tiff',
+      'mp4',
+      'mov',
+      'm4v',
+      'mkv',
+      'avi',
+      'webm',
+      'mpeg',
+      'mpg',
+    ],
+    uniformTypeIdentifiers: ['public.image', 'public.movie'],
+  ),
+];
+
 Future<void> _pickMedia(BuildContext context, Ref ref) async {
-  if (checkPlatform([TargetPlatform.android])) {
-    await PhotoManager.requestPermissionExtend(
-      requestOption: const PermissionRequestOption(
-        androidPermission: AndroidPermission(
-          type: RequestType.common,
-          mediaLocation: true,
+  if (!checkPlatformWithGallery()) {
+    try {
+      final files = await openFiles(acceptedTypeGroups: desktopMediaFileTypes);
+      if (files.isNotEmpty) {
+        await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(files: files, converter: CrossFileConverters.convertXFile));
+      }
+    } catch (error) {
+      _logger.warning('Failed to pick media files', error);
+      if (context.mounted) await showDialog(context: context, builder: (_) => const NoPermissionDialog());
+    }
+    return;
+  }
+  final oldBrightness = Theme.of(context).brightness;
+  try {
+    const permissionRequest = PermissionRequestOption(
+      androidPermission: AndroidPermission(type: RequestType.common, mediaLocation: true),
+    );
+    final permission = await AssetPicker.permissionCheck(requestOption: permissionRequest);
+    if (!context.mounted) return;
+    final provider = DefaultAssetPickerProvider(maxAssets: 999, pageSize: 80, requestType: RequestType.common);
+    final delegate = AlbumBatchPickerDelegate(
+      provider: provider,
+      initialPermission: permission,
+      textDelegate: const TranslatedAssetPickerTextDelegate(),
+      pickerTheme: Theme.of(context),
+    );
+    final result = await Navigator.of(context, rootNavigator: true).push<List<AssetEntity>>(
+      AssetPickerPageRoute<List<AssetEntity>>(
+        builder: (_) => AssetPicker<AssetEntity, AssetPathEntity, AlbumBatchPickerDelegate>(
+          permissionRequestOption: permissionRequest,
+          builder: delegate,
         ),
       ),
     );
-  }
-
-  if (!context.mounted) return;
-
-  final oldBrightness = Theme.of(context).brightness;
-  final List<AssetEntity>? result = await AssetPicker.pickAssets(
-    context,
-    pickerConfig: const AssetPickerConfig(maxAssets: 999, textDelegate: TranslatedAssetPickerTextDelegate()),
-  );
-
-  WidgetsBinding.instance.addPostFrameCallback((_) async {
-    // restore brightness for Android
-    await sleepAsync(500);
-    if (context.mounted) {
-      await updateSystemOverlayStyleWithBrightness(oldBrightness);
+    if (result != null) {
+      await ref.redux(selectedSendingFilesProvider).dispatchAsync(AddFilesAction(files: result, converter: CrossFileConverters.convertAssetEntity));
     }
-  });
-
-  if (result != null) {
-    await ref
-        .redux(selectedSendingFilesProvider)
-        .dispatchAsync(
-          AddFilesAction(
-            files: result,
-            converter: CrossFileConverters.convertAssetEntity,
-          ),
-        );
+  } catch (error) {
+    _logger.warning('Failed to pick album media', error);
+    if (context.mounted) await showDialog(context: context, builder: (_) => const NoPermissionDialog());
+  } finally {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await sleepAsync(500);
+      if (context.mounted) await updateSystemOverlayStyleWithBrightness(oldBrightness);
+    });
   }
 }
 

@@ -17,6 +17,8 @@ A cross-platform file-sharing app by **Legna**. Send files to nearby devices, sh
 
 Sharing requires a reachable host. Resume depends on both peers and the save destination; other peers retain whole-file transfer. Mobile background behavior and browser capabilities depend on the platform.
 
+Workspace links have explicit Copy actions and custom paths. Authorized workspace uploads do not require repeated prompts. Mobile albums support batch selection; desktop media supports multiple files.
+
 ## Downloads and builds
 
 Version **1.0.0**. Windows, macOS, Linux, Android and iOS source targets are included.

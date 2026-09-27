@@ -15,6 +15,7 @@ enum DockIcon: CaseIterable {
 class AppDelegate: FlutterAppDelegate {
     private var statusItem: NSStatusItem?
     private var channel: FlutterMethodChannel?
+    private var workspaceGrants: MacosWorkspaceGrants?
     private var pendingFilesObservation: Defaults.Observation?
     private var pendingStringsObservation: Defaults.Observation?
     private var isLaunchedAsLoginItem: Bool?
@@ -32,6 +33,12 @@ class AppDelegate: FlutterAppDelegate {
         let controller = mainFlutterWindow?.contentViewController as! FlutterViewController
         channel = FlutterMethodChannel(name: "main-delegate-channel", binaryMessenger: controller.engine.binaryMessenger)
         channel?.setMethodCallHandler(handleFlutterCall)
+        if let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first {
+            workspaceGrants = MacosWorkspaceGrants(
+                messenger: controller.engine.binaryMessenger,
+                window: mainFlutterWindow,
+                root: support.appendingPathComponent(".legnasend-workspace-grants", isDirectory: true))
+        }
         
         NSApplication.shared.servicesProvider = self
         

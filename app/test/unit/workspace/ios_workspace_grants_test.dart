@@ -7,6 +7,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:localsend_app/model/persistence/directory_workspace.dart';
 import 'package:localsend_app/provider/directory_publication_provider.dart';
 import 'package:localsend_app/provider/network/server/server_provider.dart';
+import 'package:localsend_app/provider/persistence_provider.dart';
 import 'package:localsend_app/provider/settings_provider.dart';
 import 'package:localsend_app/provider/web_transfer_activity_provider.dart';
 import 'package:localsend_app/provider/workspace_catalog_provider.dart';
@@ -23,6 +24,7 @@ import 'package:refena_flutter/refena_flutter.dart';
 import '../../mocks.mocks.dart';
 import 'directory_publication_test.dart' show DirectoryTestServer;
 import 'workspace_fixtures.dart';
+import 'workspace_test_persistence.dart';
 
 class GrantCatalog extends WorkspaceCatalogNotifier {
   final MemoryWorkspaceStore store;
@@ -157,6 +159,37 @@ void main() {
     await expectLater(bridge.probe('../escape'), throwsFormatException);
   });
 
+  test('macOS uses persisted Apple grants and never accepts a plain path as authority', () async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    expect(bridge.supported, true);
+    final source = (await bridge.pick())!;
+    expect(source.kind, WorkspaceSourceKind.appleBookmark);
+    expect(source.grantId, first);
+    expect((await probeWorkspaceDirectory(source)).canonicalPath, '/external/$first');
+    final active = await bridge.acquire([first]);
+    expect(active!.roots, {first: '/external/$first'});
+    await bridge.adopt(first);
+    await bridge.prune([first]);
+    final before = calls.length;
+    await expectLater(bridge.probe('/Users/Shared/previous-directory'), throwsFormatException);
+    expect(calls.length, before, reason: 'legacy path strings do not become bookmarks');
+    denied = true;
+    expect((await probeWorkspaceDirectory(source)).invalidReason, WorkspaceInvalidReason.grantUnavailable);
+    expect(held, {first}, reason: 'a failed probe must not release an active publication lease');
+    await bridge.release(active);
+    expect(held, isEmpty);
+  });
+
+  test('non-Apple platforms keep their existing picker path and do not call the grant channel', () async {
+    for (final platform in [TargetPlatform.android, TargetPlatform.linux, TargetPlatform.windows]) {
+      debugDefaultTargetPlatformOverride = platform;
+      expect(bridge.supported, false);
+      await expectLater(bridge.pick(), throwsUnsupportedError);
+      await bridge.prune([]);
+    }
+    expect(calls, isEmpty);
+  });
+
   test('malformed native lease is rejected rather than accepting URI as root', () async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(channel, (call) async {
       calls.add(call.method);
@@ -201,119 +234,123 @@ void main() {
     catalog.dispose();
   });
 
-  test('publication holds scope through failed close, stop failure and late disk publication', () async {
-    final entry = workspace(1, enabled: true).copyWith(
-      source: WorkspaceSource(kind: WorkspaceSourceKind.appleBookmark, locator: '/external/$first', grantId: first),
-    );
-    final catalog = GrantCatalog(MemoryWorkspaceStore([entry]));
-    final server = GrantServer();
-    final container = RefenaContainer(
-      overrides: [
-        workspaceCatalogProvider.overrideWithNotifier((_) => catalog),
-        serverProvider.overrideWithNotifier((_) => server),
-        settingsProvider.overrideWithNotifier((_) => SettingsService(MockPersistenceService())),
-        parentIsolateProvider.overrideWithNotifier(
-          (_) => IsolateController(
-            initialState: ParentIsolateState.initial(
-              SyncState(
-                rootIsolateToken: Object(),
-                securityContext: const StoredSecurityContext(privateKey: 'key', publicKey: 'public', certificate: 'cert', certificateHash: 'hash'),
-                deviceInfo: DeviceInfoResult(deviceType: DeviceType.desktop, deviceModel: 'Fixture', androidSdkInt: null),
-                alias: 'Fixture',
-                port: 53317,
-                discoveryPort: 53317,
-                networkWhitelist: null,
-                networkBlacklist: null,
-                protocol: ProtocolType.http,
-                multicastGroup: '224.0.0.167',
-                discoveryTimeout: 1000,
-                serverRunning: false,
-                download: false,
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.macOS]) {
+    test('${platform.name} publication holds scope through failed close, stop failure and late disk publication', () async {
+      debugDefaultTargetPlatformOverride = platform;
+      final entry = workspace(1, enabled: true).copyWith(
+        source: WorkspaceSource(kind: WorkspaceSourceKind.appleBookmark, locator: '/external/$first', grantId: first),
+      );
+      final catalog = GrantCatalog(MemoryWorkspaceStore([entry]));
+      final server = GrantServer();
+      final container = RefenaContainer(
+        overrides: [
+          persistenceProvider.overrideWithValue(MemoryWorkspacePersistence()),
+          workspaceCatalogProvider.overrideWithNotifier((_) => catalog),
+          serverProvider.overrideWithNotifier((_) => server),
+          settingsProvider.overrideWithNotifier((_) => SettingsService(MockPersistenceService())),
+          parentIsolateProvider.overrideWithNotifier(
+            (_) => IsolateController(
+              initialState: ParentIsolateState.initial(
+                SyncState(
+                  rootIsolateToken: Object(),
+                  securityContext: const StoredSecurityContext(privateKey: 'key', publicKey: 'public', certificate: 'cert', certificateHash: 'hash'),
+                  deviceInfo: DeviceInfoResult(deviceType: DeviceType.desktop, deviceModel: 'Fixture', androidSdkInt: null),
+                  alias: 'Fixture',
+                  port: 53317,
+                  discoveryPort: 53317,
+                  networkWhitelist: null,
+                  networkBlacklist: null,
+                  protocol: ProtocolType.http,
+                  multicastGroup: '224.0.0.167',
+                  discoveryTimeout: 1000,
+                  serverRunning: false,
+                  download: false,
+                ),
               ),
             ),
           ),
-        ),
-      ],
-    );
-    addTearDown(container.disposeContainer);
-    container.notifier(workspaceCatalogProvider);
-    await catalog.catalog.initialize();
-    final publisher = container.notifier(directoryPublicationProvider);
-    final activity = container.notifier(webTransferActivityProvider);
-    await publisher.synchronize();
-    expect(held, {first});
-    server.fail = true;
-    await catalog.catalog.disable(entry.id);
-    await publisher.synchronize();
-    expect(publisher.state.failed, true);
-    expect(held, {first});
-    server.fail = false;
-    await publisher.synchronize();
-    expect(publisher.state.published, isEmpty);
-    expect(held, {first}, reason: 'ack alone does not drain publication workers');
-    final row = {
-      'id': 'late',
-      'name': 'file',
-      'peer': '',
-      'total': 1,
-      'transferred': 1,
-      'direction': 'receive',
-      'operation': 'upload',
-      'origin': 'browser',
-      'workspaceId': entry.id,
-      'workspaceName': entry.name,
-    };
-    activity.apply(
-      jsonEncode([
-        {...row, 'phase': 'transferring'},
-      ]),
-      generation: server.epoch,
-    );
-    await publisher.synchronize();
-    expect(held, {first});
-    server.beginStop();
-    activity.beginStop(generation: server.epoch);
-    final pending = publisher.synchronize();
-    await Future<void>.delayed(Duration.zero);
-    expect(held, {first});
-    server.stopping!.complete(false);
-    await pending;
-    activity.stopped(
-      generation: server.epoch,
-      finalSnapshot: jsonEncode([
-        {...row, 'phase': 'succeeded'},
-      ]),
-    );
-    await publisher.synchronize();
-    expect(held, {first}, reason: 'actual stop failed');
-    server.stopping = Completer<bool>()..complete(true);
-    activity.beginStop(generation: server.epoch);
-    await publisher.synchronize();
-    expect(held, {first}, reason: 'no valid final observation yet');
-    activity.stopped(
-      generation: server.epoch,
-      finalSnapshot: jsonEncode([
-        {...row, 'id': 'late2', 'phase': 'transferring'},
-      ]),
-    );
-    await publisher.synchronize();
-    expect(held, {first});
-    // Previous success is immutable and therefore sufficient even if an old
-    // snapshot is replayed. Exercise fresh pending identity for the late gate.
-    activity.apply(
-      jsonEncode([
-        {...row, 'id': 'late2', 'phase': 'transferring'},
-      ]),
-      generation: server.epoch,
-    );
-    await publisher.synchronize();
-    activity.apply(
-      jsonEncode([
-        {...row, 'id': 'late2', 'phase': 'succeeded'},
-      ]),
-      generation: server.epoch,
-    );
-    await publisher.synchronize();
-    expect(held, isEmpty);
-  });
+        ],
+      );
+      addTearDown(container.disposeContainer);
+      container.notifier(workspaceCatalogProvider);
+      await catalog.catalog.initialize();
+      final publisher = container.notifier(directoryPublicationProvider);
+      final activity = container.notifier(webTransferActivityProvider);
+      await publisher.synchronize();
+      expect(held, {first});
+      server.fail = true;
+      await catalog.catalog.disable(entry.id);
+      await publisher.synchronize();
+      expect(publisher.state.failed, true);
+      expect(held, {first});
+      server.fail = false;
+      await publisher.synchronize();
+      expect(publisher.state.published, isEmpty);
+      expect(held, {first}, reason: 'ack alone does not drain publication workers');
+      final row = {
+        'id': 'late',
+        'name': 'file',
+        'peer': '',
+        'total': 1,
+        'transferred': 1,
+        'direction': 'receive',
+        'operation': 'upload',
+        'origin': 'browser',
+        'workspaceId': entry.id,
+        'workspaceName': entry.name,
+      };
+      activity.apply(
+        jsonEncode([
+          {...row, 'phase': 'transferring'},
+        ]),
+        generation: server.epoch,
+      );
+      await publisher.synchronize();
+      expect(held, {first});
+      server.beginStop();
+      activity.beginStop(generation: server.epoch);
+      final pending = publisher.synchronize();
+      await Future<void>.delayed(Duration.zero);
+      expect(held, {first});
+      server.stopping!.complete(false);
+      await pending;
+      activity.stopped(
+        generation: server.epoch,
+        finalSnapshot: jsonEncode([
+          {...row, 'phase': 'succeeded'},
+        ]),
+      );
+      await publisher.synchronize();
+      expect(held, {first}, reason: 'actual stop failed');
+      server.stopping = Completer<bool>()..complete(true);
+      activity.beginStop(generation: server.epoch);
+      await publisher.synchronize();
+      expect(held, {first}, reason: 'no valid final observation yet');
+      activity.stopped(
+        generation: server.epoch,
+        finalSnapshot: jsonEncode([
+          {...row, 'id': 'late2', 'phase': 'transferring'},
+        ]),
+      );
+      await publisher.synchronize();
+      expect(held, {first});
+      // Previous success is immutable and therefore sufficient even if an old
+      // snapshot is replayed. Exercise fresh pending identity for the late gate.
+      activity.apply(
+        jsonEncode([
+          {...row, 'id': 'late2', 'phase': 'transferring'},
+        ]),
+        generation: server.epoch,
+      );
+      await publisher.synchronize();
+      activity.apply(
+        jsonEncode([
+          {...row, 'id': 'late2', 'phase': 'succeeded'},
+        ]),
+        generation: server.epoch,
+      );
+      await publisher.synchronize();
+      expect(held, isEmpty);
+    });
+  }
 }

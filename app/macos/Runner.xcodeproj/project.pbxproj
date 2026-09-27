@@ -38,6 +38,8 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
+		A18E90012EA0000100000001 /* MacosWorkspaceGrants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18E90012EA0000100000003 /* MacosWorkspaceGrants.swift */; };
+		A18E90012EA0000100000002 /* IosWorkspaceGrantStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A18E90012EA0000100000004 /* IosWorkspaceGrantStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,8 @@
 		9740EEB21CF90195004384FC /* Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		C3B8682D6499CC218E0523B9 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		CBF4462C3F5FC50BF6BF2B97 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		A18E90012EA0000100000003 /* MacosWorkspaceGrants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacosWorkspaceGrants.swift; sourceTree = "<group>"; };
+		A18E90012EA0000100000004 /* IosWorkspaceGrantStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = IosWorkspaceGrantStore.swift; path = ../ios/Runner/IosWorkspaceGrantStore.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +209,8 @@
 			isa = PBXGroup;
 			children = (
 				33CC10F02044A3C60003C045 /* AppDelegate.swift */,
+				A18E90012EA0000100000003 /* MacosWorkspaceGrants.swift */,
+				A18E90012EA0000100000004 /* IosWorkspaceGrantStore.swift */,
 				0543E87A2C8A93A9004AA8B7 /* ContentDropView.swift */,
 				33CC11122044BFA00003C045 /* MainFlutterWindow.swift */,
 				05BAA8CF2C8CE248003CFCF1 /* SecurityScopedResourceManager.swift */,
@@ -479,6 +485,8 @@
 				053DADFD2C89F83400C3B4DE /* Shared.swift in Sources */,
 				05BAA8D02C8CE248003CFCF1 /* SecurityScopedResourceManager.swift in Sources */,
 				33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */,
+				A18E90012EA0000100000001 /* MacosWorkspaceGrants.swift in Sources */,
+				A18E90012EA0000100000002 /* IosWorkspaceGrantStore.swift in Sources */,
 				335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

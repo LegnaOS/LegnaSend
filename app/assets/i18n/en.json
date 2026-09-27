@@ -328,7 +328,7 @@
     "title": "Workspaces",
     "create": "Create workspace",
     "name": "Name",
-    "slug": "URL path",
+    "slug": "Custom path",
     "root": "Local directory",
     "choose": "Choose directory",
     "visible": "Visible in index",
@@ -342,19 +342,19 @@
     "syncing": "Applying changes",
     "serverOff": "Server stopped",
     "readOnly": "Read-only directory",
-    "readOnlyHint": "Workspaces start read-only. Enable browser uploads separately for each directory; existing files are not overwritten.",
-    "empty": "Create a workspace from a local directory. Its files stay in their original location.",
-    "failed": "The operation failed. Check the name, unique URL path, directory access and service status.",
-    "syncFailed": "Changes were not confirmed by the server. Previously published routes may still be active. Retry synchronization.",
-    "retry": "Retry synchronization",
+    "readOnlyHint": "Read-only unless uploads are enabled.",
+    "empty": "Choose a folder to create a workspace.",
+    "failed": "Could not save. Check the path and folder access.",
+    "syncFailed": "Changes not applied. Previous sharing settings remain active.",
+    "retry": "Retry",
     "enable": "Open",
     "close": "Close",
     "destroy": "Destroy workspace",
     "validate": "Check directory",
-    "stopHint": "Stop requests for this workspace. Other workspaces and native transfers continue. Source files will not be deleted.",
-    "hiddenHint": "Hidden workspaces are omitted from the index, but remain accessible by direct link. Hiding is not password protection.",
+    "stopHint": "Stop sharing this workspace? Source files will be kept.",
+    "hiddenHint": "Hidden from the index. Anyone with the link can still access it.",
     "closeToEdit": "Close the workspace before changing its URL path or source directory.",
-    "invalidInput": "Enter a name, a lowercase URL path such as workspace1, and a local directory.",
+    "invalidInput": "Enter a name, a unique path (letters, numbers or hyphens), and a folder.",
     "reasons(map)": {
       "missing": "Directory missing",
       "notDirectory": "Not a local directory",
@@ -370,13 +370,14 @@
     "confirmPassword": "Confirm password",
     "keepPassword": "Leave blank to keep the current password.",
     "passwordInvalid": "Use 4–128 characters and enter the same password twice.",
-    "passwordHint": "Saving a changed password or access mode revokes previous grants and stops this workspace’s active downloads. HTTPS protects transport; the password controls access.",
+    "passwordHint": "Changing access disconnects current downloads.",
     "accessPending": "Access policy awaiting server confirmation",
     "uploadPermission": "Upload permission",
     "allowUpload": "Allow browser uploads",
-    "uploadHint": "Anyone who can access this workspace may upload files and folders directly into its directory. Existing files are never overwritten. Turning this off stops unfinished uploads; saved files remain. Password-protected workspaces still require unlocking.",
+    "uploadHint": "Visitors can upload without asking again. Existing files are kept.",
     "uploadPending": "Upload permission pending",
-    "permissionHint": "Uploads are controlled per workspace"
+    "permissionHint": "Upload permissions",
+    "startService": "Start service"
   },
   "changelogPage": {
     "title": "Changelog",
@@ -391,16 +392,13 @@
     "changes(interface=WhatsNewStrings)": {
       "v1_0_0": {
         "changes": [
-          "1.0.0 is a development version and has not been officially released.",
-          "Send files and folders from a queue, retry failed files individually, and manage sending and receiving without leaving your current page.",
-          "Compatible devices and storage can resume large transfers. Reusing progress after restart needs fresh approval; other destinations retain whole-file retry.",
-          "Choose receive folders in iOS Files and Android document storage. Lost access is reported without silently changing the destination.",
-          "Check interrupted saves and automatically clean verified temporary copies. Completed files, active transfers and uncertain leftovers remain protected.",
-          "Share files and folder workspaces in a browser, with passwords, approved uploads, bulk ZIP downloads and optional authorized-folder download controls.",
-          "Preview images, audio, video, text and Markdown. Search document contents and keep your reading position when files refresh.",
-          "Choose a network connection per send task, view connection details, and access the optional integration API and its in-app reference.",
-          "iOS restores pending shares without sending automatically. Smaller screens and large text are easier to use, and the privacy policy is available offline.",
-          "Fixed an incorrect recovery-record save error when starting the sandboxed macOS app."
+          "Create named workspaces with custom paths and copyable links.",
+          "Remember authorized workspace folders on macOS and restart sharing from the workspace page.",
+          "Enable workspace uploads once; authorized visitors can upload and retry without repeated prompts.",
+          "Select a mobile album in batches, or select multiple photos and videos on desktop.",
+          "Queue files and folders, and manage sending and receiving together.",
+          "Preview and search shared content in a browser.",
+          "Simpler workspace forms and fewer explanatory labels."
         ]
       }
     }
@@ -816,7 +814,7 @@
     "unknown": "Unknown",
     "detected": "Detected",
     "notDetected": "Not detected",
-    "routeHint": "Local addresses and VPN/tunnel addresses are listed separately. Actual reachability follows both devices’ system routes and VPN rules. Native peer requests ignore application HTTP proxies, not system VPN routing. A tunnel name is only an interface hint; no route bypass has been verified."
+    "routeHint": "Choose a local or VPN address reachable by the other device."
   },
   "linkWorkspace": {
     "title": "Link workspace",

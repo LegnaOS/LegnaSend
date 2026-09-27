@@ -120,7 +120,9 @@ class DirectoryPublicationNotifier extends Notifier<DirectoryPublicationState> {
             'generation': entry.generation,
             'visible': entry.visible,
             'allowUpload': entry.allowUpload,
-            'uploadApproval': true,
+            // Enabling uploads is the owner's standing consent for this workspace.
+            // Access passwords, write grants and no-overwrite checks remain enforced.
+            'uploadApproval': false,
             'passwordHash': entry.passwordHash,
           },
       ];

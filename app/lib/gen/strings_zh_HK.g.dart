@@ -606,7 +606,7 @@ class Translations$directoryWorkspaces$zh_HK extends Translations$directoryWorks
   @override
   String get name => '名稱';
   @override
-  String get slug => '訪問路徑';
+  String get slug => '自訂路徑';
   @override
   String get root => '本地目錄';
   @override
@@ -634,15 +634,15 @@ class Translations$directoryWorkspaces$zh_HK extends Translations$directoryWorks
   @override
   String get readOnly => '只讀目錄';
   @override
-  String get readOnlyHint => '工作區預設唯讀。可分別開啟網頁上傳，既有檔案不會被覆蓋。';
+  String get readOnlyHint => '預設唯讀，可開啟上載。';
   @override
-  String get empty => '從本地目錄建立工作區，檔案保留在原位置。';
+  String get empty => '選擇資料夾，建立工作區。';
   @override
-  String get failed => '操作失敗，請檢查名稱、唯一訪問路徑、目錄許可權和服務狀態。';
+  String get failed => '儲存失敗，請檢查路徑和資料夾權限。';
   @override
-  String get syncFailed => '服務端尚未確認變更，原先發布的路徑可能仍在提供服務。請重試同步。';
+  String get syncFailed => '設定未生效，原分享設定保持不變。';
   @override
-  String get retry => '重試同步';
+  String get retry => '重試';
   @override
   String get enable => '開啟';
   @override
@@ -652,13 +652,13 @@ class Translations$directoryWorkspaces$zh_HK extends Translations$directoryWorks
   @override
   String get validate => '檢查目錄';
   @override
-  String get stopHint => '停止本工作區的訪問請求，其他工作區和原生收發繼續執行。不會刪除原始檔。';
+  String get stopHint => '停止分享此工作區？來源檔案會保留。';
   @override
-  String get hiddenHint => '隱藏的工作區不顯示在索引中，知道連結仍可訪問。隱藏不等於密碼保護。';
+  String get hiddenHint => '不在索引中顯示，知道連結仍可存取。';
   @override
   String get closeToEdit => '修改訪問路徑或源目錄前，請先關閉工作區。';
   @override
-  String get invalidInput => '請填寫名稱、workspace1 形式的小寫訪問路徑和本地目錄。';
+  String get invalidInput => '請填寫名稱、唯一的字母數字或連字號路徑，並選擇資料夾。';
   @override
   Map<String, String> get reasons => {
     'missing': '目錄不存在',
@@ -683,7 +683,7 @@ class Translations$directoryWorkspaces$zh_HK extends Translations$directoryWorks
   @override
   String get passwordInvalid => '請輸入 4–128 個字元，兩次輸入應一致。';
   @override
-  String get passwordHint => '儲存新的密碼或存取方式會撤銷舊授權，並停止本工作區正在進行的下載。HTTPS 保護傳輸，密碼控制存取權限。';
+  String get passwordHint => '修改存取保護會中斷目前下載。';
   @override
   String get accessPending => '存取策略待服務確認';
   @override
@@ -691,11 +691,13 @@ class Translations$directoryWorkspaces$zh_HK extends Translations$directoryWorks
   @override
   String get allowUpload => '允許網頁上傳';
   @override
-  String get uploadHint => '開啟後，能存取此工作區的瀏覽器可直接將檔案和資料夾上傳至該目錄，不覆蓋既有檔案。關閉會停止未完成上傳，已儲存檔案保留。有密碼的工作區仍需先解鎖。';
+  String get uploadHint => '訪客可直接上載，無需逐次確認。已有檔案不會被覆寫。';
   @override
   String get uploadPending => '上傳權限待同步';
   @override
-  String get permissionHint => '每個工作區獨立控制上傳';
+  String get permissionHint => '上載權限';
+  @override
+  String get startService => '啟動服務';
 }
 
 // Path: changelogPage
@@ -1240,7 +1242,7 @@ class Translations$networkEnvironment$zh_HK extends Translations$networkEnvironm
   @override
   String get notDetected => '未偵測到';
   @override
-  String get routeHint => '本機位址與 VPN／隧道位址分別標記；實際可達性取決於兩端系統路由及 VPN 規則。原生裝置請求忽略應用層 HTTP 代理，但不繞過系統 VPN 路由。網卡名稱僅為介面線索，尚未驗證強制直連。';
+  String get routeHint => '選擇對方裝置可存取的本機或 VPN 位址。';
 }
 
 // Path: linkWorkspace
@@ -2355,15 +2357,12 @@ class Translations$whatsNewPage$changes$v1_0_0$zh_HK extends Translations$whatsN
   // Translations
   @override
   List<String> get changes => [
-    '1.0.0 目前為開發版本，尚未正式發佈。',
-    '檔案和資料夾可排隊傳送，失敗檔案單獨重試；統一面板管理收發，離開頁面不停止傳輸。',
-    '相容的裝置和儲存位置支援大檔案續傳。重新啟動後重用進度需要重新批准接收，其他目的地保留整個檔案重試。',
-    'iOS 可從「檔案」選擇接收目錄，Android 可選擇系統文件目錄；權限失效時明確提示，不擅自切換儲存位置。',
-    '核對中斷儲存，自動清理核驗通過的暫存副本；成品、活動傳輸和歸屬不明的殘留繼續保留。',
-    '瀏覽器分享檔案和目錄工作區，支援密碼、批准上傳、批次 ZIP 下載及可選的授權目錄下載管理。',
-    '預覽圖片、影音、文字和 Markdown，搜尋內文，檔案重新整理後保留閱讀位置。',
-    '按傳送任務選擇網路連線、查看連線資訊，並使用可選整合 API 和應用程式內說明。',
-    'iOS 重新啟動後還原待傳送分享但不自動傳送；改善小螢幕、大字體體驗，隱私政策可離線查看。',
-    '修復 macOS 沙盒啟動時誤報復原記錄儲存失敗。',
+    '工作區自動填寫名稱，支援自訂路徑和一鍵複製連結。',
+    'macOS 記住工作區目錄授權，可在工作區頁重新啟動分享服務。',
+    '開啟工作區上載後，已授權訪客直接上載、重試，不再反覆確認。',
+    '手機相簿支援批量選擇，桌面可多選圖片和影片。',
+    '檔案與資料夾排隊傳送，統一管理傳送和接收。',
+    '瀏覽器內預覽、搜尋和下載分享內容。',
+    '優化工作區表單，減少解釋性文案。',
   ];
 }
