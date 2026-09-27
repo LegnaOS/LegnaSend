@@ -6,12 +6,23 @@ from pathlib import Path
 def run(*args):
     return subprocess.check_output(args,text=True).strip()
 def api(path):return json.loads(run('gh','api',path))
+def release_version(tag):
+    match = re.fullmatch(r'v(\d+\.\d+\.\d+)(?:-r([2-9]|[1-9]\d+))?', tag)
+    if not match:
+        raise ValueError('Invalid release tag')
+    return match.group(1)
+
 def main():
     repo=os.environ['GITHUB_REPOSITORY'];tag=os.environ['RELEASE_TAG']
     ids=[os.environ['PRIMARY_RUN'],os.environ['ARM64_RUN']]
-    if not re.fullmatch(r'v\d+\.\d+\.\d+',tag) or not all(re.fullmatch(r'\d+',x) for x in ids):
+    version=release_version(tag)
+    if not all(re.fullmatch(r'\d+',x) for x in ids):
         raise ValueError('Invalid release tag or run ID')
-    version=tag[1:]
+    release_name=tag[1:]
+    notes_en=Path(f'docs/releases/{release_name}_EN.md')
+    notes_zh=Path(f'docs/releases/{release_name}_ZH.md')
+    if not notes_en.is_file() or not notes_zh.is_file():
+        raise ValueError('Both release note languages are required')
     actual=re.search(r'^version: (\S+)',Path('app/pubspec.yaml').read_text(),re.M).group(1).split('+')[0]
     if actual!=version:raise ValueError('Tag does not match the app version')
     expected=[['windows (x64,','linux','android'],['windows (arm64,']]
@@ -61,8 +72,8 @@ def main():
                             'url':f'https://github.com/{repo}/releases/download/{tag}/{name}'})
     if len(records)!=5:raise ValueError('Expected five downloadable packages')
     (out/'SHA256SUMS.txt').write_text(''.join(f'{r["sha256"]}  {r["file"]}\n' for r in records))
-    (out/'BUILD-MANIFEST.json').write_text(json.dumps({'version':version,'tag_target':runs[1]['head_sha'],'artifacts':records},indent=2)+'\n')
-    shutil.copyfile('docs/releases/1.0.0_EN.md',out/'RELEASE-NOTES-EN.md')
+    (out/'BUILD-MANIFEST.json').write_text(json.dumps({'version':version,'release_tag':tag,'tag_target':runs[1]['head_sha'],'artifacts':records},indent=2)+'\n')
+    shutil.copyfile(notes_en,out/'RELEASE-NOTES-EN.md')
     # The owner pre-creates the tag so the workflow needs no permission to create
     # a ref to a commit containing workflow changes.
     ref=api(f'repos/{repo}/git/ref/tags/{tag}')
@@ -72,10 +83,10 @@ def main():
     existing=subprocess.run(['gh','api',f'repos/{repo}/releases/tags/{tag}'],capture_output=True,text=True)
     if existing.returncode==0:raise ValueError('Release already exists; no assets were overwritten')
     if '404' not in existing.stderr:raise RuntimeError('Release existence check failed')
-    subprocess.run(['gh','release','create',tag,'--repo',repo,'--verify-tag','--draft','--title','LegnaSend '+version,'--notes-file','docs/releases/1.0.0_ZH.md',*[str(p) for p in sorted(out.iterdir())]],check=True)
+    subprocess.run(['gh','release','create',tag,'--repo',repo,'--verify-tag','--draft','--title','LegnaSend '+release_name,'--notes-file',str(notes_zh),*[str(p) for p in sorted(out.iterdir())]],check=True)
     subprocess.run(['gh','release','edit',tag,'--repo',repo,'--draft=false','--latest'],check=True)
     print(json.dumps(records,indent=2))
     with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:
-        f.write('## Published LegnaSend '+version+'\n\n')
+        f.write('## Published LegnaSend '+release_name+'\n\n')
         for r in records:f.write(f'- [{r["file"]}]({r["url"]})\n')
 if __name__=='__main__':main()
